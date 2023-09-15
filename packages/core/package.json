@@ -7,10 +7,12 @@
   ],
   "main": "dist/wgpu-kit_core.umd.cjs",
   "module": "dist/wgpu-kit_core.js",
+  "types": "dist/wgpu-kit_core.d.ts",
   "exports": {
     ".": {
       "import": "./dist/wgpu-kit_core.js",
-      "require": "./dist/wgpu-kit_core.umd.cjs"
+      "require": "./dist/wgpu-kit_core.umd.cjs",
+      "types": "./dist/wgpu-kit_core.d.ts"
     }
   },
   "scripts": {
@@ -27,6 +29,7 @@
     "tsconfig": "workspace:*",
     "typescript": "^5.0.2",
     "uuid": "^9.0.0",
+    "vite-plugin-dts": "3.5.3",
     "vite": "^4.4.5"
   },
   "author": {
