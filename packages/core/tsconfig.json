@@ -1,4 +1,4 @@
 {
   "extends": "tsconfig/main",
-  "include": ["src", "lib"]
+  "include": ["src"]
 }

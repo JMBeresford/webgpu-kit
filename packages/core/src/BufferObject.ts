@@ -1,39 +1,62 @@
-export interface IUniform {
-  name?: string;
+export interface IBufferObject {
+  readonly gpuBuffer: GPUBuffer;
+
+  label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;
   bufferOptions?: GPUBufferBindingLayout;
-  gpuBuffer: GPUBuffer;
   arrayBuffer: ArrayBuffer;
 
   setArrayBuffer(buffer: ArrayBuffer): void;
-  updateBuffer(): void;
 }
 
-export interface IUniformBuilder {
+export interface IUniform extends IBufferObject {
+  bufferOptions: {
+    type: 'uniform';
+  };
+}
+
+export interface IStorage extends IBufferObject {
+  bufferOptions: {
+    type: 'storage' | 'read-only-storage';
+  };
+}
+
+export interface IBufferObjectBuilder {
+  setLabel(label: string): this;
   setBinding(binding: number): this;
   setVisibility(visibility: GPUShaderStageFlags): this;
   setBufferOptions(options: GPUBufferBindingLayout): this;
   setArrayBuffer(buffer: ArrayBuffer): this;
 
-  finish(device: GPUDevice): IUniform;
+  finish(device: GPUDevice): IBufferObject;
 }
 
-type UniformOptions = Partial<IUniform & { arrayBuffer: ArrayBuffer }>;
+type BufferObjectOptions = Partial<
+  Pick<
+    IBufferObject,
+    'label' | 'binding' | 'visibility' | 'arrayBuffer' | 'bufferOptions'
+  >
+>;
 
-class UniformBuilder implements IUniformBuilder {
-  name?: string;
+class BufferObjectBuilder implements IBufferObjectBuilder {
+  label?: string;
   binding?: number;
   visibility?: GPUShaderStageFlags;
   bufferOptions?: GPUBufferBindingLayout;
   arrayBuffer?: ArrayBuffer;
 
-  constructor(options: UniformOptions = {}) {
-    this.name = options.name;
+  constructor(options: BufferObjectOptions) {
+    this.label = options.label;
     this.binding = options.binding;
     this.visibility = options.visibility;
-    this.bufferOptions = options.bufferOptions ?? { type: 'uniform' };
+    this.bufferOptions = options.bufferOptions;
     this.arrayBuffer = options.arrayBuffer;
+  }
+
+  setLabel(label: string): this {
+    this.label = label;
+    return this;
   }
 
   setBinding(binding: number): this {
@@ -56,8 +79,8 @@ class UniformBuilder implements IUniformBuilder {
     return this;
   }
 
-  finish(device: GPUDevice): IUniform {
-    if (this.binding == undefined) {
+  finish(device: GPUDevice): IBufferObject {
+    if (!this.binding) {
       throw new Error('Binding is not set');
     }
     if (!this.visibility) {
@@ -68,14 +91,14 @@ class UniformBuilder implements IUniformBuilder {
     }
 
     const buffer = device.createBuffer({
-      label: `${this.name ?? 'uniform'}-buffer`,
+      label: `${this.label ?? 'unlabelled'}-buffer`,
       size: this.arrayBuffer.byteLength,
-      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+      usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
     });
 
-    return new Uniform(
+    return new BufferObject(
       {
-        name: this.name,
+        label: this.label,
         binding: this.binding,
         visibility: this.visibility,
         bufferOptions: this.bufferOptions,
@@ -87,20 +110,21 @@ class UniformBuilder implements IUniformBuilder {
   }
 }
 
-class Uniform implements IUniform {
+class BufferObject implements IBufferObject {
   private device: GPUDevice;
-  name?: string;
+  readonly gpuBuffer: GPUBuffer;
+
+  label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;
-  gpuBuffer: GPUBuffer;
   bufferOptions?: GPUBufferBindingLayout;
   arrayBuffer: ArrayBuffer;
 
   constructor(
-    options: Omit<IUniform, 'setArrayBuffer' | 'updateBuffer'>,
+    options: Omit<IBufferObject, 'setArrayBuffer' | 'updateBuffer'>,
     device: GPUDevice
   ) {
-    this.name = options.name;
+    this.label = options.label;
     this.binding = options.binding;
     this.visibility = options.visibility;
     this.gpuBuffer = options.gpuBuffer;
@@ -121,6 +145,8 @@ class Uniform implements IUniform {
   }
 }
 
-export function createUniform(options: UniformOptions = {}): IUniformBuilder {
-  return new UniformBuilder(options);
+export function createBufferObject(
+  options: BufferObjectOptions = {}
+): IBufferObjectBuilder {
+  return new BufferObjectBuilder(options);
 }

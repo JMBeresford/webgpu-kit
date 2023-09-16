@@ -32,7 +32,7 @@ export interface IPipelineUnit<T> {
   onBeforePass?: PipelineCallback<T>;
   onAfterPass?: PipelineCallback<T>;
   drawParams?: DrawParams;
-  dispatchParams: [number, number, number];
+  workgroupSize: [number, number, number];
   pipeline?: Pipeline;
   shaderEntries?: ShaderEntries;
 }
@@ -41,7 +41,7 @@ export interface IPipelineUnitBuilder<T> {
   setOnBeforePass(f: PipelineCallback<T>): this;
   setOnAfterPass(f: PipelineCallback<T>): this;
   setDrawParams(...params: DrawParams): this;
-  setDispatchParams(...params: [number, number, number]): this;
+  setWorkgroupSize(...size: [number, number, number]): this;
   finish(): IPipelineUnit<T>;
 }
 
@@ -53,7 +53,7 @@ class PipelineUnitBuilder<T> implements IPipelineUnitBuilder<T> {
   onAfterPass?: PipelineCallback<T>;
   deviceCtx: IDeviceContext;
   drawParams?: DrawParams;
-  dispatchParams: [number, number, number] = [8, 8, 8];
+  workgroupSize: [number, number, number] = [8, 8, 8];
   vertexBuffer?: GPUBuffer;
   pipeline?: Pipeline;
   bindGroupLayout?: GPUBindGroupLayout;
@@ -82,8 +82,8 @@ class PipelineUnitBuilder<T> implements IPipelineUnitBuilder<T> {
     return this;
   }
 
-  setDispatchParams(...params: [number, number, number]): this {
-    this.dispatchParams = params;
+  setWorkgroupSize(...size: [number, number, number]): this {
+    this.workgroupSize = size;
     return this;
   }
 
@@ -101,7 +101,7 @@ class PipelineUnit<T> implements IPipelineUnit<T> {
   onBeforePass?: PipelineCallback<T>;
   onAfterPass?: PipelineCallback<T>;
   drawParams?: DrawParams;
-  dispatchParams: [number, number, number];
+  workgroupSize: [number, number, number];
   pipeline?: Pipeline;
 
   constructor(builder: PipelineUnitBuilder<T>) {
@@ -112,7 +112,7 @@ class PipelineUnit<T> implements IPipelineUnit<T> {
     this.onBeforePass = builder.onBeforePass;
     this.onAfterPass = builder.onAfterPass;
     this.drawParams = builder.drawParams;
-    this.dispatchParams = builder.dispatchParams;
+    this.workgroupSize = builder.workgroupSize;
 
     if (this.type === 'render' && !this.drawParams) {
       throw new Error('Draw params not set');
