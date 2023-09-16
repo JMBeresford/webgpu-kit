@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.2
+
+### Patch Changes
+
+- b285183: fix(Core,Web): fixed inter-package builds
+
 ## 0.0.1
 
 ### Patch Changes
