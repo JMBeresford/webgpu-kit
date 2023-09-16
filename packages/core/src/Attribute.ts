@@ -1,7 +1,7 @@
-type ArrayType = Float32Array | Uint32Array | Uint16Array | Uint8Array;
+import { ArrayType } from './utils';
 
 export interface IAttribute {
-  name: string;
+  label?: string;
   format: GPUVertexFormat;
   shaderLocation: number;
   arrayBuffer: ArrayType;
@@ -12,7 +12,7 @@ export interface IAttribute {
 }
 
 export interface IAttributeBuilder {
-  setName(name: string): this;
+  setLabel(label: string): this;
   setFormat(format: GPUVertexFormat): this;
   setShaderLocation(location: number): this;
   setArrayBuffer(buffer: ArrayType): this;
@@ -25,7 +25,7 @@ export interface IAttributeBuilder {
 type AttributeOptions = Partial<IAttribute & { buffer: ArrayType }>;
 
 class AttributeBuilder implements IAttributeBuilder {
-  name?: string;
+  label?: string;
   format?: GPUVertexFormat;
   shaderLocation?: number;
   arrayBuffer?: ArrayType;
@@ -33,7 +33,7 @@ class AttributeBuilder implements IAttributeBuilder {
   itemCount?: number;
 
   constructor(options: AttributeOptions = {}) {
-    this.name = options.name;
+    this.label = options.label;
     this.format = options.format;
     this.shaderLocation = options.shaderLocation;
     this.arrayBuffer = options.arrayBuffer;
@@ -41,8 +41,8 @@ class AttributeBuilder implements IAttributeBuilder {
     this.itemCount = options.itemCount;
   }
 
-  setName(name: string): this {
-    this.name = name;
+  setLabel(label: string): this {
+    this.label = label;
     return this;
   }
 
@@ -72,7 +72,7 @@ class AttributeBuilder implements IAttributeBuilder {
   }
 
   finish(): IAttribute {
-    if (!this.name) {
+    if (!this.label) {
       throw new Error('Attribute name is required');
     }
     if (!this.format) {
@@ -92,7 +92,7 @@ class AttributeBuilder implements IAttributeBuilder {
     }
 
     return new Attribute({
-      name: this.name,
+      label: this.label,
       format: this.format,
       shaderLocation: this.shaderLocation,
       arrayBuffer: this.arrayBuffer,
@@ -103,15 +103,15 @@ class AttributeBuilder implements IAttributeBuilder {
 }
 
 class Attribute implements IAttribute {
-  name: string;
+  label?: string;
   format: GPUVertexFormat;
   shaderLocation: number;
   arrayBuffer: ArrayType;
   itemSize: number;
   itemCount: number;
 
-  constructor(options: Omit<IAttribute, 'setArrayBuffer' | 'updateBuffer'>) {
-    this.name = options.name;
+  constructor(options: Omit<IAttribute, 'setArrayBuffer'>) {
+    this.label = options.label;
     this.format = options.format;
     this.shaderLocation = options.shaderLocation;
     this.arrayBuffer = options.arrayBuffer;

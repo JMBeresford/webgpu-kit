@@ -142,7 +142,7 @@ class Executor extends ExecutorCommon implements IExecutor {
     const pass = encoder.beginComputePass();
     pass.setPipeline(unit.pipeline as GPUComputePipeline);
     pass.setBindGroup(0, bindGroup);
-    pass.dispatchWorkgroups(...unit.dispatchParams);
+    pass.dispatchWorkgroups(...unit.workgroupSize);
     pass.end();
   }
 }

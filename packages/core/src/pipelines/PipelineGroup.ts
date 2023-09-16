@@ -2,8 +2,7 @@ import { IDeviceContext } from '../DeviceContext';
 import { IPipelineUnit } from './PipelineUnit';
 import { PipelineGroupBaseState, PipelineGroupState } from './PipelineState';
 import { IAttribute } from '../Attribute';
-import { IUniform } from '../Uniform';
-import { IStorage } from '../Storage';
+import { IUniform, IStorage } from '../BufferObject';
 
 type PipelineGroupOptions<T> = {
   deviceCtx: IDeviceContext;

@@ -1,12 +1,12 @@
+import type { IUniform, IStorage } from '@wgpu-kit/core/src';
 import {
   deviceContext,
   createExecutor,
   createPipeline,
   createAttribute,
-  createStorage,
+  createBufferObject,
   createPipelineGroup,
-  createUniform,
-} from '@wgpu-kit/core/lib';
+} from '@wgpu-kit/core/src';
 import {
   GRID_SIZE,
   WORKGROUP_SIZE,
@@ -28,7 +28,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     -0.8, -0.8, 0.8, 0.8, -0.8, 0.8,
   ]);
 
-  const attributeBuffer = createAttribute({ name: 'pos' })
+  const attributeBuffer = createAttribute({ label: 'pos' })
     .setFormat('float32x2')
     .setShaderLocation(0)
     .setArrayBuffer(vertices)
@@ -37,31 +37,31 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     .finish();
 
   const gridArray = new Float32Array([GRID_SIZE, GRID_SIZE]);
-  const gridUniform = createUniform({ name: 'grid' })
+  const gridUniform = createBufferObject({ label: 'grid' })
     .setVisibility(
       GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE
     )
     .setArrayBuffer(gridArray)
     .setBinding(0)
-    .finish(device);
+    .finish(device) as IUniform;
 
   const storageArray = new Uint32Array(GRID_SIZE * GRID_SIZE);
   for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
     storageArray[i] = Math.random() > 0.6 ? 1 : 0;
   }
 
-  const storageBuffer1 = createStorage({ name: 'cellState 1' })
+  const storageBuffer1 = createBufferObject({ label: 'cellState 1' })
     .setVisibility(GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE)
     .setBinding(1)
     .setArrayBuffer(storageArray)
     .setBufferOptions({ type: 'read-only-storage' })
-    .finish(device);
+    .finish(device) as IStorage;
 
-  const storageBuffer2 = createStorage({ name: 'cellState 2' })
+  const storageBuffer2 = createBufferObject({ label: 'cellState 2' })
     .setVisibility(GPUShaderStage.COMPUTE)
     .setBinding(2)
     .setArrayBuffer(storageArray)
-    .finish(device);
+    .finish(device) as IStorage;
 
   const pipelineGroupBuilder = createPipelineGroup({
     deviceCtx,
@@ -94,7 +94,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
       state.activeBindGroupIdx += 1;
       state.activeBindGroupIdx %= state.bindGroups.length;
     })
-    .setDispatchParams(workgroupSize, workgroupSize, 1)
+    .setWorkgroupSize(workgroupSize, workgroupSize, 1)
     .finish();
 
   pipelineGroupBuilder
