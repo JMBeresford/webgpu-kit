@@ -120,7 +120,7 @@ class Executor extends ExecutorCommon implements IExecutor {
           loadOp: 'clear',
           clearValue: { r: 0, g: 0, b: 0.4, a: 1 },
           storeOp: 'store',
-        },
+        } satisfies GPURenderPassColorAttachment,
       ],
     });
 

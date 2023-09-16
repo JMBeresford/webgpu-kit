@@ -99,9 +99,9 @@ class PipelineGroupBuilder<T> implements IPipelineGroupBuilder<T> {
       usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
     });
 
-    const array = [];
+    const array: number[] = [];
     for (const attr of this.attributes) {
-      array.push(...attr.arrayBuffer);
+      attr.arrayBuffer.forEach((value) => array.push(value));
     }
 
     this.deviceCtx.device.queue.writeBuffer(
