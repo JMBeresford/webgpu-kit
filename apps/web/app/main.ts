@@ -6,7 +6,7 @@ import {
   createStorage,
   createPipelineGroup,
   createUniform,
-} from '@wgpu-kit/core';
+} from '@wgpu-kit/core/lib';
 import {
   GRID_SIZE,
   WORKGROUP_SIZE,

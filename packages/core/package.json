@@ -8,13 +8,6 @@
   "main": "dist/wgpu-kit_core.umd.cjs",
   "module": "dist/wgpu-kit_core.js",
   "types": "dist/wgpu-kit_core.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/wgpu-kit_core.js",
-      "require": "./dist/wgpu-kit_core.umd.cjs",
-      "types": "./dist/wgpu-kit_core.d.ts"
-    }
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
