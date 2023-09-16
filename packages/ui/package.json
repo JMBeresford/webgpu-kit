@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "main": "./index.tsx",
   "types": "./index.tsx",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
@@ -17,5 +18,8 @@
     "react": "^18.2.0",
     "tsconfig": "workspace:*",
     "typescript": "^4.5.2"
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
