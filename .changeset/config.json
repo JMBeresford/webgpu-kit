@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@changesets/config@2.3.1/schema.json",
   "changelog": [
     "@changesets/changelog-github",
-    { "repo": "jberesford/wgpu-kit" }
+    { "repo": "JMBeresford/wgpu-kit" }
   ],
   "commit": false,
   "fixed": [],
