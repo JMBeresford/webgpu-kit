@@ -18,7 +18,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "wgsl_reflect": "github:brendan-duncan/wgsl_reflect"
@@ -29,8 +30,9 @@
     "tsconfig": "workspace:*",
     "typescript": "^5.0.2",
     "uuid": "^9.0.0",
+    "vite": "^4.4.5",
     "vite-plugin-dts": "3.5.3",
-    "vite": "^4.4.5"
+    "vitest": "^0.34.4"
   },
   "author": {
     "name": "John Beresford",
