@@ -140,9 +140,9 @@ class PipelineGroupBuilder<T> implements IPipelineGroupBuilder<T> {
     });
   }
 
-  private buildPipelines(): void {
-    if (!this.bindGroupLayout || !this.pipelineLayout) {
-      throw new Error('Layouts not built');
+  private async buildPipelines(): Promise<void> {
+    if (!this.bindGroupLayout) {
+      throw new Error('BindGroupLayout not built');
     }
 
     const device = this.deviceCtx.device;
@@ -168,41 +168,47 @@ class PipelineGroupBuilder<T> implements IPipelineGroupBuilder<T> {
       attributes,
     };
 
-    for (const unit of this.pipelineUnits) {
-      const shaderModule = device.createShaderModule({
-        code: unit.shader,
-      });
+    await Promise.all(
+      this.pipelineUnits.map(async (unit) => {
+        if (!this.pipelineLayout) {
+          throw new Error('Pipeline layout not built');
+        }
 
-      if (unit.type === 'compute') {
-        unit.pipeline = device.createComputePipeline({
-          label: `${unit.label ?? 'Unlabeled'} ComputePipeline`,
-          layout: this.pipelineLayout,
-          compute: {
-            module: shaderModule,
-            entryPoint: unit.shaderEntries?.compute ?? 'computeMain',
-          },
+        const shaderModule = device.createShaderModule({
+          code: unit.shader,
         });
-      } else {
-        unit.pipeline = device.createRenderPipeline({
-          label: `${unit.label ?? 'Unlabeled'} RenderPipeline`,
-          layout: this.pipelineLayout,
-          vertex: {
-            module: shaderModule,
-            entryPoint: unit.shaderEntries?.vertex ?? 'vertexMain',
-            buffers: [vertexBufferLayout],
-          },
-          fragment: {
-            module: shaderModule,
-            entryPoint: unit.shaderEntries?.fragment ?? 'fragmentMain',
-            targets: [
-              {
-                format: this.deviceCtx.canvasFormat,
-              },
-            ],
-          },
-        });
-      }
-    }
+
+        if (unit.type === 'compute') {
+          unit.pipeline = await device.createComputePipelineAsync({
+            label: `${unit.label ?? 'Unlabeled'} ComputePipeline`,
+            layout: this.pipelineLayout,
+            compute: {
+              module: shaderModule,
+              entryPoint: unit.shaderEntries?.compute ?? 'computeMain',
+            },
+          });
+        } else {
+          unit.pipeline = await device.createRenderPipelineAsync({
+            label: `${unit.label ?? 'Unlabeled'} RenderPipeline`,
+            layout: this.pipelineLayout,
+            vertex: {
+              module: shaderModule,
+              entryPoint: unit.shaderEntries?.vertex ?? 'vertexMain',
+              buffers: [vertexBufferLayout],
+            },
+            fragment: {
+              module: shaderModule,
+              entryPoint: unit.shaderEntries?.fragment ?? 'fragmentMain',
+              targets: [
+                {
+                  format: this.deviceCtx.canvasFormat,
+                },
+              ],
+            },
+          });
+        }
+      })
+    );
   }
 
   private buildBindGroups() {
@@ -251,7 +257,7 @@ class PipelineGroupBuilder<T> implements IPipelineGroupBuilder<T> {
   async finish(): Promise<IPipelineGroup<T>> {
     this.buildVertexAttributeBuffer();
     this.buildLayouts();
-    this.buildPipelines();
+    await this.buildPipelines();
     this.buildBindGroups();
 
     return new PipelineGroup<T>(this);
