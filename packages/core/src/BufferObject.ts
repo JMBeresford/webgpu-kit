@@ -4,7 +4,7 @@ export interface IBufferObject {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;
-  bufferOptions?: GPUBufferBindingLayout;
+  bufferOptions: GPUBufferBindingLayout;
   arrayBuffer: ArrayBuffer;
 
   setArrayBuffer(buffer: ArrayBuffer): void;
@@ -80,20 +80,28 @@ class BufferObjectBuilder implements IBufferObjectBuilder {
   }
 
   finish(device: GPUDevice): IBufferObject {
-    if (!this.binding) {
+    if (this.binding == undefined) {
       throw new Error('Binding is not set');
     }
-    if (!this.visibility) {
+    if (this.visibility == undefined) {
       throw new Error('Visibility is not set');
     }
-    if (!this.arrayBuffer) {
+    if (this.arrayBuffer == undefined) {
       throw new Error('Array buffer is not set');
     }
+    if (this.bufferOptions == undefined) {
+      throw new Error('Buffer options is not set');
+    }
+
+    const usage =
+      this.bufferOptions?.type === 'uniform'
+        ? GPUBufferUsage.UNIFORM
+        : GPUBufferUsage.STORAGE;
 
     const buffer = device.createBuffer({
       label: `${this.label ?? 'unlabelled'}-buffer`,
       size: this.arrayBuffer.byteLength,
-      usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+      usage: usage | GPUBufferUsage.COPY_DST,
     });
 
     return new BufferObject(
@@ -117,7 +125,7 @@ class BufferObject implements IBufferObject {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;
-  bufferOptions?: GPUBufferBindingLayout;
+  bufferOptions: GPUBufferBindingLayout;
   arrayBuffer: ArrayBuffer;
 
   constructor(
