@@ -1,5 +1,18 @@
 # web
 
+## 1.0.4
+
+### Patch Changes
+
+- [#9](https://github.com/JMBeresford/wgpu-kit/pull/9) [`70b093a`](https://github.com/JMBeresford/wgpu-kit/commit/70b093a17489a39f9a0de88b799873009f17abd7) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix(Core, Web): buffer types usage
+
+- [#7](https://github.com/JMBeresford/wgpu-kit/pull/7) [`9ca9fc5`](https://github.com/JMBeresford/wgpu-kit/commit/9ca9fc5cf70ec78c13545ce0e237f980df2cda5c) Thanks [@JMBeresford](https://github.com/JMBeresford)! - refactor(Core,Web): merge buffer classes
+
+- [#10](https://github.com/JMBeresford/wgpu-kit/pull/10) [`91f9961`](https://github.com/JMBeresford/wgpu-kit/commit/91f996184be605158736482ce4b04f21ff7b3201) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat: async pipeline builds
+
+- Updated dependencies [[`70b093a`](https://github.com/JMBeresford/wgpu-kit/commit/70b093a17489a39f9a0de88b799873009f17abd7), [`9ca9fc5`](https://github.com/JMBeresford/wgpu-kit/commit/9ca9fc5cf70ec78c13545ce0e237f980df2cda5c), [`91f9961`](https://github.com/JMBeresford/wgpu-kit/commit/91f996184be605158736482ce4b04f21ff7b3201)]:
+  - @wgpu-kit/core@0.0.4
+
 ## 1.0.3
 
 ### Patch Changes
