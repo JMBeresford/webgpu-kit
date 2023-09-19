@@ -43,6 +43,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     )
     .setArrayBuffer(gridArray)
     .setBinding(0)
+    .setBufferOptions({ type: 'uniform' })
     .finish(device) as IUniform;
 
   const storageArray = new Uint32Array(GRID_SIZE * GRID_SIZE);
@@ -61,6 +62,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     .setVisibility(GPUShaderStage.COMPUTE)
     .setBinding(2)
     .setArrayBuffer(storageArray)
+    .setBufferOptions({ type: 'storage' })
     .finish(device) as IStorage;
 
   const pipelineGroupBuilder = createPipelineGroup({
