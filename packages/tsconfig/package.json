@@ -5,5 +5,8 @@
   "license": "MIT",
   "publishConfig": {
     "access": "restricted"
+  },
+  "peerDependencies": {
+    "@webgpu/types": "0.1.34"
   }
 }

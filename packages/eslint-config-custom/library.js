@@ -14,7 +14,9 @@ const project = resolve(process.cwd(), 'tsconfig.json');
 module.exports = {
   extends: [
     '@vercel/style-guide/eslint/node',
+    '@vercel/style-guide/eslint/browser',
     '@vercel/style-guide/eslint/typescript',
+    'eslint-config-turbo',
   ].map(require.resolve),
   parserOptions: {
     project,
@@ -26,5 +28,17 @@ module.exports = {
       },
     },
   },
-  ignorePatterns: ['node_modules/', 'dist/'],
+  plugins: ['prettier'],
+  ignorePatterns: ['node_modules/', 'dist/', 'vite.config.js'],
+  rules: {
+    'prettier/prettier': 'error',
+    '@typescript-eslint/no-extraneous-class': 'off',
+    '@typescript-eslint/consistent-type-definitions': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    'no-undef': 'off',
+    'unicorn/filename-case': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
+    "no-bitwise": "off",
+  },
 };

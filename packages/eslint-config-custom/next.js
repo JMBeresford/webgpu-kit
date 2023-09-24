@@ -34,9 +34,11 @@ module.exports = {
       },
     },
   },
+  plugins: ["prettier"],
   ignorePatterns: ["node_modules/", "dist/"],
   // add rules configurations here
   rules: {
+    "prettier/prettier": "error",
     "import/no-default-export": "off",
   },
 };

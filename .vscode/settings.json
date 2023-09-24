@@ -1,3 +1,13 @@
 {
-  "eslint.workingDirectories": ["./packages/*", "./apps/*"]
+  "eslint.workingDirectories": ["./packages/*", "./apps/*"],
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }

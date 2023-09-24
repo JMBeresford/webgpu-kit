@@ -1,150 +1,121 @@
-import type { IUniform, IStorage } from '@wgpu-kit/core/src';
-import {
-  deviceContext,
-  createExecutor,
-  createPipeline,
-  createAttribute,
-  createBufferObject,
-  createPipelineGroup,
-} from '@wgpu-kit/core/src';
+import { Attribute } from "@wgpu-kit/core/src/Attribute";
+import { VertexAttributeObject } from "@wgpu-kit/core/src/VertexAttributeObject";
+import { Pipeline } from "@wgpu-kit/core/src/Pipeline";
+import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
+import { Executor } from "@wgpu-kit/core/src/Executor";
+import { Uniform } from "@wgpu-kit/core/src/Uniform";
+import { Storage } from "@wgpu-kit/core/src";
 import {
   GRID_SIZE,
   WORKGROUP_SIZE,
   computeShader,
   renderShader,
-} from './shaders';
+} from "./shaders";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
-  const deviceCtx = await deviceContext({
-    canvas,
-    powerPreference: 'high-performance',
-  });
-
-  const device = deviceCtx.device;
-
   const vertices = new Float32Array([
-    -0.8, -0.8, 0.8, -0.8, 0.8, 0.8,
+    //   X,    Y,
+    -0.8,
+    -0.8, // Triangle 1 (Blue)
+    0.8,
+    -0.8,
+    0.8,
+    0.8,
 
-    -0.8, -0.8, 0.8, 0.8, -0.8, 0.8,
+    -0.8,
+    -0.8, // Triangle 2 (Red)
+    0.8,
+    0.8,
+    -0.8,
+    0.8,
   ]);
 
-  const attributeBuffer = createAttribute({ label: 'pos' })
-    .setFormat('float32x2')
-    .setShaderLocation(0)
-    .setArrayBuffer(vertices)
-    .setItemSize(4)
-    .setItemCount(2)
-    .finish();
+  const posAttribute = new Attribute({
+    label: "Position",
+    format: "float32x2",
+    shaderLocation: 0,
+    arrayBuffer: vertices,
+    itemCount: vertices.length / 2,
+    itemSize: 2,
+  });
 
-  const gridArray = new Float32Array([GRID_SIZE, GRID_SIZE]);
-  const gridUniform = createBufferObject({ label: 'grid' })
-    .setVisibility(
-      GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE
-    )
-    .setArrayBuffer(gridArray)
-    .setBinding(0)
-    .setBufferOptions({ type: 'uniform' })
-    .finish(device) as IUniform;
+  const gridUniform = new Uniform({
+    label: "Grid Size Uniform",
+    visibility:
+      GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
+    binding: 0,
+    arrayBuffer: new Float32Array([GRID_SIZE, GRID_SIZE]),
+  });
 
-  const storageArray = new Uint32Array(GRID_SIZE * GRID_SIZE);
-  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-    storageArray[i] = Math.random() > 0.6 ? 1 : 0;
+  const stepUniform = new Uniform({
+    label: "Step Uniform",
+    visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
+    binding: 1,
+    arrayBuffer: new Uint32Array([0]),
+  });
+
+  const cellState = new Uint32Array(GRID_SIZE * GRID_SIZE * 2);
+
+  for (let i = 0; i < cellState.length / 2; i++) {
+    cellState[i] = Math.random() > 0.75 ? 1 : 0;
   }
 
-  const storageBuffer1 = createBufferObject({ label: 'cellState 1' })
-    .setVisibility(GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE)
-    .setBinding(1)
-    .setArrayBuffer(storageArray)
-    .setBufferOptions({ type: 'read-only-storage' })
-    .finish(device) as IStorage;
+  const gridStorage = new Storage({
+    label: "Cell State Storage",
+    visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE,
+    binding: 2,
+    arrayBuffer: cellState,
+    readOnly: false,
+  });
 
-  const storageBuffer2 = createBufferObject({ label: 'cellState 2' })
-    .setVisibility(GPUShaderStage.COMPUTE)
-    .setBinding(2)
-    .setArrayBuffer(storageArray)
-    .setBufferOptions({ type: 'storage' })
-    .finish(device) as IStorage;
+  const vao = await new VertexAttributeObject({
+    label: "Cell VAO",
+    vertexCount: vertices.length / 2,
+    instanceCount: GRID_SIZE * GRID_SIZE,
+  }).addAttribute(posAttribute);
 
-  const pipelineGroupBuilder = createPipelineGroup({
-    deviceCtx,
-    label: 'Game of Life Pipeline Group',
-  })
-    .addAttribute(attributeBuffer)
-    .addUniform(gridUniform)
-    .addStorage(storageBuffer1)
-    .addStorage(storageBuffer2);
-
-  const renderPass = createPipeline({
-    label: 'Render Pass',
-    deviceCtx,
-    type: 'render',
+  const renderPipeline = new Pipeline({
+    label: "Render Pipeline",
     shader: renderShader,
-  })
-    .setDrawParams(vertices.length / 2, GRID_SIZE * GRID_SIZE)
-    .finish();
+  });
 
-  const workgroupSize = Math.ceil(GRID_SIZE / WORKGROUP_SIZE);
-  const computePass = createPipeline({
-    label: 'Compute Pass',
-    deviceCtx,
-    type: 'compute',
+  const computePipeline = new Pipeline({
+    label: "Cell Simulation Pipeline",
+    type: "compute",
+    workgroupSize: [WORKGROUP_SIZE, WORKGROUP_SIZE, 1],
+    workgroupCount: [GRID_SIZE / WORKGROUP_SIZE, GRID_SIZE / WORKGROUP_SIZE, 1],
+    onAfterPass: async () => {
+      if (!stepUniform.cpuBuffer) return;
+      stepUniform.cpuBuffer[0] += 1;
+
+      await stepUniform.updateGpuBuffer();
+    },
     shader: computeShader,
-  })
-    .setOnAfterPass((state) => {
-      if (!state) return;
+  });
 
-      state.activeBindGroupIdx += 1;
-      state.activeBindGroupIdx %= state.bindGroups.length;
-    })
-    .setWorkgroupSize(workgroupSize, workgroupSize, 1)
-    .finish();
+  const pipelineGroup = new PipelineGroup({
+    label: "Cell Pipeline Group",
+    pipelines: [computePipeline, renderPipeline],
+    vertexAttributeObject: vao,
+    canvas,
+  });
 
-  pipelineGroupBuilder
-    .addPipeline(computePass)
-    .addPipeline(renderPass)
-    .setBindGroupCount(2);
+  await pipelineGroup.addUniform(gridUniform);
+  await pipelineGroup.addUniform(stepUniform);
+  await pipelineGroup.addStorage(gridStorage);
 
-  const bindGroupsEntries: GPUBindGroupEntry[][] = [
-    [
-      {
-        binding: 0,
-        resource: { buffer: gridUniform.gpuBuffer },
-      },
-      {
-        binding: 1,
-        resource: { buffer: storageBuffer1.gpuBuffer },
-      },
-      {
-        binding: 2,
-        resource: { buffer: storageBuffer2.gpuBuffer },
-      },
-    ],
-    [
-      {
-        binding: 0,
-        resource: { buffer: gridUniform.gpuBuffer },
-      },
-      {
-        binding: 1,
-        resource: { buffer: storageBuffer2.gpuBuffer },
-      },
-      {
-        binding: 2,
-        resource: { buffer: storageBuffer1.gpuBuffer },
-      },
-    ],
-  ];
+  const executor = await new Executor({
+    label: "Cell Executor",
+  }).addPipelineGroup(pipelineGroup);
 
-  const pipelineGroup = await pipelineGroupBuilder
-    .setBindGroupEntries(bindGroupsEntries)
-    .finish();
-
-  const executor = createExecutor().addPipelineGroups([pipelineGroup]).finish();
-
-  function tick(): void {
-    executor.runPipelines();
-    requestAnimationFrame(tick);
+  async function tick(): Promise<void> {
+    await executor.run();
+    await new Promise(requestAnimationFrame);
+    await tick();
   }
 
-  tick();
+  await tick();
+
+  // await executor.run();
+  // await executor.run();
 }
