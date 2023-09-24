@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.5
+
+### Patch Changes
+
+- [#11](https://github.com/JMBeresford/wgpu-kit/pull/11) [`c90a00f`](https://github.com/JMBeresford/wgpu-kit/commit/c90a00fe752e54d5d377ac2ba80271dd3f42167a) Thanks [@JMBeresford](https://github.com/JMBeresford)! - refactor: mixin based architecture
+
 ## 0.0.4
 
 ### Patch Changes
