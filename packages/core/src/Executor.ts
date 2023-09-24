@@ -1,152 +1,98 @@
-import { IPipelineGroup } from './pipelines/PipelineGroup';
-import { PipelineGroupState } from './pipelines/PipelineState';
-import { IPipelineUnit } from './pipelines/PipelineUnit';
+import type { PipelineGroup } from "./PipelineGroup";
+import { WithCanvas } from "./components/Canvas";
+import { WithDevice } from "./components/Device";
+import { WithLabel } from "./components/Label";
 
-export type ExecutionCallback<T> = (
-  encoder: GPUCommandEncoder,
-  state: PipelineGroupState<T>
-) => void;
+const Mixins = WithCanvas(WithDevice(WithLabel()));
 
 type ExecutorOptions = {
-  canvas?: HTMLCanvasElement;
+  label?: string;
 };
 
-type Common = {
-  canvas?: HTMLCanvasElement;
-  ctx?: GPUCanvasContext;
-  pipelineGroups: IPipelineGroup[];
-};
+export class Executor extends Mixins {
+  pipelineGroups: PipelineGroup[] = [];
 
-export interface IExecutor extends Common {
-  runPipelines(): void;
-}
-
-export interface IExecutorBuilder extends Common {
-  addPipelineGroups(groups: IPipelineGroup[]): this;
-  finish(): IExecutor;
-}
-
-abstract class ExecutorCommon implements Common {
-  canvas?: HTMLCanvasElement;
-  ctx?: GPUCanvasContext;
-  pipelineGroups: IPipelineGroup[] = [];
-}
-
-class ExecutorBuilder extends ExecutorCommon implements IExecutorBuilder {
-  constructor(options?: ExecutorOptions) {
+  constructor(options: ExecutorOptions) {
     super();
-    this.canvas = options?.canvas;
+    this.label = options.label;
   }
 
-  addPipelineGroups(groups: IPipelineGroup[]): this {
-    this.pipelineGroups.push(...groups);
+  async addPipelineGroup(group: PipelineGroup): Promise<this> {
+    await group.build();
+    this.pipelineGroups.push(group);
+
     return this;
   }
 
-  finish(): IExecutor {
-    return new Executor(this);
-  }
-}
+  private async runPipelineGroup(group: PipelineGroup): Promise<void> {
+    const vao = group.vertexAttributeObject;
+    const bindGroup = group.bindGroup;
 
-class Executor extends ExecutorCommon implements IExecutor {
-  constructor(builder: IExecutorBuilder) {
-    super();
-    let canvas = builder.canvas;
-    if (!canvas) {
-      canvas = document.createElement('canvas');
-      canvas.width = 640;
-      canvas.height = 480;
+    if (vao === undefined) {
+      throw new Error("Vertex attribute object not set");
+    }
+    if (bindGroup === undefined) {
+      throw new Error("Bind group not set");
     }
 
-    this.canvas = canvas;
+    const { context } = group;
+    const device = await group.getDevice();
 
-    const ctx = this.canvas.getContext('webgpu');
-    if (!ctx) {
-      throw new Error('Could not get WebGPU context');
-    }
+    const commandEncoder = device.createCommandEncoder();
 
-    this.ctx = ctx;
-    this.pipelineGroups = builder.pipelineGroups;
-  }
+    await Promise.all(
+      group.pipelines.map(async (pipeline) => {
+        if (vao.gpuBuffer === undefined) return;
 
-  runPipelines() {
-    if (!this.ctx) {
-      throw new Error('WebGPU context is not initialized');
-    }
+        await pipeline.onBeforePass(pipeline);
 
-    for (const pipelineGroup of this.pipelineGroups) {
-      const device = pipelineGroup.deviceCtx.device;
-      const commandEncoder = device.createCommandEncoder();
+        if (
+          pipeline.type === "render" &&
+          pipeline.gpuPipeline instanceof GPURenderPipeline
+        ) {
+          const pass = commandEncoder.beginRenderPass({
+            colorAttachments: [
+              {
+                view: context.getCurrentTexture().createView(),
+                loadOp: "clear",
+                clearValue: { r: 0, g: 0, b: 0, a: 1 },
+                storeOp: "store",
+              } satisfies GPURenderPassColorAttachment,
+            ],
+          });
 
-      for (const unit of pipelineGroup.pipelineUnits) {
-        if (!unit.pipeline) {
-          console.error('Pipeline not built');
-          continue;
+          pass.setPipeline(pipeline.gpuPipeline);
+          pass.setVertexBuffer(0, vao.gpuBuffer);
+          pass.setBindGroup(0, bindGroup);
+          pass.draw(vao.vertexCount, vao.instanceCount);
+          pass.end();
+        } else if (
+          pipeline.type === "compute" &&
+          pipeline.gpuPipeline instanceof GPUComputePipeline
+        ) {
+          const pass = commandEncoder.beginComputePass();
+          pass.setPipeline(pipeline.gpuPipeline);
+          pass.setBindGroup(0, bindGroup);
+          pass.dispatchWorkgroups(
+            pipeline.workgroupCount[0],
+            pipeline.workgroupCount[1],
+            pipeline.workgroupCount[2],
+          );
+          pass.end();
         }
 
-        unit.onBeforePass?.(pipelineGroup.state);
+        await pipeline.onAfterPass(pipeline);
+      }),
+    );
 
-        if (unit.type === 'render') {
-          this.runRenderPipeline(commandEncoder, pipelineGroup, unit);
-        } else {
-          this.runComputePipeline(commandEncoder, pipelineGroup, unit);
-        }
-
-        unit.onAfterPass?.(pipelineGroup.state);
-      }
-
-      device.queue.submit([commandEncoder.finish()]);
-    }
+    device.queue.submit([commandEncoder.finish()]);
   }
 
-  private runRenderPipeline<T>(
-    encoder: GPUCommandEncoder,
-    group: IPipelineGroup<T>,
-    unit: IPipelineUnit<T>
-  ) {
-    if (!unit.drawParams) {
-      throw new Error('Draw params not set');
-    }
-    if (!group.vertexBuffer) {
-      throw new Error('Vertex buffer not built');
-    }
-
-    const state = group.state;
-    const bindGroup = state.bindGroups[state.activeBindGroupIdx];
-    const pass = encoder.beginRenderPass({
-      colorAttachments: [
-        {
-          view: group.deviceCtx.canvasCtx.getCurrentTexture().createView(),
-          loadOp: 'clear',
-          clearValue: { r: 0, g: 0, b: 0.4, a: 1 },
-          storeOp: 'store',
-        } satisfies GPURenderPassColorAttachment,
-      ],
-    });
-
-    pass.setPipeline(unit.pipeline as GPURenderPipeline);
-    pass.setVertexBuffer(0, group.vertexBuffer);
-    pass.setBindGroup(0, bindGroup);
-    pass.draw(...unit.drawParams);
-    pass.end();
+  async run(): Promise<void> {
+    await Promise.all(
+      this.pipelineGroups.map(async (group) => {
+        await this.runPipelineGroup(group);
+      }),
+    );
   }
-
-  private runComputePipeline<T>(
-    encoder: GPUCommandEncoder,
-    group: IPipelineGroup<T>,
-    unit: IPipelineUnit<T>
-  ) {
-    const state = group.state;
-    const bindGroup = state.bindGroups[state.activeBindGroupIdx];
-
-    const pass = encoder.beginComputePass();
-    pass.setPipeline(unit.pipeline as GPUComputePipeline);
-    pass.setBindGroup(0, bindGroup);
-    pass.dispatchWorkgroups(...unit.workgroupSize);
-    pass.end();
-  }
-}
-
-export function createExecutor(options?: ExecutorOptions) {
-  return new ExecutorBuilder(options);
 }

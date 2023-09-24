@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useLayoutEffect, useRef } from 'react';
-import { runExample } from './main';
+import { useLayoutEffect, useRef } from "react";
+import { runExample } from "./main";
 
 export function Example(): JSX.Element {
   const ref = useRef<HTMLCanvasElement>(null);

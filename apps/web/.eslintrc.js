@@ -4,4 +4,5 @@ module.exports = {
     'no-bitwise': 'off',
     'no-undef': 'off',
   },
+  root: true,
 };

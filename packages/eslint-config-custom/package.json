@@ -5,7 +5,8 @@
   "private": true,
   "devDependencies": {
     "@vercel/style-guide": "^5.0.0",
-    "eslint-config-turbo": "^1.10.12"
+    "eslint-config-turbo": "^1.10.12",
+    "eslint-plugin-prettier": "5.0.0"
   },
   "publishConfig": {
     "access": "restricted"
