@@ -24,7 +24,7 @@ export class Pipeline extends Mixins {
   gpuPipeline?: GPURenderPipeline | GPUComputePipeline;
   workgroupSize: [number, number, number];
   workgroupCount: [number, number, number];
-  clearColor: GPUColor = [0, 0, 0];
+  clearColor: GPUColor = [0, 0, 0, 1];
 
   constructor(options: PipelineOptions) {
     super();
