@@ -5,3 +5,5 @@ export * from "./PipelineGroup";
 export * from "./Storage";
 export * from "./Uniform";
 export * from "./VertexAttributeObject";
+export * from "./Texture";
+export * from "./Sampler";

@@ -4,7 +4,7 @@ import { fallbackToEmpty } from "../utils";
 export type WithCpuBuffer = InstanceType<ReturnType<typeof WithCpuBuffer>>;
 
 export function WithCpuBuffer<TBase extends Constructor>(Base?: TBase) {
-  return class CpuBuffer extends fallbackToEmpty(Base) {
+  return class extends fallbackToEmpty(Base) {
     cpuBuffer?: ArrayType;
 
     constructor(...args: ConstructorArgs) {

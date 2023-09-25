@@ -9,7 +9,6 @@
   "module": "dist/wgpu-kit_core.js",
   "types": "dist/wgpu-kit_core.d.ts",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .ts ./src",

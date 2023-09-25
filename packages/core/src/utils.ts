@@ -4,7 +4,12 @@ export type ConstructorArgs = any[];
 export type Constructor<T = Record<string, unknown>> = new (
   ...args: ConstructorArgs
 ) => T;
-export type ArrayType = Float32Array | Uint32Array | Uint16Array | Uint8Array;
+export type ArrayType =
+  | Float32Array
+  | Uint32Array
+  | Uint16Array
+  | Uint8Array
+  | Uint8ClampedArray;
 
 export function fallbackToEmpty<T extends Constructor>(Base?: T): T {
   return Base ?? (class {} as T);
@@ -21,4 +26,17 @@ export async function getDefaultDevice(): Promise<GPUDevice> {
 
   defaultDevice = _device;
   return _device;
+}
+
+export function getDataFromImage(image: HTMLImageElement): Uint8ClampedArray {
+  const canvas = document.createElement("canvas");
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
+  const ctx = canvas.getContext("2d");
+  if (ctx === null) {
+    throw new Error("Could not get 2D context");
+  }
+
+  ctx.drawImage(image, 0, 0);
+  return ctx.getImageData(0, 0, image.naturalWidth, image.naturalHeight).data;
 }

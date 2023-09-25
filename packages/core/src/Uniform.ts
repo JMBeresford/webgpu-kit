@@ -1,4 +1,4 @@
-import { WithGpuBufferObject } from "./components/GpuBufferObject";
+import { WithGpuBuffer } from "./components/GpuBufferObject";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
@@ -11,7 +11,7 @@ type UniformOptions = {
   arrayBuffer?: ArrayType;
 };
 
-const Mixins = WithGpuBufferObject(WithCpuBuffer(WithDevice(WithLabel())));
+const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
 
 export class Uniform extends Mixins {
   readonly binding: number;

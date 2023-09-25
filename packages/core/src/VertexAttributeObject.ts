@@ -1,9 +1,9 @@
-import { WithGpuBufferObject } from "./components/GpuBufferObject";
+import { WithGpuBuffer } from "./components/GpuBufferObject";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import type { Attribute } from ".";
 
-const Mixins = WithGpuBufferObject(WithDevice(WithLabel()));
+const Mixins = WithGpuBuffer(WithDevice(WithLabel()));
 
 type VAOOptions = {
   label?: string;
