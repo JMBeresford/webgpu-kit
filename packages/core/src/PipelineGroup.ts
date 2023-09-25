@@ -1,5 +1,7 @@
 import type { Pipeline } from "./Pipeline";
+import type { Sampler } from "./Sampler";
 import type { Storage } from "./Storage";
+import type { Texture } from "./Texture";
 import type { Uniform } from "./Uniform";
 import type { VertexAttributeObject } from "./VertexAttributeObject";
 import { WithCanvas } from "./components/Canvas";
@@ -23,6 +25,8 @@ export class PipelineGroup extends Mixins {
   pipelines: Pipeline[];
   uniforms: Uniform[] = [];
   storages: Storage[] = [];
+  textures: Texture[] = [];
+  samplers: Sampler[] = [];
 
   constructor(options: PipelineGroupOptions) {
     super();
@@ -39,22 +43,32 @@ export class PipelineGroup extends Mixins {
     return this._bindGroup;
   }
 
-  async addUniform(uniform: Uniform): Promise<this> {
+  async addUniform(uniform: Uniform): Promise<void> {
     if (uniform.gpuBuffer === undefined && uniform.cpuBuffer !== undefined) {
       await uniform.setBuffer(uniform.cpuBuffer);
     }
     this.uniforms.push(uniform);
-
-    return this;
   }
 
-  async addStorage(storage: Storage): Promise<this> {
+  async addStorage(storage: Storage): Promise<void> {
     if (storage.gpuBuffer === undefined && storage.cpuBuffer !== undefined) {
       await storage.setBuffer(storage.cpuBuffer);
     }
     this.storages.push(storage);
+  }
 
-    return this;
+  async addTexture(texture: Texture): Promise<void> {
+    if (texture.gpuTexture === undefined) {
+      await texture.updateTexture();
+    }
+    this.textures.push(texture);
+  }
+
+  async addSampler(sampler: Sampler): Promise<void> {
+    if (sampler.gpuSampler === undefined) {
+      await sampler.updateSampler();
+    }
+    this.samplers.push(sampler);
   }
 
   async build() {
@@ -105,6 +119,40 @@ export class PipelineGroup extends Mixins {
         binding: storage.binding,
         visibility: storage.visibility,
         buffer: storage.bufferOptions,
+      });
+    }
+
+    for (const texture of this.textures) {
+      if (texture.gpuTexture === undefined) {
+        throw new Error("Texture not set");
+      }
+
+      entries.push({
+        binding: texture.binding,
+        resource: texture.gpuTexture.createView(),
+      });
+
+      layoutEntries.push({
+        binding: texture.binding,
+        visibility: texture.visibility,
+        texture: {},
+      });
+    }
+
+    for (const sampler of this.samplers) {
+      if (sampler.gpuSampler === undefined) {
+        throw new Error("Sampler not set");
+      }
+
+      entries.push({
+        binding: sampler.binding,
+        resource: sampler.gpuSampler,
+      });
+
+      layoutEntries.push({
+        binding: sampler.binding,
+        visibility: sampler.visibility,
+        sampler: {},
       });
     }
 

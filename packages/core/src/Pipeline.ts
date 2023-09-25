@@ -24,6 +24,7 @@ export class Pipeline extends Mixins {
   gpuPipeline?: GPURenderPipeline | GPUComputePipeline;
   workgroupSize: [number, number, number];
   workgroupCount: [number, number, number];
+  clearColor: GPUColor = [0, 0, 0];
 
   constructor(options: PipelineOptions) {
     super();
@@ -59,5 +60,9 @@ export class Pipeline extends Mixins {
 
   setOnAfterPass(f: PipelineCallback): void {
     this.onAfterPass = f;
+  }
+
+  setClearColor(color: GPUColor): void {
+    this.clearColor = color;
   }
 }
