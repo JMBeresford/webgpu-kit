@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.6
+
+### Patch Changes
+
+- [#16](https://github.com/JMBeresford/wgpu-kit/pull/16) [`f2683ed`](https://github.com/JMBeresford/wgpu-kit/commit/f2683ed27225ef1f4cf7330de3890cca2280d6cd) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(Core): init textures and samplers
+
 ## 0.0.5
 
 ### Patch Changes
