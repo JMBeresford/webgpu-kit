@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.7
+
+### Patch Changes
+
+- [`e764c91`](https://github.com/JMBeresford/wgpu-kit/commit/e764c916a425876e3a6092a4da63c4fd3a94d3ce) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix(Core): fix clear color default
+
 ## 0.0.6
 
 ### Patch Changes
