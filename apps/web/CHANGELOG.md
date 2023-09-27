@@ -1,5 +1,15 @@
 # web
 
+## 1.0.8
+
+### Patch Changes
+
+- [`3ded504`](https://github.com/JMBeresford/wgpu-kit/commit/3ded504c2547830b637c321280c84cd4c706d785) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(Core): Mipmap generation for texture2d
+
+- Updated dependencies [[`3ded504`](https://github.com/JMBeresford/wgpu-kit/commit/3ded504c2547830b637c321280c84cd4c706d785)]:
+  - @wgpu-kit/core@0.0.8
+  - ui@0.0.1
+
 ## 1.0.7
 
 ### Patch Changes

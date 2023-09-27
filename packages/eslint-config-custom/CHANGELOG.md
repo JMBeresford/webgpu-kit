@@ -1,5 +1,11 @@
 # eslint-config-custom
 
+## 0.0.2
+
+### Patch Changes
+
+- [`3ded504`](https://github.com/JMBeresford/wgpu-kit/commit/3ded504c2547830b637c321280c84cd4c706d785) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(Core): Mipmap generation for texture2d
+
 ## 0.0.1
 
 ### Patch Changes
