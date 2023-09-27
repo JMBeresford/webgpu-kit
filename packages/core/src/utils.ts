@@ -40,3 +40,29 @@ export function getDataFromImage(image: HTMLImageElement): Uint8ClampedArray {
   ctx.drawImage(image, 0, 0);
   return ctx.getImageData(0, 0, image.naturalWidth, image.naturalHeight).data;
 }
+
+export function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
+export function clamp(x: number, min: number, max: number): number {
+  return Math.min(Math.max(x, min), max);
+}
+
+export function mix(a: ArrayType, b: ArrayType, t: number): ArrayType {
+  return a.map((v, i) => v + (b[i] - v) * t);
+}
+
+export function bilinearInterpolation(
+  topLeft: ArrayType,
+  topRight: ArrayType,
+  bottomLeft: ArrayType,
+  bottomRight: ArrayType,
+  t1: number,
+  t2: number,
+) {
+  const top = mix(topLeft, topRight, t1);
+  const bottom = mix(bottomLeft, bottomRight, t1);
+
+  return mix(top, bottom, t2);
+}

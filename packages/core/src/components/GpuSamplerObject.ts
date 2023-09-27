@@ -12,6 +12,9 @@ export function WithGpuSampler<
     samplerOptions: GPUSamplerDescriptor = {
       magFilter: "linear",
       minFilter: "linear",
+      addressModeU: "repeat",
+      addressModeV: "repeat",
+      mipmapFilter: "linear",
     };
 
     async updateSampler(options?: GPUSamplerDescriptor): Promise<void> {

@@ -7,13 +7,16 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "rm -rf **/(.turbo|.next|dist)",
+    "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/",
+    "clean:deps": "git clean -fXd",
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
+  },
+  "dependencies": {
+    "@webgpu/types": "0.1.34"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
-    "@webgpu/types": "0.1.34",
     "eslint": "^8.48.0",
     "prettier": "^3.0.3",
     "tsconfig": "workspace:*",

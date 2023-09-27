@@ -5,6 +5,7 @@ import {
   PipelineGroup,
   Sampler,
   Texture,
+  Uniform,
   VertexAttributeObject,
 } from "@wgpu-kit/core/src";
 import texture from "./logo.png";
@@ -43,11 +44,13 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
         @location(0) uv: vec2<f32>,
       }
 
+      @group(0) @binding(2) var<uniform> scale: f32;
+
       @vertex
       fn vertexMain(input: VertexInput) -> VertexOutput {
         var output = VertexOutput();
 
-        output.pos = vec4<f32>(input.pos, 0.0, 1.0);
+        output.pos = vec4<f32>(input.pos * scale, 0.0, 1.0);
         output.uv = (input.pos + 1.0) / 2.0;
         output.uv = vec2<f32>(output.uv.x, 1.0 - output.uv.y);
 
@@ -68,6 +71,12 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
         return tex;
       }
     `,
+    onAfterPass: async () => {
+      if (scale.cpuBuffer !== undefined && scale.cpuBuffer.length > 0) {
+        scale.cpuBuffer[0] = Math.sin(performance.now() / 1000);
+        await scale.updateGpuBuffer();
+      }
+    },
   });
 
   pipeline.setClearColor([0.9, 0.9, 1.0, 1.0]);
@@ -86,6 +95,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   });
 
   await logoTex.setFromImage(texture.src);
+  await logoTex.generateMipMaps();
 
   const sampler = new Sampler({
     label: "Logo sampler",
@@ -98,8 +108,16 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     minFilter: "linear",
   });
 
+  const scale = new Uniform({
+    label: "Scale",
+    binding: 2,
+    visibility: GPUShaderStage.VERTEX,
+    arrayBuffer: new Float32Array([1]),
+  });
+
   await pipelineGroup.addTexture(logoTex);
   await pipelineGroup.addSampler(sampler);
+  await pipelineGroup.addUniform(scale);
 
   const executor = new Executor({
     label: "Render executor",
@@ -107,5 +125,11 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   await executor.addPipelineGroup(pipelineGroup);
 
-  await executor.run();
+  async function tick(): Promise<void> {
+    await executor.run();
+    await new Promise(requestAnimationFrame);
+    await tick();
+  }
+
+  await tick();
 }

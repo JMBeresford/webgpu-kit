@@ -11,7 +11,7 @@ export function WithCpuBuffer<TBase extends Constructor>(Base?: TBase) {
       super(args);
     }
 
-    setArrayBuffer(buffer: ArrayType): void {
+    setCpuBuffer(buffer: ArrayType): void {
       this.cpuBuffer = buffer;
     }
   };
