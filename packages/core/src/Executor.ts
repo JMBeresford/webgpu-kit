@@ -1,9 +1,7 @@
 import type { PipelineGroup } from "./PipelineGroup";
-import { WithCanvas } from "./components/Canvas";
-import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 
-const Mixins = WithCanvas(WithDevice(WithLabel()));
+const Mixins = WithLabel();
 
 type ExecutorOptions = {
   label?: string;
@@ -50,7 +48,7 @@ export class Executor extends Mixins {
           pipeline.type === "render" &&
           pipeline.gpuPipeline instanceof GPURenderPipeline
         ) {
-          const pass = commandEncoder.beginRenderPass({
+          const renderPassDescriptor: GPURenderPassDescriptor = {
             colorAttachments: [
               {
                 view: context.getCurrentTexture().createView(),
@@ -59,7 +57,17 @@ export class Executor extends Mixins {
                 storeOp: "store",
               } satisfies GPURenderPassColorAttachment,
             ],
-          });
+            depthStencilAttachment: undefined,
+          };
+
+          if (group.depthStencilEnabled && group.depthTextureView) {
+            renderPassDescriptor.depthStencilAttachment = {
+              view: group.depthTextureView,
+              ...group.depthStencilAttachment,
+            };
+          }
+
+          const pass = commandEncoder.beginRenderPass(renderPassDescriptor);
 
           pass.setPipeline(pipeline.gpuPipeline);
           pass.setVertexBuffer(0, vao.gpuBuffer);

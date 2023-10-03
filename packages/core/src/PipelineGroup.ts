@@ -5,22 +5,26 @@ import type { Texture } from "./Texture";
 import type { Uniform } from "./Uniform";
 import type { VertexAttributeObject } from "./VertexAttributeObject";
 import { WithCanvas } from "./components/Canvas";
+import { WithDepthStencil } from "./components/DepthStencil";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 
-const Mixins = WithCanvas(WithDevice(WithLabel()));
+const Mixins = WithCanvas(WithDevice(WithDepthStencil(WithLabel())));
 
 type PipelineGroupOptions = {
   label?: string;
   vertexAttributeObject?: VertexAttributeObject;
   pipelines?: Pipeline[];
   canvas?: HTMLCanvasElement;
+  enableDepthStencil?: boolean;
 };
 
 export class PipelineGroup extends Mixins {
   private _bindGroup?: GPUBindGroup;
   private bindGroupLayout?: GPUBindGroupLayout;
   private pipelineLayout?: GPUPipelineLayout;
+  depthTexture?: GPUTexture;
+  depthTextureView?: GPUTextureView;
   vertexAttributeObject?: VertexAttributeObject;
   pipelines: Pipeline[];
   uniforms: Uniform[] = [];
@@ -36,6 +40,10 @@ export class PipelineGroup extends Mixins {
 
     if (options.canvas) {
       this.setCanvas(options.canvas);
+    }
+
+    if (options.enableDepthStencil) {
+      this.depthStencilEnabled = true;
     }
   }
 
@@ -72,8 +80,24 @@ export class PipelineGroup extends Mixins {
   }
 
   async build() {
+    await this.buildDepthTexture();
     await this.buildBindGroup();
     await this.buildPipelines();
+  }
+
+  private async buildDepthTexture(): Promise<GPUTexture> {
+    const device = await this.getDevice();
+
+    this.depthTexture = device.createTexture({
+      label: "Depth texture",
+      size: [this.canvas.width, this.canvas.height],
+      format: this.depthStencilState.format,
+      usage: GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+
+    this.depthTextureView = this.depthTexture.createView();
+
+    return this.depthTexture;
   }
 
   private async buildBindGroup(): Promise<GPUBindGroup> {
@@ -218,6 +242,9 @@ export class PipelineGroup extends Mixins {
                 },
               ],
             },
+            depthStencil: this.depthStencilEnabled
+              ? this.depthStencilState
+              : undefined,
           });
         } else {
           pipeline.gpuPipeline = await device.createComputePipelineAsync({

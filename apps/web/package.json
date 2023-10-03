@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@wgpu-kit/core": "workspace:*",
+    "gl-matrix": "^3.4.3",
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
