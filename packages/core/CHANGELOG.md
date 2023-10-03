@@ -1,5 +1,15 @@
 # @wgpu-kit/core
 
+## 0.0.9
+
+### Patch Changes
+
+- [`04d44ae`](https://github.com/JMBeresford/wgpu-kit/commit/04d44ae538c14d9ab6ae6b359861d4f91a5aa8b2) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(Core): per-render pipeline auto clear
+
+- [`dccf958`](https://github.com/JMBeresford/wgpu-kit/commit/dccf95869aeb35ae56d97880cc8b385936bbb055) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(Core): depth-stencil support
+
+- [`f410239`](https://github.com/JMBeresford/wgpu-kit/commit/f4102392249950eed7f01151281f363be4f7e455) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix(Core): prefer auto-clear by default
+
 ## 0.0.8
 
 ### Patch Changes
