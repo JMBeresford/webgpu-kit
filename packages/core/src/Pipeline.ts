@@ -15,6 +15,7 @@ type PipelineOptions = {
   shader: string;
   workgroupSize?: [number, number, number];
   workgroupCount?: [number, number, number];
+  clearColor?: GPUColor;
 };
 
 export class Pipeline extends Mixins {
@@ -24,7 +25,7 @@ export class Pipeline extends Mixins {
   gpuPipeline?: GPURenderPipeline | GPUComputePipeline;
   workgroupSize: [number, number, number];
   workgroupCount: [number, number, number];
-  clearColor: GPUColor = [0, 0, 0, 1];
+  clearColor?: GPUColor;
 
   constructor(options: PipelineOptions) {
     super();
@@ -40,6 +41,7 @@ export class Pipeline extends Mixins {
     this.setShader(options.shader);
     this.workgroupSize = options.workgroupSize ?? [64, 64, 64];
     this.workgroupCount = options.workgroupCount ?? [8, 8, 8];
+    this.clearColor = options.clearColor;
   }
 
   async build(): Promise<void> {

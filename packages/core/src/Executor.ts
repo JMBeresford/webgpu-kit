@@ -54,7 +54,7 @@ export class Executor extends Mixins {
             colorAttachments: [
               {
                 view: context.getCurrentTexture().createView(),
-                loadOp: "clear",
+                loadOp: pipeline.clearColor ? "clear" : "load",
                 clearValue: pipeline.clearColor,
                 storeOp: "store",
               } satisfies GPURenderPassColorAttachment,
