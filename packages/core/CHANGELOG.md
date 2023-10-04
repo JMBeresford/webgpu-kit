@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.10
+
+### Patch Changes
+
+- [`30f635c`](https://github.com/JMBeresford/wgpu-kit/commit/30f635cc257647d6473cdd4c4402333ec131f332) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(Core): multi-sampling
+
 ## 0.0.9
 
 ### Patch Changes
