@@ -48,10 +48,23 @@ export class Executor extends Mixins {
           pipeline.type === "render" &&
           pipeline.gpuPipeline instanceof GPURenderPipeline
         ) {
+          const multiSampleTextureView =
+            group.multiSampleState.count > 1
+              ? group.multiSampleTextureView
+              : undefined;
+
+          const view =
+            multiSampleTextureView ?? context.getCurrentTexture().createView();
+
+          const resolveTarget = multiSampleTextureView
+            ? context.getCurrentTexture().createView()
+            : undefined;
+
           const renderPassDescriptor: GPURenderPassDescriptor = {
             colorAttachments: [
               {
-                view: context.getCurrentTexture().createView(),
+                view,
+                resolveTarget,
                 loadOp: pipeline.clearColor ? "clear" : "load",
                 clearValue: pipeline.clearColor,
                 storeOp: "store",
@@ -60,9 +73,9 @@ export class Executor extends Mixins {
             depthStencilAttachment: undefined,
           };
 
-          if (group.depthStencilEnabled && group.depthTextureView) {
+          if (group.depthStencilEnabled && group.depthStencilTextureView) {
             renderPassDescriptor.depthStencilAttachment = {
-              view: group.depthTextureView,
+              view: group.depthStencilTextureView,
               ...group.depthStencilAttachment,
             };
           }

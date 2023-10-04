@@ -1,12 +1,19 @@
-import { fallbackToEmpty, type Constructor } from "../utils";
+import { type Constructor } from "../utils";
+import type { WithCanvas } from "./Canvas";
+import type { WithDevice } from "./Device";
+import type { WithMultiSampling } from "./MultiSampling";
 
 export type WithDepthStencil = InstanceType<
   ReturnType<typeof WithDepthStencil>
 >;
 
-export function WithDepthStencil<TBase extends Constructor>(Base?: TBase) {
-  return class extends fallbackToEmpty(Base) {
+export function WithDepthStencil<
+  TBase extends Constructor<WithCanvas & WithDevice & WithMultiSampling>,
+>(Base: TBase) {
+  return class extends Base {
     depthStencilEnabled = false;
+    depthStencilTexture?: GPUTexture;
+    depthStencilTextureView?: GPUTextureView;
     depthStencilState: GPUDepthStencilState = {
       depthWriteEnabled: true,
       depthCompare: "less",
@@ -87,6 +94,26 @@ export function WithDepthStencil<TBase extends Constructor>(Base?: TBase) {
         this.depthStencilAttachment = attachment;
       } else {
         Object.assign(this.depthStencilAttachment, attachment);
+      }
+    }
+
+    async buildDepthStencilTexture() {
+      const device = await this.getDevice();
+
+      if (this.depthStencilTexture !== undefined) {
+        this.depthStencilTexture.destroy();
+      }
+
+      if (this.depthStencilEnabled) {
+        this.depthStencilTexture = device.createTexture({
+          label: "Depth stencil texture",
+          size: [this.canvas.width, this.canvas.height],
+          format: this.depthStencilState.format,
+          usage: GPUTextureUsage.RENDER_ATTACHMENT,
+          sampleCount: this.multiSampleState.count,
+        });
+
+        this.depthStencilTextureView = this.depthStencilTexture.createView();
       }
     }
   };

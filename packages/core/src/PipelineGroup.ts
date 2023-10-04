@@ -8,14 +8,18 @@ import { WithCanvas } from "./components/Canvas";
 import { WithDepthStencil } from "./components/DepthStencil";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
+import { WithMultiSampling } from "./components/MultiSampling";
 
-const Mixins = WithCanvas(WithDevice(WithDepthStencil(WithLabel())));
+const Mixins = WithCanvas(
+  WithDevice(WithMultiSampling(WithDepthStencil(WithLabel()))),
+);
 
 type PipelineGroupOptions = {
   label?: string;
   vertexAttributeObject?: VertexAttributeObject;
   pipelines?: Pipeline[];
   canvas?: HTMLCanvasElement;
+  enableMultiSampling?: boolean;
   enableDepthStencil?: boolean;
 };
 
@@ -23,8 +27,6 @@ export class PipelineGroup extends Mixins {
   private _bindGroup?: GPUBindGroup;
   private bindGroupLayout?: GPUBindGroupLayout;
   private pipelineLayout?: GPUPipelineLayout;
-  depthTexture?: GPUTexture;
-  depthTextureView?: GPUTextureView;
   vertexAttributeObject?: VertexAttributeObject;
   pipelines: Pipeline[];
   uniforms: Uniform[] = [];
@@ -40,6 +42,10 @@ export class PipelineGroup extends Mixins {
 
     if (options.canvas) {
       this.setCanvas(options.canvas);
+    }
+
+    if (options.enableMultiSampling) {
+      this.setMultiSampleCount(4);
     }
 
     if (options.enableDepthStencil) {
@@ -80,24 +86,10 @@ export class PipelineGroup extends Mixins {
   }
 
   async build() {
-    await this.buildDepthTexture();
+    await this.buildMultiSampleTexture();
+    await this.buildDepthStencilTexture();
     await this.buildBindGroup();
     await this.buildPipelines();
-  }
-
-  private async buildDepthTexture(): Promise<GPUTexture> {
-    const device = await this.getDevice();
-
-    this.depthTexture = device.createTexture({
-      label: "Depth texture",
-      size: [this.canvas.width, this.canvas.height],
-      format: this.depthStencilState.format,
-      usage: GPUTextureUsage.RENDER_ATTACHMENT,
-    });
-
-    this.depthTextureView = this.depthTexture.createView();
-
-    return this.depthTexture;
   }
 
   private async buildBindGroup(): Promise<GPUBindGroup> {
@@ -159,7 +151,9 @@ export class PipelineGroup extends Mixins {
       layoutEntries.push({
         binding: texture.binding,
         visibility: texture.visibility,
-        texture: {},
+        texture: {
+          multisampled: texture.gpuTexture.sampleCount > 1,
+        },
       });
     }
 
@@ -242,6 +236,7 @@ export class PipelineGroup extends Mixins {
                 },
               ],
             },
+            multisample: this.multiSampleState,
             depthStencil: this.depthStencilEnabled
               ? this.depthStencilState
               : undefined,
