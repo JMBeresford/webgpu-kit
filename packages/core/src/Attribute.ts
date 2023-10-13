@@ -5,6 +5,9 @@ import type { ArrayType } from "./utils";
 
 const Mixins = WithDevice(WithCpuBuffer(WithLabel()));
 
+/**
+ * {@link Attribute}'eslint-plugin-tsdoc'
+ */
 type AttributeOptions = {
   label?: string;
   format: GPUVertexFormat;
@@ -14,6 +17,9 @@ type AttributeOptions = {
   arrayBuffer: ArrayType;
 };
 
+/**
+ * An attribute object that contains vertex data
+ */
 export class Attribute extends Mixins {
   readonly format: GPUVertexFormat;
   readonly shaderLocation: number;

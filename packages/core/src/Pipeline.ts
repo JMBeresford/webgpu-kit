@@ -6,6 +6,9 @@ import { WithShader } from "./components/Shader";
 const Mixins = WithShader(WithDevice(WithId(WithLabel())));
 type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
 
+/**
+ * {@link Pipeline} constructor parameters
+ */
 type PipelineOptions = {
   label?: string;
   type?: "render" | "compute";
@@ -18,6 +21,9 @@ type PipelineOptions = {
   clearColor?: GPUColor;
 };
 
+/**
+ * A pipeline that runs either a render or compute operation
+ */
 export class Pipeline extends Mixins {
   type: "render" | "compute" = "render";
   onBeforePass: PipelineCallback = () => {};
