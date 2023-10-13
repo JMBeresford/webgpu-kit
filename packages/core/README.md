@@ -5,6 +5,9 @@
 ## Table of Contents
 
 <!--toc:start-->
+
+- [Installation](#installation)
+- [Usage](#usage) - [Overview](#overview) - [Pipelines](#pipelines) - [Uniform Buffers](#uniform-buffers) - [Storage Buffers](#storage-buffers) - [Samplers](#samplers)
 <!--toc:end-->
 
 ## Installation
@@ -116,8 +119,8 @@ Pipelines can contain various types of state that will compose the operation to 
 
 - Shader Code
 - Bind Groups composed of
-  - [Uniform Buffers](#Uniforms)
-  - [Storage Buffers]()
+  - [Uniform Buffers](#uniform-buffers)
+  - [Storage Buffers](#storage-buffers)
   - Texture Objects
   - Sampler Objects
 - Vertex Attribute Objects

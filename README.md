@@ -33,7 +33,7 @@ Other packages are planned to expose additional APIs:
 
 ## Packages
 
-- [core](packages/core/README.md)
+- [core](packages/core/)
 - forward
 - shaders
 
