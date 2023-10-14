@@ -7,7 +7,6 @@
 <!--toc:start-->
 
 - [Installation](#installation)
-
 - [Overview](#overview)
   - [Pipelines](#pipelines)
   - [Uniform Buffers](#uniform-buffers)
