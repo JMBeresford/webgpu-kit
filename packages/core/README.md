@@ -172,7 +172,7 @@ myPipelineGroup.addUniform(myColorUniform);
 
 #### Storage Buffers
 
-Storages are created and used like in the exact same fashion as [Uniforms](#uniform-buffers)
+Storages are created and used in the exact same fashion as [Uniforms](#uniform-buffers)
 
 > Pay close attention to how the binding location in the shader is matched by that defined
 > in the Storage instantiation. This is **mandatory**.
