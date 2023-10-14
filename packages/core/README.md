@@ -7,7 +7,13 @@
 <!--toc:start-->
 
 - [Installation](#installation)
-- [Usage](#usage) - [Overview](#overview) - [Pipelines](#pipelines) - [Uniform Buffers](#uniform-buffers) - [Storage Buffers](#storage-buffers) - [Samplers](#samplers)
+
+- [Overview](#overview)
+  - [Pipelines](#pipelines)
+  - [Uniform Buffers](#uniform-buffers)
+  - [Storage Buffers](#storage-buffers)
+  - [Samplers](#samplers)
+
 <!--toc:end-->
 
 ## Installation
@@ -17,8 +23,6 @@ Run the following to add the package to your project:
 ```sh
 npm i @wgpu-kit/core
 ```
-
-## Usage
 
 ### Overview
 
@@ -172,26 +176,26 @@ myPipelineGroup.addUniform(myColorUniform);
 Storages are created and used like in the exact same fashion as [Uniforms](#uniform-buffers)
 
 > Pay close attention to how the binding location in the shader is matched by that defined
-> in the Uniform instantiation. This is **mandatory**.
+> in the Storage instantiation. This is **mandatory**.
 
 ```ts
-import { Uniform, Pipeline } from "@wgpu-kit/core";
+import { Storage, Pipeline } from "@wgpu-kit/core";
 
 const myShader = wgsl`
 
-@group(0) @binding(0) var<uniform> vec3<f32> uColor;
+@group(0) @binding(0) var<storage> array<vec3<f32>> vertexColors;
 
 @fragment
-fn fragmentMain() {
-  return vec4<f32>(uColor, 1.0);
+fn fragmentMain(@builtin(vertex_index) vIndex) {
+  return vec4<f32>(vertexColors[vIndex], 1.0);
 } 
 `;
 
-const myColorUniform = new Uniform({ label: "color uniform", binding: 0 });
+const myColorStorage = new Storage({ label: "color storage", binding: 0 });
 
-// add the uniform to a pipelineGroup, and it will be available to
+// add the storage to a pipelineGroup, and it will be available to
 // all contained pipelines
-myPipelineGroup.addUniform(myColorUniform);
+myPipelineGroup.addStorage(myColorStorage);
 ```
 
 #### Samplers
