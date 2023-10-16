@@ -246,8 +246,9 @@ await myPipelineGroup.addSampler(sampler);
 await myPipelineGroup.addTexture(texture);
 ```
 
-> reference the [Sampler source][sampler_source] for the full list of constructor options available
-> reference the [Texture source][texture_source] for the full list of constructor options available
+> reference the [Sampler source][sampler_source] and the
+> [Texture source][texture_source] for the full list of constructor
+> options available
 
 #### Vertex Attribute Objects
 
@@ -293,8 +294,9 @@ const pipelineGroup = new PipelineGroup({
 });
 ```
 
-> reference the [Attribute source][attribute_source] for the full list of constructor options available
-> reference the [VertexAttributeObject source][vao_source] for the full list of constructor options available
+> reference the [Attribute source][attribute_source] and the
+> [VertexAttributeObject source][vao_source] for the full list of constructor
+> options available
 
 [attribute_source]: ./src/Attribute.ts
 [pipeline_source]: ./src/Pipeline.ts
