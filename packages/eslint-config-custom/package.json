@@ -10,5 +10,8 @@
   },
   "publishConfig": {
     "access": "restricted"
+  },
+  "dependencies": {
+    "eslint-plugin-tsdoc": "^0.2.17"
   }
 }

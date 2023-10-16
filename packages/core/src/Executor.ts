@@ -3,10 +3,17 @@ import { WithLabel } from "./components/Label";
 
 const Mixins = WithLabel();
 
+/**
+ * {@link Executor} constructor parameters
+ */
 type ExecutorOptions = {
   label?: string;
 };
 
+/**
+ * An executor class that executes each pipeline in its contained
+ * {@link PipelineGroups}.
+ */
 export class Executor extends Mixins {
   pipelineGroups: PipelineGroup[] = [];
 
@@ -109,6 +116,9 @@ export class Executor extends Mixins {
     device.queue.submit([commandEncoder.finish()]);
   }
 
+  /**
+   * Run each pipline in each of the executor's contained pipelineGroups
+   */
   async run(): Promise<void> {
     await Promise.all(
       this.pipelineGroups.map(async (group) => {

@@ -5,12 +5,18 @@ import { WithLabel } from "./components/Label";
 
 const Mixins = WithGpuTexture(WithCpuBuffer(WithDevice(WithLabel())));
 
+/**
+ * {@link Texture} constructor parameters
+ */
 type TextureOptions = {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;
 };
 
+/**
+ * A GPU texture object
+ */
 export class Texture extends Mixins {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;

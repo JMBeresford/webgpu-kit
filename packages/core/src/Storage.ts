@@ -4,6 +4,9 @@ import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { type ArrayType } from "./utils";
 
+/**
+ * {@link Storage} constructor parameters
+ */
 type StorageOptions = {
   label?: string;
   binding: number;
@@ -14,6 +17,9 @@ type StorageOptions = {
 
 const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
 
+/**
+ * A GPU storage object
+ */
 export class Storage extends Mixins {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;

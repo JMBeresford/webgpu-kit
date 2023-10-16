@@ -14,6 +14,9 @@ const Mixins = WithCanvas(
   WithDevice(WithMultiSampling(WithDepthStencil(WithLabel()))),
 );
 
+/**
+ * {@link PipelineGroup} constructor parameters
+ */
 type PipelineGroupOptions = {
   label?: string;
   vertexAttributeObject?: VertexAttributeObject;
@@ -23,6 +26,11 @@ type PipelineGroupOptions = {
   enableDepthStencil?: boolean;
 };
 
+/**
+ * A group of {@link Pipeline}s that share the same {@link VertexAttributeObject}
+ * and bind group layout.
+ *
+ */
 export class PipelineGroup extends Mixins {
   private _bindGroup?: GPUBindGroup;
   private bindGroupLayout?: GPUBindGroupLayout;

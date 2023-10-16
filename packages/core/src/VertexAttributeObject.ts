@@ -5,12 +5,19 @@ import type { Attribute } from ".";
 
 const Mixins = WithGpuBuffer(WithDevice(WithLabel()));
 
+/**
+ * {@link VertexAttributeObject} constructor parameters
+ */
 type VAOOptions = {
   label?: string;
   vertexCount: number;
   instanceCount?: number;
 };
 
+/**
+ * A GPU vertex attribute object that is composed of multiple {@link Attribute}s
+ * to be used in a {@link PipelineGroup}
+ */
 export class VertexAttributeObject extends Mixins {
   private attributes: Attribute[] = [];
   layout?: GPUVertexBufferLayout;
