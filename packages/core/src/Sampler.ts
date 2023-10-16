@@ -4,6 +4,9 @@ import { WithGpuSampler } from "./components/GpuSamplerObject";
 
 const Mixins = WithGpuSampler(WithDevice(WithLabel()));
 
+/**
+ * {@link Sampler} constructor parameters
+ */
 type SamplerOptions = {
   label?: string;
   binding: number;
@@ -11,6 +14,9 @@ type SamplerOptions = {
   options?: GPUSamplerDescriptor;
 };
 
+/**
+ * Sampler object used to sample textures
+ */
 export class Sampler extends Mixins {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;

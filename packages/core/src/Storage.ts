@@ -4,6 +4,9 @@ import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { type ArrayType } from "./utils";
 
+/**
+ * {@link Storage} constructor parameters
+ */
 type StorageOptions = {
   label?: string;
   binding: number;

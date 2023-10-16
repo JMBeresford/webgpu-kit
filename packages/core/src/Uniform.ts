@@ -4,6 +4,9 @@ import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { type ArrayType } from "./utils";
 
+/**
+ * {@link Uniform} constructor parameters
+ */
 type UniformOptions = {
   label?: string;
   binding: number;
@@ -13,6 +16,9 @@ type UniformOptions = {
 
 const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
 
+/**
+ * A GPU uniform object
+ */
 export class Uniform extends Mixins {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;

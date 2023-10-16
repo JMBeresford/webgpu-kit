@@ -4,15 +4,15 @@ import { WithLabel } from "./components/Label";
 const Mixins = WithLabel();
 
 /**
- * {@link Executor} constructor params
+ * {@link Executor} constructor parameters
  */
 type ExecutorOptions = {
   label?: string;
 };
 
 /**
- * An executor class that executes each pipeline in it's contained
- * pipelineGroups
+ * An executor class that executes each pipeline in its contained
+ * {@link PipelineGroups}.
  */
 export class Executor extends Mixins {
   pipelineGroups: PipelineGroup[] = [];

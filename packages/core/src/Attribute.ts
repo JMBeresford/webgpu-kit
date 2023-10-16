@@ -6,7 +6,7 @@ import type { ArrayType } from "./utils";
 const Mixins = WithDevice(WithCpuBuffer(WithLabel()));
 
 /**
- * {@link Attribute}'eslint-plugin-tsdoc'
+ * {@link Attribute} constructor parameters
  */
 type AttributeOptions = {
   label?: string;
