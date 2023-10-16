@@ -17,6 +17,9 @@ type StorageOptions = {
 
 const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
 
+/**
+ * A GPU storage object
+ */
 export class Storage extends Mixins {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;
