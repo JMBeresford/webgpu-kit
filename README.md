@@ -20,7 +20,7 @@
 
 WGPUKit aims to provide varying levels of abstraction around the webGPU spec.
 
-The `core` package is intended to be a small wrapper around webGPU to reduce boilerplate and
+The [core] package is intended to be a small wrapper around webGPU to reduce boilerplate and
 to make construction and execution of pipelines more straight-forward.
 
 The `forward` package is intended to be yet another small wrapper around the core package that
@@ -33,9 +33,9 @@ Other packages are planned to expose additional APIs:
 
 ## Packages
 
-- [core](packages/core/)
-- forward
-- shaders
+- [core]
+- forward - TODO
+- shaders - TODO
 
 ## Installation
 
@@ -47,3 +47,5 @@ In order to install the packages run the following:
 # e.g. to install the core package
 npm i @wgpu-kit/core
 ```
+
+[core]: ./packages/core/
