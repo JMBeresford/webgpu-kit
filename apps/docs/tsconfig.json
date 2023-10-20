@@ -1,0 +1,8 @@
+{
+  "extends": "tsconfig/main.json",
+  "files": [],
+  "compilerOptions": {
+    "types": ["@webgpu/types"]
+  },
+  "references": [{ "path": "../../packages/core" }]
+}
