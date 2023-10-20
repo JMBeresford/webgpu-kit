@@ -4,7 +4,7 @@ import { Pipeline } from "@wgpu-kit/core/src/Pipeline";
 import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
 import { Executor } from "@wgpu-kit/core/src/Executor";
 import { Uniform } from "@wgpu-kit/core/src/Uniform";
-import { Storage } from "@wgpu-kit/core/src";
+import { Storage } from "@wgpu-kit/core/src/Storage";
 import {
   GRID_SIZE,
   WORKGROUP_SIZE,

@@ -1,9 +1,21 @@
-export * as Attribute from "./Attribute";
-export * as Executor from "./Executor";
-export * as Pipeline from "./Pipeline";
-export * as PipelineGroup from "./PipelineGroup";
-export * as Storage from "./Storage";
-export * as Uniform from "./Uniform";
-export * as VertexAttributeObject from "./VertexAttributeObject";
-export * as Texture from "./Texture";
-export * as Sampler from "./Sampler";
+import * as Attribute from "./Attribute";
+import * as Executor from "./Executor";
+import * as Pipeline from "./Pipeline";
+import * as PipelineGroup from "./PipelineGroup";
+import * as Storage from "./Storage";
+import * as Uniform from "./Uniform";
+import * as VertexAttributeObject from "./VertexAttributeObject";
+import * as Texture from "./Texture";
+import * as Sampler from "./Sampler";
+
+export {
+  Attribute,
+  Executor,
+  Pipeline,
+  PipelineGroup,
+  Storage,
+  Uniform,
+  VertexAttributeObject,
+  Texture,
+  Sampler,
+};
