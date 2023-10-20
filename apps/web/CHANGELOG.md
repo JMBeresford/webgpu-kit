@@ -1,5 +1,12 @@
 # web
 
+## 1.0.12
+
+### Patch Changes
+
+- Updated dependencies [[`4538565`](https://github.com/JMBeresford/wgpu-kit/commit/4538565694b56dd97c1931a24d202ae60e041501)]:
+  - @wgpu-kit/core@0.0.12
+
 ## 1.0.11
 
 ### Patch Changes

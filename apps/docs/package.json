@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Documentation for the wgpu-kit packages",
   "private": true,
   "scripts": {
