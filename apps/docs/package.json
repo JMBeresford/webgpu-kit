@@ -2,6 +2,7 @@
   "name": "docs",
   "version": "0.0.2",
   "description": "Documentation for the wgpu-kit packages",
+  "private": true,
   "scripts": {
     "build": "typedoc"
   },
