@@ -27,6 +27,7 @@ export function WithGpuTexture<
   TBase extends Constructor<WithCpuBuffer & WithDevice & Partial<WithLabel>>,
 >(Base: TBase) {
   return class extends Base implements GpuTextureComponent {
+    /** @internal */
     _mipmaps: MipMap[] = [];
     declare cpuBuffer?: Uint8ClampedArray;
     gpuTexture?: GPUTexture;

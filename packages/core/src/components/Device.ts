@@ -13,6 +13,7 @@ export function WithDevice<TBase extends Constructor<Partial<WithCanvas>>>(
   Base?: TBase,
 ) {
   return class extends fallbackToEmpty(Base) implements DeviceComponent {
+    /** @internal */
     _device?: GPUDevice;
 
     async getDevice(): Promise<GPUDevice> {

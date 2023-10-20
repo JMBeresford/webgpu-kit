@@ -2,8 +2,13 @@
   "extends": "./typedoc.base.json",
   "name": "wgpu-kit",
   "out": "./dist",
-  "entryPoints": ["../../packages/core/"],
+  "entryPoints": ["../../packages/core/src/*.ts"],
   "entryPointStrategy": "resolve",
   "categorizeByGroup": true,
-  "exclude": ["**/node_modules/**/*", "**/*.test.ts"]
+  "excludeInternal": true,
+  "exclude": [
+    "**/node_modules/**/*",
+    "**/*.test.ts",
+    "../../packages/core/src/index.ts"
+  ]
 }
