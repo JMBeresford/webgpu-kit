@@ -2,6 +2,17 @@ import { type Constructor } from "../utils";
 import type { WithCanvas } from "./Canvas";
 import type { WithDevice } from "./Device";
 
+export interface MultiSamplingComponent {
+  multiSampleTexture?: GPUTexture;
+  multiSampleTextureView?: GPUTextureView;
+  multiSampleState: Required<GPUMultisampleState>;
+
+  setMultiSampleCount(count: 1 | 4): void;
+  setMultiSampleMask(mask: number): void;
+  setMultiSampleAlphaToCoverageEnabled(enabled: boolean): void;
+  buildMultiSampleTexture(): Promise<void>;
+}
+
 export type WithMultiSampling = InstanceType<
   ReturnType<typeof WithMultiSampling>
 >;
@@ -9,7 +20,7 @@ export type WithMultiSampling = InstanceType<
 export function WithMultiSampling<
   TBase extends Constructor<WithDevice & WithCanvas>,
 >(Base: TBase) {
-  return class extends Base {
+  return class extends Base implements MultiSamplingComponent {
     multiSampleTexture?: GPUTexture;
     multiSampleTextureView?: GPUTextureView;
     multiSampleState: Required<GPUMultisampleState> = {

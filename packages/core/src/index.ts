@@ -1,9 +1,9 @@
-export * from "./Attribute";
-export * from "./Executor";
-export * from "./Pipeline";
-export * from "./PipelineGroup";
-export * from "./Storage";
-export * from "./Uniform";
-export * from "./VertexAttributeObject";
-export * from "./Texture";
-export * from "./Sampler";
+export * as Attribute from "./Attribute";
+export * as Executor from "./Executor";
+export * as Pipeline from "./Pipeline";
+export * as PipelineGroup from "./PipelineGroup";
+export * as Storage from "./Storage";
+export * as Uniform from "./Uniform";
+export * as VertexAttributeObject from "./VertexAttributeObject";
+export * as Texture from "./Texture";
+export * as Sampler from "./Sampler";

@@ -4,12 +4,12 @@ import { WithDevice } from "./components/Device";
 import { WithShader } from "./components/Shader";
 
 const Mixins = WithShader(WithDevice(WithId(WithLabel())));
-type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
+export type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
 
 /**
  * {@link Pipeline} constructor parameters
  */
-type PipelineOptions = {
+export type PipelineOptions = {
   label?: string;
   type?: "render" | "compute";
   onBeforePass?: PipelineCallback;

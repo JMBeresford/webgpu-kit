@@ -17,7 +17,7 @@ const Mixins = WithCanvas(
 /**
  * {@link PipelineGroup} constructor parameters
  */
-type PipelineGroupOptions = {
+export type PipelineGroupOptions = {
   label?: string;
   vertexAttributeObject?: VertexAttributeObject;
   pipelines?: Pipeline[];

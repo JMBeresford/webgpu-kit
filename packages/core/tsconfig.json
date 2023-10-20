@@ -1,4 +1,7 @@
 {
   "extends": "tsconfig/main",
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
   "include": ["**/*.ts", "**/*.tsx"]
 }

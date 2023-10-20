@@ -8,7 +8,7 @@ const Mixins = WithDevice(WithCpuBuffer(WithLabel()));
 /**
  * {@link Attribute} constructor parameters
  */
-type AttributeOptions = {
+export type AttributeOptions = {
   label?: string;
   format: GPUVertexFormat;
   shaderLocation: number;

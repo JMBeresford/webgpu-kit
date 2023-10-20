@@ -3,6 +3,30 @@ import type { WithCanvas } from "./Canvas";
 import type { WithDevice } from "./Device";
 import type { WithMultiSampling } from "./MultiSampling";
 
+export interface DepthStencilComponent {
+  depthStencilEnabled: boolean;
+  depthStencilTexture?: GPUTexture;
+  depthStencilTextureView?: GPUTextureView;
+  depthStencilState: GPUDepthStencilState;
+  depthStencilAttachment: Partial<GPURenderPassDepthStencilAttachment>;
+
+  setDepthWriteEnabled(enabled: boolean): void;
+  setDepthCompare(compare: GPUCompareFunction): void;
+  setDepthStencilFormat(format: GPUTextureFormat): void;
+  setStencilBack(state: GPUStencilFaceState): void;
+  setStencilFront(state: GPUStencilFaceState): void;
+  setDepthBias(bias: number): void;
+  setDepthBiasSlopeScale(scale: number): void;
+  setDepthBiasClamp(clamp: number): void;
+  setStencilReadMask(mask: number): void;
+  setStencilWriteMask(mask: number): void;
+  setDepthStencilAttachment(
+    attachment: Partial<GPURenderPassDepthStencilAttachment>,
+    replace?: boolean,
+  ): void;
+  buildDepthStencilTexture(): Promise<void>;
+}
+
 export type WithDepthStencil = InstanceType<
   ReturnType<typeof WithDepthStencil>
 >;
@@ -10,7 +34,7 @@ export type WithDepthStencil = InstanceType<
 export function WithDepthStencil<
   TBase extends Constructor<WithCanvas & WithDevice & WithMultiSampling>,
 >(Base: TBase) {
-  return class extends Base {
+  return class extends Base implements DepthStencilComponent {
     depthStencilEnabled = false;
     depthStencilTexture?: GPUTexture;
     depthStencilTextureView?: GPUTextureView;
