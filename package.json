@@ -6,6 +6,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "docs": "turbo run docs",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/",
@@ -13,7 +14,8 @@
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
   },
   "dependencies": {
-    "@webgpu/types": "0.1.34"
+    "@webgpu/types": "0.1.34",
+    "typedoc": "^0.25.2"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",

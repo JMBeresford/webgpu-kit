@@ -1,0 +1,6 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "plugin": ["@jberesford/typedoc-plugin-mdn-links"],
+  "tryResolveUnknown": true,
+  "logLevel": "Verbose"
+}

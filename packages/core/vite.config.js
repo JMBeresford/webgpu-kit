@@ -1,21 +1,21 @@
 // vite.config.js
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import { resolve } from "path";
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'WGPU-Kit Core',
-      fileName: 'wgpu-kit_core',
+      entry: resolve(__dirname, "./index.ts"),
+      name: "WGPU-Kit Core",
+      fileName: "wgpu-kit_core",
     },
   },
   plugins: [
     dts({
       insertTypesEntry: true,
       rollupTypes: true,
-      tsconfigPath: resolve(__dirname, 'tsconfig.json'),
+      tsconfigPath: resolve(__dirname, "tsconfig.json"),
     }),
   ],
 });

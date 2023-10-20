@@ -1,14 +1,12 @@
-import {
-  Attribute,
-  Executor,
-  Pipeline,
-  PipelineGroup,
-  Sampler,
-  Texture,
-  Uniform,
-  VertexAttributeObject,
-} from "@wgpu-kit/core/src";
 import { mat4 } from "gl-matrix";
+import { Attribute } from "@wgpu-kit/core/src/Attribute";
+import { Executor } from "@wgpu-kit/core/src/Executor";
+import { Pipeline } from "@wgpu-kit/core/src/Pipeline";
+import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
+import { Uniform } from "@wgpu-kit/core/src/Uniform";
+import { VertexAttributeObject } from "@wgpu-kit/core/src/VertexAttributeObject";
+import { Texture } from "@wgpu-kit/core/src/Texture";
+import { Sampler } from "@wgpu-kit/core/src/Sampler";
 import texture from "./logo.png";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {

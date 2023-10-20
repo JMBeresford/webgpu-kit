@@ -7,7 +7,7 @@ import { type ArrayType } from "./utils";
 /**
  * {@link Storage} constructor parameters
  */
-type StorageOptions = {
+export type StorageOptions = {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;

@@ -6,13 +6,13 @@ const Mixins = WithLabel();
 /**
  * {@link Executor} constructor parameters
  */
-type ExecutorOptions = {
+export type ExecutorOptions = {
   label?: string;
 };
 
 /**
  * An executor class that executes each pipeline in its contained
- * {@link PipelineGroups}.
+ * {@link PipelineGroup}s.
  */
 export class Executor extends Mixins {
   pipelineGroups: PipelineGroup[] = [];

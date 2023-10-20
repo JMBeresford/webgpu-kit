@@ -1,14 +1,14 @@
 import { WithGpuBuffer } from "./components/GpuBufferObject";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
-import type { Attribute } from ".";
+import type { Attribute } from "./Attribute";
 
 const Mixins = WithGpuBuffer(WithDevice(WithLabel()));
 
 /**
  * {@link VertexAttributeObject} constructor parameters
  */
-type VAOOptions = {
+export type VAOOptions = {
   label?: string;
   vertexCount: number;
   instanceCount?: number;

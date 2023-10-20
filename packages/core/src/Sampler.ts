@@ -7,7 +7,7 @@ const Mixins = WithGpuSampler(WithDevice(WithLabel()));
 /**
  * {@link Sampler} constructor parameters
  */
-type SamplerOptions = {
+export type SamplerOptions = {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;

@@ -1,9 +1,16 @@
 import type { Constructor } from "../utils";
 
+export interface CanvasComponent {
+  canvas: HTMLCanvasElement;
+  context: GPUCanvasContext;
+  canvasFormat: GPUTextureFormat;
+
+  setCanvas(canvas: HTMLCanvasElement): void;
+}
 export type WithCanvas = InstanceType<ReturnType<typeof WithCanvas>>;
 
 export function WithCanvas<TBase extends Constructor>(Base: TBase) {
-  return class extends Base {
+  return class extends Base implements CanvasComponent {
     canvas: HTMLCanvasElement = defaultCanvas();
     context: GPUCanvasContext = defaultContext();
     canvasFormat: GPUTextureFormat = defaultCanvasFormat();

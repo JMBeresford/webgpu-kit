@@ -7,7 +7,7 @@ import { type ArrayType } from "./utils";
 /**
  * {@link Uniform} constructor parameters
  */
-type UniformOptions = {
+export type UniformOptions = {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;

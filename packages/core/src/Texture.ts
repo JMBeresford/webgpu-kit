@@ -8,7 +8,7 @@ const Mixins = WithGpuTexture(WithCpuBuffer(WithDevice(WithLabel())));
 /**
  * {@link Texture} constructor parameters
  */
-type TextureOptions = {
+export type TextureOptions = {
   label?: string;
   binding: number;
   visibility: GPUShaderStageFlags;

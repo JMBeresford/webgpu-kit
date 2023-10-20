@@ -4,13 +4,29 @@ import type { WithCpuBuffer } from "./CpuBuffer";
 import type { WithDevice } from "./Device";
 import type { WithLabel } from "./Label";
 
+export interface GpuTextureComponent {
+  gpuTexture?: GPUTexture;
+  cpuBuffer?: Uint8ClampedArray;
+  textureFormat: GPUTextureFormat;
+  textureWidth: number;
+  textureHeight: number;
+  textureUsage: GPUTextureUsageFlags;
+
+  setTextureFormat(format: GPUTextureFormat): void;
+  setTextureUsage(usage: GPUTextureUsageFlags): void;
+  setTextureSize(width: number, height: number): void;
+  setFromImage(image: HTMLImageElement | string): Promise<void>;
+  setFromData(data: ArrayType): Promise<void>;
+  generateMipMaps(): Promise<void>;
+}
+
 export type WithGpuTexture = InstanceType<ReturnType<typeof WithGpuTexture>>;
 export type MipMap = { data: Uint8ClampedArray; width: number; height: number };
 
 export function WithGpuTexture<
   TBase extends Constructor<WithCpuBuffer & WithDevice & Partial<WithLabel>>,
 >(Base: TBase) {
-  return class extends Base {
+  return class extends Base implements GpuTextureComponent {
     _mipmaps: MipMap[] = [];
     declare cpuBuffer?: Uint8ClampedArray;
     gpuTexture?: GPUTexture;
