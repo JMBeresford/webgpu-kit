@@ -1,9 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- definition of Constructor
+/** @internal */
 export type ConstructorArgs = any[];
 
+/** @internal */
 export type Constructor<T = Record<string, unknown>> = new (
   ...args: ConstructorArgs
 ) => T;
+
 export type ArrayType =
   | Float32Array
   | Uint32Array
@@ -11,11 +14,14 @@ export type ArrayType =
   | Uint8Array
   | Uint8ClampedArray;
 
+/** @internal */
 export function fallbackToEmpty<T extends Constructor>(Base?: T): T {
   return Base ?? (class {} as T);
 }
 
 let defaultDevice: GPUDevice | undefined;
+
+/** @internal */
 export async function getDefaultDevice(): Promise<GPUDevice> {
   if (defaultDevice) return defaultDevice;
 
@@ -28,6 +34,7 @@ export async function getDefaultDevice(): Promise<GPUDevice> {
   return _device;
 }
 
+/** @internal */
 export function getDataFromImage(image: HTMLImageElement): Uint8ClampedArray {
   const canvas = document.createElement("canvas");
   canvas.width = image.naturalWidth;
@@ -41,18 +48,22 @@ export function getDataFromImage(image: HTMLImageElement): Uint8ClampedArray {
   return ctx.getImageData(0, 0, image.naturalWidth, image.naturalHeight).data;
 }
 
+/** @internal */
 export function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
 
+/** @internal */
 export function clamp(x: number, min: number, max: number): number {
   return Math.min(Math.max(x, min), max);
 }
 
+/** @internal */
 export function mix(a: ArrayType, b: ArrayType, t: number): ArrayType {
   return a.map((v, i) => v + (b[i] - v) * t);
 }
 
+/** @internal */
 export function bilinearInterpolation(
   topLeft: ArrayType,
   topRight: ArrayType,

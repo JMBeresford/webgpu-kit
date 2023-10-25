@@ -2,8 +2,9 @@ import { WithGpuBuffer } from "./components/GpuBufferObject";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import type { Attribute } from "./Attribute";
+import { WithCpuBuffer } from "./components/CpuBuffer";
 
-const Mixins = WithGpuBuffer(WithDevice(WithLabel()));
+const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
 
 /**
  * {@link VertexAttributeObject} constructor parameters
@@ -19,7 +20,7 @@ export type VAOOptions = {
  * to be used in a {@link PipelineGroup}
  */
 export class VertexAttributeObject extends Mixins {
-  private attributes: Attribute[] = [];
+  readonly attributes: Attribute[] = [];
   layout?: GPUVertexBufferLayout;
   vertexCount: number;
   instanceCount: number;
@@ -49,7 +50,6 @@ export class VertexAttributeObject extends Mixins {
       return;
     }
 
-    let arrayStride = 0;
     let offset = 0;
     const attributes: GPUVertexAttribute[] = [];
     for (const attribute of this.attributes) {
@@ -59,12 +59,11 @@ export class VertexAttributeObject extends Mixins {
         shaderLocation: attribute.shaderLocation,
       });
 
-      offset += attribute.cpuBuffer.byteLength;
-      arrayStride += attribute.itemSize * attribute.cpuBuffer.BYTES_PER_ELEMENT;
+      offset += attribute.itemSize * attribute.cpuBuffer.BYTES_PER_ELEMENT;
     }
 
     this.layout = {
-      arrayStride,
+      arrayStride: offset,
       attributes,
     };
   }
@@ -84,6 +83,11 @@ export class VertexAttributeObject extends Mixins {
       }
     }
 
+    this.setCpuBuffer(new Float32Array(arrayBuffer));
+    if (!this.cpuBuffer) {
+      throw new Error("cpuBuffer is undefined");
+    }
+
     const device = await this.getDevice();
 
     if (this.gpuBuffer === undefined || size !== this.gpuBuffer.size) {
@@ -94,6 +98,6 @@ export class VertexAttributeObject extends Mixins {
       });
     }
 
-    device.queue.writeBuffer(this.gpuBuffer, 0, new Float32Array(arrayBuffer));
+    device.queue.writeBuffer(this.gpuBuffer, 0, this.cpuBuffer);
   }
 }
