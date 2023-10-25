@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "lint": "eslint --ext .ts ./src",
     "test:setup": "playwright install",
-    "test": "pnpm run test:setup && vitest"
+    "test:local": "pnpm run test:setup && vitest"
   },
   "dependencies": {
     "@webgpu/types": "0.1.34",
