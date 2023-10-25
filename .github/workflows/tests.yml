@@ -1,15 +1,13 @@
-name: Release
+name: Tests
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   release:
-    name: Release
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -41,23 +39,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Creating .npmrc
-        run: |
-          cat << EOF > "$HOME/.npmrc"
-            //registry.npmjs.org/:_authToken=$NPM_TOKEN
-          EOF
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Run tests
         run: pnpm run test
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm run publish-packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
