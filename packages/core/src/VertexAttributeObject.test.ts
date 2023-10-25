@@ -56,7 +56,9 @@ describe("VertexAttributeObject", () => {
     await vao.addAttribute(position);
     await vao.addAttribute(color);
     expect(vao.attributes.length).toBe(2);
-    expect(vao.cpuBuffer).toEqual(new Float32Array([...vertices, ...colors]));
+    expect(vao.cpuBuffer).toEqual(
+      new Float32Array([-1, -1, 1, 0, 0, 0, 1, 0, 1, 0, 1, -1, 0, 0, 1]),
+    );
 
     expect(vao.layout).toEqual({
       arrayStride: 20,

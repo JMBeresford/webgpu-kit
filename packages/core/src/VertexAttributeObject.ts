@@ -73,23 +73,29 @@ export class VertexAttributeObject extends Mixins {
       return;
     }
 
-    let size = 0;
-    const arrayBuffer: number[] = [];
+    const data: number[] = [];
 
-    for (const attribute of this.attributes) {
-      size += attribute.cpuBuffer.byteLength;
-      for (const value of attribute.cpuBuffer) {
-        arrayBuffer.push(value);
+    if (!this.layout) {
+      throw new Error("layout is undefined");
+    }
+
+    for (let i = 0; i < this.vertexCount; i++) {
+      for (const attribute of this.attributes) {
+        const offset = i * attribute.itemSize;
+        for (let j = offset; j < offset + attribute.itemSize; j++) {
+          data.push(attribute.cpuBuffer[j]);
+        }
       }
     }
 
-    this.setCpuBuffer(new Float32Array(arrayBuffer));
+    this.setCpuBuffer(new Float32Array(data));
+
     if (!this.cpuBuffer) {
       throw new Error("cpuBuffer is undefined");
     }
 
     const device = await this.getDevice();
-
+    const size = this.cpuBuffer.byteLength;
     if (this.gpuBuffer === undefined || size !== this.gpuBuffer.size) {
       this.gpuBuffer = device.createBuffer({
         usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
