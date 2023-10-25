@@ -7,10 +7,10 @@ export interface MultiSamplingComponent {
   multiSampleTextureView?: GPUTextureView;
   multiSampleState: Required<GPUMultisampleState>;
 
-  setMultiSampleCount(count: 1 | 4): void;
-  setMultiSampleMask(mask: number): void;
-  setMultiSampleAlphaToCoverageEnabled(enabled: boolean): void;
-  buildMultiSampleTexture(): Promise<void>;
+  setMultiSampleCount: (count: 1 | 4) => void;
+  setMultiSampleMask: (mask: number) => void;
+  setMultiSampleAlphaToCoverageEnabled: (enabled: boolean) => void;
+  buildMultiSampleTexture: () => Promise<void>;
 }
 
 export type WithMultiSampling = InstanceType<

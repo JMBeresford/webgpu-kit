@@ -6,7 +6,7 @@ export interface GpuSamplerComponent {
   gpuSampler?: GPUSampler;
   samplerOptions: GPUSamplerDescriptor;
 
-  updateSampler(options?: GPUSamplerDescriptor): Promise<void>;
+  updateSampler: (options?: GPUSamplerDescriptor) => Promise<void>;
 }
 
 export type WithGpuSampler = InstanceType<ReturnType<typeof WithGpuSampler>>;

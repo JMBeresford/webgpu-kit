@@ -8,9 +8,9 @@ export interface ShaderComponent {
   shaderModule?: GPUShaderModule;
   shaderEntries: ShaderEntries;
 
-  setShader(shader: string): void;
-  buildShaderModule(): Promise<void>;
-  setShaderEntries(entries: ShaderEntries): void;
+  setShader: (shader: string) => void;
+  buildShaderModule: () => Promise<void>;
+  setShaderEntries: (entries: ShaderEntries) => void;
 }
 
 export type WithShader = InstanceType<ReturnType<typeof WithShader>>;

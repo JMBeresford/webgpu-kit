@@ -12,12 +12,12 @@ export interface GpuTextureComponent {
   textureHeight: number;
   textureUsage: GPUTextureUsageFlags;
 
-  setTextureFormat(format: GPUTextureFormat): void;
-  setTextureUsage(usage: GPUTextureUsageFlags): void;
-  setTextureSize(width: number, height: number): void;
-  setFromImage(image: HTMLImageElement | string): Promise<void>;
-  setFromData(data: ArrayType): Promise<void>;
-  generateMipMaps(): Promise<void>;
+  setTextureFormat: (format: GPUTextureFormat) => void;
+  setTextureUsage: (usage: GPUTextureUsageFlags) => void;
+  setTextureSize: (width: number, height: number) => void;
+  setFromImage: (image: HTMLImageElement | string) => Promise<void>;
+  setFromData: (data: ArrayType) => Promise<void>;
+  generateMipMaps: () => Promise<void>;
 }
 
 export type WithGpuTexture = InstanceType<ReturnType<typeof WithGpuTexture>>;

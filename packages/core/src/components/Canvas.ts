@@ -5,7 +5,7 @@ export interface CanvasComponent {
   context: GPUCanvasContext;
   canvasFormat: GPUTextureFormat;
 
-  setCanvas(canvas: HTMLCanvasElement): void;
+  setCanvas: (canvas: HTMLCanvasElement) => void;
 }
 export type WithCanvas = InstanceType<ReturnType<typeof WithCanvas>>;
 

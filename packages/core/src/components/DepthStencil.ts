@@ -10,21 +10,21 @@ export interface DepthStencilComponent {
   depthStencilState: GPUDepthStencilState;
   depthStencilAttachment: Partial<GPURenderPassDepthStencilAttachment>;
 
-  setDepthWriteEnabled(enabled: boolean): void;
-  setDepthCompare(compare: GPUCompareFunction): void;
-  setDepthStencilFormat(format: GPUTextureFormat): void;
-  setStencilBack(state: GPUStencilFaceState): void;
-  setStencilFront(state: GPUStencilFaceState): void;
-  setDepthBias(bias: number): void;
-  setDepthBiasSlopeScale(scale: number): void;
-  setDepthBiasClamp(clamp: number): void;
-  setStencilReadMask(mask: number): void;
-  setStencilWriteMask(mask: number): void;
-  setDepthStencilAttachment(
+  setDepthWriteEnabled: (enabled: boolean) => void;
+  setDepthCompare: (compare: GPUCompareFunction) => void;
+  setDepthStencilFormat: (format: GPUTextureFormat) => void;
+  setStencilBack: (state: GPUStencilFaceState) => void;
+  setStencilFront: (state: GPUStencilFaceState) => void;
+  setDepthBias: (bias: number) => void;
+  setDepthBiasSlopeScale: (scale: number) => void;
+  setDepthBiasClamp: (clamp: number) => void;
+  setStencilReadMask: (mask: number) => void;
+  setStencilWriteMask: (mask: number) => void;
+  setDepthStencilAttachment: (
     attachment: Partial<GPURenderPassDepthStencilAttachment>,
     replace?: boolean,
-  ): void;
-  buildDepthStencilTexture(): Promise<void>;
+  ) => void;
+  buildDepthStencilTexture: () => Promise<void>;
 }
 
 export type WithDepthStencil = InstanceType<

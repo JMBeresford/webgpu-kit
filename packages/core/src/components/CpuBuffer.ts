@@ -4,7 +4,7 @@ import { fallbackToEmpty } from "../utils";
 export interface CpuBufferComponent {
   cpuBuffer?: ArrayType;
 
-  setCpuBuffer(buffer: ArrayType): void;
+  setCpuBuffer: (buffer: ArrayType) => void;
 }
 
 export type WithCpuBuffer = InstanceType<ReturnType<typeof WithCpuBuffer>>;

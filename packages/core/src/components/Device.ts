@@ -3,8 +3,8 @@ import { fallbackToEmpty, getDefaultDevice } from "../utils";
 import type { WithCanvas } from "./Canvas";
 
 export interface DeviceComponent {
-  getDevice(): Promise<GPUDevice>;
-  setDevice(d: GPUDevice): void;
+  getDevice: () => Promise<GPUDevice>;
+  setDevice: (d: GPUDevice) => void;
 }
 
 export type WithDevice = InstanceType<ReturnType<typeof WithDevice>>;

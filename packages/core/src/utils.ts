@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- definition of Constructor
-/** @internal */
+/**
+ * @internal
+ */ /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- private */
 export type ConstructorArgs = any[];
 
 /** @internal */

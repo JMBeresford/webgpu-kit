@@ -4,7 +4,7 @@ import { fallbackToEmpty } from "../utils";
 export interface LabelComponent {
   label?: string;
 
-  setLabel(label: string): void;
+  setLabel: (label: string) => void;
 }
 
 export type WithLabel = InstanceType<ReturnType<typeof WithLabel>>;
