@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.14
+
+### Patch Changes
+
+- [`5ec0a39`](https://github.com/JMBeresford/wgpu-kit/commit/5ec0a39a86696bc6c49e73040ec69fa5c180fa24) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix(core): fix buffer interleaving
+
 ## 0.0.13
 
 ### Patch Changes
