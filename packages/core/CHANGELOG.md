@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.0.13
+
+### Patch Changes
+
+- [#26](https://github.com/JMBeresford/wgpu-kit/pull/26) [`1b7a1b4`](https://github.com/JMBeresford/wgpu-kit/commit/1b7a1b4bd34fb8835f5604498daad44a82ce4b26) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix(core): fix offset calc for multiple attributes
+
 ## 0.0.12
 
 ### Patch Changes
