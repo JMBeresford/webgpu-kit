@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return -- mocks */
-
 import { it, describe, expect, vi } from "vitest";
 import { MockWebGPU, MockDevice } from "../lib/MockWebGPU";
 import { Attribute } from "./Attribute";
@@ -26,9 +24,10 @@ describe("VertexAttributeObject", () => {
   });
 
   it("should create an instance with a label", () => {
-    expect(
-      new VertexAttributeObject({ label: "vao", vertexCount: 0 }),
-    ).toBeTruthy();
+    const attr = new VertexAttributeObject({ label: "vao", vertexCount: 0 });
+    expect(attr).toBeTruthy();
+
+    expect(attr.label).toBe("vao");
   });
 
   it("should allow adding an attribute", async () => {

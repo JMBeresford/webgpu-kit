@@ -1,4 +1,3 @@
-/* eslint-disable no-return-await -- mocks */
 export const MockDevice = {
   createBuffer: () => ({}) as unknown as GPUBuffer,
   queue: {
