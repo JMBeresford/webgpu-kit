@@ -1,6 +1,24 @@
-import { it, describe, expect } from "vitest";
+/* eslint-disable @typescript-eslint/no-unsafe-return -- mocks */
+
+import { it, describe, expect, vi } from "vitest";
+import { MockWebGPU, MockDevice } from "../lib/MockWebGPU";
 import { Attribute } from "./Attribute";
 import { VertexAttributeObject } from "./VertexAttributeObject";
+
+vi.mock("./utils", async () => {
+  const actual = await vi.importActual("./utils");
+  for (const key in MockWebGPU) {
+    vi.stubGlobal(
+      key,
+      vi.fn(() => MockWebGPU[key]),
+    );
+  }
+
+  return {
+    ...(actual as Record<string, unknown>),
+    getDefaultDevice: () => MockDevice,
+  };
+});
 
 describe("VertexAttributeObject", () => {
   it("should create an instance", () => {
