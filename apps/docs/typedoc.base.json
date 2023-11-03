@@ -1,6 +1,5 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "plugin": ["@jberesford/typedoc-plugin-mdn-links"],
-  "tryResolveUnknown": true,
+  "plugin": ["typedoc-plugin-resolve-external"],
   "logLevel": "Verbose"
 }
