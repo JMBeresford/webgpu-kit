@@ -1,5 +1,11 @@
 # docs
 
+## 0.0.4
+
+### Patch Changes
+
+- [`9cc8879`](https://github.com/JMBeresford/wgpu-kit/commit/9cc8879900dee9f9845307fa6f602cfcae27fb49) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat: resolve webgpu types via plugin
+
 ## 0.0.3
 
 ### Patch Changes
