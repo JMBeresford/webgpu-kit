@@ -35,6 +35,43 @@ export async function getDefaultDevice(): Promise<GPUDevice> {
   return _device;
 }
 
+let _canvas: HTMLCanvasElement | undefined;
+let _context: GPUCanvasContext | undefined;
+
+/** @internal */
+export function defaultCanvas(): HTMLCanvasElement {
+  if (_canvas) {
+    return _canvas;
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = 640;
+  canvas.height = 480;
+  _canvas = canvas;
+  return canvas;
+}
+
+/** @internal */
+export function defaultContext(): GPUCanvasContext {
+  if (_context) {
+    return _context;
+  }
+  const ctx = defaultCanvas().getContext("webgpu");
+  if (!ctx) {
+    throw new Error("Could not get WebGPU context");
+  }
+  _context = ctx;
+  return ctx;
+}
+
+/** @internal */
+export function defaultCanvasFormat(): GPUTextureFormat {
+  try {
+    return navigator.gpu.getPreferredCanvasFormat();
+  } catch {
+    throw new Error(`Could not get preferred canvas format`);
+  }
+}
+
 /** @internal */
 export function getDataFromImage(image: HTMLImageElement): Uint8ClampedArray {
   const canvas = document.createElement("canvas");

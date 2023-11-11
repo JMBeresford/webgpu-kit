@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/uuid": "^9.0.3",
     "eslint-config-custom": "workspace:*",
+    "jsdom": "^22.1.0",
     "tsconfig": "workspace:*",
     "typescript": "^5.0.2",
     "uuid": "^9.0.0",

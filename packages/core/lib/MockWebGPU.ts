@@ -5,6 +5,15 @@ export const MockDevice = {
   },
 } as unknown as GPUDevice;
 
+export const MockCanvas = {
+  getContext: () => ({}) as unknown as GPUCanvasContext,
+} as unknown as HTMLCanvasElement;
+
+export const MockContext = {
+  configure: () => {},
+  getSwapChainPreferredFormat: () => "rgba8unorm",
+} as unknown as GPUCanvasContext;
+
 export const MockAdapter = {} as unknown as GPUAdapter;
 
 export const MockWebGPU: Record<string, unknown> = {
