@@ -12,11 +12,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .ts ./src",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
-    "@webgpu/types": "0.1.34",
-    "wgsl_reflect": "github:brendan-duncan/wgsl_reflect"
+    "@webgpu/types": "0.1.34"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.3",

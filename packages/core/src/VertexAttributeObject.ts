@@ -3,6 +3,7 @@ import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import type { Attribute } from "./Attribute";
 import { WithCpuBuffer } from "./components/CpuBuffer";
+import type { IndexBuffer } from "./IndexBuffer";
 
 const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
 
@@ -24,6 +25,7 @@ export class VertexAttributeObject extends Mixins {
   layout?: GPUVertexBufferLayout;
   vertexCount: number;
   instanceCount: number;
+  indexBuffer?: IndexBuffer;
 
   constructor(options: VAOOptions) {
     super();
@@ -43,6 +45,11 @@ export class VertexAttributeObject extends Mixins {
 
   setInstanceCount(count: number) {
     this.instanceCount = count;
+  }
+
+  async setIndexBuffer(indexBuffer: IndexBuffer) {
+    this.indexBuffer = indexBuffer;
+    await this.indexBuffer.updateGpuBuffer();
   }
 
   private updateLayout(): void {

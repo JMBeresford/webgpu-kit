@@ -7,3 +7,4 @@ export * from "./Uniform";
 export * from "./VertexAttributeObject";
 export * from "./Texture";
 export * from "./Sampler";
+export * from "./IndexBuffer";

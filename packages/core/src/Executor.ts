@@ -92,7 +92,23 @@ export class Executor extends Mixins {
           pass.setPipeline(pipeline.gpuPipeline);
           pass.setVertexBuffer(0, vao.gpuBuffer);
           pass.setBindGroup(0, bindGroup);
-          pass.draw(vao.vertexCount, vao.instanceCount);
+          const indexBuffer = vao.indexBuffer;
+
+          if (indexBuffer?.gpuBuffer !== undefined) {
+            const fmt =
+              indexBuffer.cpuBuffer instanceof Uint32Array
+                ? "uint32"
+                : "uint16";
+            pass.setIndexBuffer(indexBuffer.gpuBuffer, fmt);
+            pass.drawIndexed(
+              indexBuffer.indexCount ?? indexBuffer.cpuBuffer.length,
+              vao.instanceCount,
+              indexBuffer.firstIndex,
+            );
+          } else {
+            pass.draw(vao.vertexCount, vao.instanceCount);
+          }
+
           pass.end();
         } else if (
           pipeline.type === "compute" &&
