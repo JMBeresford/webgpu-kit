@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 0.1.0
+
+### Minor Changes
+
+- [`29f2cd9`](https://github.com/JMBeresford/wgpu-kit/commit/29f2cd95be9f759f8c95aeb147a8520250d41138) Thanks [@JMBeresford](https://github.com/JMBeresford)! - add indexed drawing support
+
 ## 0.0.14
 
 ### Patch Changes
