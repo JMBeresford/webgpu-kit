@@ -20,11 +20,11 @@ vi.mock("./utils", async () => {
 
 describe("VertexAttributeObject", () => {
   it("should create an instance", () => {
-    expect(new VertexAttributeObject({ vertexCount: 0 })).toBeTruthy();
+    expect(new VertexAttributeObject({ itemCount: 0 })).toBeTruthy();
   });
 
   it("should create an instance with a label", () => {
-    const attr = new VertexAttributeObject({ label: "vao", vertexCount: 0 });
+    const attr = new VertexAttributeObject({ label: "vao", itemCount: 0 });
     expect(attr).toBeTruthy();
 
     expect(attr.label).toBe("vao");
@@ -41,7 +41,7 @@ describe("VertexAttributeObject", () => {
       shaderLocation: 0,
     });
 
-    const vao = new VertexAttributeObject({ vertexCount: 3 });
+    const vao = new VertexAttributeObject({ itemCount: 3 });
     await vao.addAttribute(attribute);
     expect(vao.attributes.length).toBe(1);
     expect(vao.cpuBuffer).toEqual(vertices);
@@ -69,7 +69,7 @@ describe("VertexAttributeObject", () => {
       shaderLocation: 1,
     });
 
-    const vao = new VertexAttributeObject({ vertexCount: 3 });
+    const vao = new VertexAttributeObject({ itemCount: 3 });
     await vao.addAttribute(position);
     await vao.addAttribute(color);
     expect(vao.attributes.length).toBe(2);
@@ -91,6 +91,7 @@ describe("VertexAttributeObject", () => {
           shaderLocation: 1,
         },
       ],
+      stepMode: "vertex",
     });
   });
 });

@@ -30,12 +30,13 @@ export class Executor extends Mixins {
   }
 
   private async runPipelineGroup(group: PipelineGroup): Promise<void> {
-    const vao = group.vertexAttributeObject;
+    const vaos = group.vertexAttributeObjects;
     const bindGroup = group.bindGroup;
 
-    if (vao === undefined) {
+    if (vaos.length === 0) {
       throw new Error("Vertex attribute object not set");
     }
+
     if (bindGroup === undefined) {
       throw new Error("Bind group not set");
     }
@@ -47,8 +48,6 @@ export class Executor extends Mixins {
 
     await Promise.all(
       group.pipelines.map(async (pipeline) => {
-        if (vao.gpuBuffer === undefined) return;
-
         await pipeline.onBeforePass(pipeline);
 
         if (
@@ -90,9 +89,17 @@ export class Executor extends Mixins {
           const pass = commandEncoder.beginRenderPass(renderPassDescriptor);
 
           pass.setPipeline(pipeline.gpuPipeline);
-          pass.setVertexBuffer(0, vao.gpuBuffer);
+          let i = 0;
+          for (const vao of vaos) {
+            if (vao.gpuBuffer === undefined) {
+              throw new Error("GPU buffer not set");
+            }
+            pass.setVertexBuffer(i, vao.gpuBuffer);
+            i++;
+          }
+
           pass.setBindGroup(0, bindGroup);
-          const indexBuffer = vao.indexBuffer;
+          const indexBuffer = group.indexBuffer;
 
           if (indexBuffer?.gpuBuffer !== undefined) {
             const fmt =
@@ -102,11 +109,11 @@ export class Executor extends Mixins {
             pass.setIndexBuffer(indexBuffer.gpuBuffer, fmt);
             pass.drawIndexed(
               indexBuffer.indexCount ?? indexBuffer.cpuBuffer.length,
-              vao.instanceCount,
+              group.instanceCount,
               indexBuffer.firstIndex,
             );
           } else {
-            pass.draw(vao.vertexCount, vao.instanceCount);
+            pass.draw(group.vertexCount, group.instanceCount);
           }
 
           pass.end();

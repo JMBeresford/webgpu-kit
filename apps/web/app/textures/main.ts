@@ -25,7 +25,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   });
 
   const vao = new VertexAttributeObject({
-    vertexCount: vertices.length / 2,
+    itemCount: vertices.length / 2,
   });
 
   await vao.addAttribute(posAttribute);
@@ -81,10 +81,12 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const pipelineGroup = new PipelineGroup({
     label: "Render pipeline group",
-    vertexAttributeObject: vao,
     pipelines: [pipeline],
+    vertexCount: vertices.length / 2,
     canvas,
   });
+
+  pipelineGroup.addVertexAttributeObject(vao);
 
   const logoTex = new Texture({
     label: "Logo texture",

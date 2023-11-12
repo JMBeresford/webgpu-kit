@@ -3,7 +3,6 @@ import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import type { Attribute } from "./Attribute";
 import { WithCpuBuffer } from "./components/CpuBuffer";
-import type { IndexBuffer } from "./IndexBuffer";
 
 const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
 
@@ -12,8 +11,8 @@ const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
  */
 export type VAOOptions = {
   label?: string;
-  vertexCount: number;
-  instanceCount?: number;
+  itemCount: number;
+  stepMode?: GPUVertexStepMode;
 };
 
 /**
@@ -23,15 +22,14 @@ export type VAOOptions = {
 export class VertexAttributeObject extends Mixins {
   readonly attributes: Attribute[] = [];
   layout?: GPUVertexBufferLayout;
-  vertexCount: number;
-  instanceCount: number;
-  indexBuffer?: IndexBuffer;
+  itemCount: number;
+  stepMode: GPUVertexStepMode;
 
   constructor(options: VAOOptions) {
     super();
     this.label = options.label;
-    this.instanceCount = options.instanceCount ?? 1;
-    this.vertexCount = options.vertexCount;
+    this.itemCount = options.itemCount;
+    this.stepMode = options.stepMode ?? "vertex";
   }
 
   async addAttribute(attribute: Attribute): Promise<this> {
@@ -41,15 +39,6 @@ export class VertexAttributeObject extends Mixins {
     await this.updateBuffer();
 
     return this;
-  }
-
-  setInstanceCount(count: number) {
-    this.instanceCount = count;
-  }
-
-  async setIndexBuffer(indexBuffer: IndexBuffer) {
-    this.indexBuffer = indexBuffer;
-    await this.indexBuffer.updateGpuBuffer();
   }
 
   private updateLayout(): void {
@@ -72,6 +61,7 @@ export class VertexAttributeObject extends Mixins {
     this.layout = {
       arrayStride: offset,
       attributes,
+      stepMode: this.stepMode,
     };
   }
 
@@ -86,7 +76,7 @@ export class VertexAttributeObject extends Mixins {
       throw new Error("layout is undefined");
     }
 
-    for (let i = 0; i < this.vertexCount; i++) {
+    for (let i = 0; i < this.itemCount; i++) {
       for (const attribute of this.attributes) {
         const offset = i * attribute.itemSize;
         for (let j = offset; j < offset + attribute.itemSize; j++) {

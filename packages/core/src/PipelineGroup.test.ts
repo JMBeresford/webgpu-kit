@@ -27,7 +27,7 @@ vi.mock("./utils", async () => {
 
 describe("PipelineGroup", () => {
   it("Should have a label", () => {
-    const group = new PipelineGroup({ label: "Test" });
+    const group = new PipelineGroup({ label: "Test", vertexCount: 0 });
     expect(group.label).toBe("Test");
   });
 });

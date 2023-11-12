@@ -70,8 +70,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const vao = await new VertexAttributeObject({
     label: "Cell VAO",
-    vertexCount: vertices.length / 2,
-    instanceCount: GRID_SIZE * GRID_SIZE,
+    itemCount: vertices.length / 2,
   }).addAttribute(posAttribute);
 
   const renderPipeline = new Pipeline({
@@ -96,10 +95,12 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   const pipelineGroup = new PipelineGroup({
     label: "Cell Pipeline Group",
     pipelines: [computePipeline, renderPipeline],
-    vertexAttributeObject: vao,
+    vertexCount: vertices.length / 2,
+    instanceCount: GRID_SIZE * GRID_SIZE,
     canvas,
   });
 
+  pipelineGroup.addVertexAttributeObject(vao);
   await pipelineGroup.addUniform(gridUniform);
   await pipelineGroup.addUniform(stepUniform);
   await pipelineGroup.addStorage(gridStorage);

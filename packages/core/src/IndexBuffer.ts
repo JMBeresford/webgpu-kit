@@ -37,7 +37,7 @@ export class IndexBuffer extends Mixins {
   }
 
   setCpuBuffer(indexBuffer: IndexArray) {
-    this.setCpuBuffer(indexBuffer);
+    this.cpuBuffer = indexBuffer;
   }
 
   setIndexCount(indexCount: number) {

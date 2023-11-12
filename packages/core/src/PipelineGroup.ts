@@ -1,3 +1,4 @@
+import type { IndexBuffer } from "./IndexBuffer";
 import type { Pipeline } from "./Pipeline";
 import type { Sampler } from "./Sampler";
 import type { Storage } from "./Storage";
@@ -19,11 +20,12 @@ const Mixins = WithCanvas(
  */
 export type PipelineGroupOptions = {
   label?: string;
-  vertexAttributeObject?: VertexAttributeObject;
   pipelines?: Pipeline[];
   canvas?: HTMLCanvasElement;
   enableMultiSampling?: boolean;
   enableDepthStencil?: boolean;
+  instanceCount?: number;
+  vertexCount: number;
 };
 
 /**
@@ -35,8 +37,11 @@ export class PipelineGroup extends Mixins {
   private _bindGroup?: GPUBindGroup;
   private bindGroupLayout?: GPUBindGroupLayout;
   private pipelineLayout?: GPUPipelineLayout;
-  vertexAttributeObject?: VertexAttributeObject;
+  vertexAttributeObjects: VertexAttributeObject[] = [];
   pipelines: Pipeline[];
+  instanceCount: number;
+  indexBuffer?: IndexBuffer;
+  vertexCount: number;
   uniforms: Uniform[] = [];
   storages: Storage[] = [];
   textures: Texture[] = [];
@@ -45,7 +50,6 @@ export class PipelineGroup extends Mixins {
   constructor(options: PipelineGroupOptions) {
     super();
     this.label = options.label;
-    this.vertexAttributeObject = options.vertexAttributeObject;
     this.pipelines = options.pipelines ?? [];
 
     if (options.canvas) {
@@ -59,6 +63,9 @@ export class PipelineGroup extends Mixins {
     if (options.enableDepthStencil) {
       this.depthStencilEnabled = true;
     }
+
+    this.instanceCount = options.instanceCount ?? 1;
+    this.vertexCount = options.vertexCount;
   }
 
   get bindGroup() {
@@ -70,6 +77,7 @@ export class PipelineGroup extends Mixins {
       await uniform.setBuffer(uniform.cpuBuffer);
     }
     this.uniforms.push(uniform);
+    await this.updateBindGroup();
   }
 
   async addStorage(storage: Storage): Promise<void> {
@@ -77,6 +85,7 @@ export class PipelineGroup extends Mixins {
       await storage.setBuffer(storage.cpuBuffer);
     }
     this.storages.push(storage);
+    await this.updateBindGroup();
   }
 
   async addTexture(texture: Texture): Promise<void> {
@@ -84,6 +93,7 @@ export class PipelineGroup extends Mixins {
       await texture.updateTexture();
     }
     this.textures.push(texture);
+    await this.updateBindGroup();
   }
 
   async addSampler(sampler: Sampler): Promise<void> {
@@ -91,16 +101,29 @@ export class PipelineGroup extends Mixins {
       await sampler.updateSampler();
     }
     this.samplers.push(sampler);
+    await this.updateBindGroup();
+  }
+
+  addVertexAttributeObject(vertexAttributeObject: VertexAttributeObject): void {
+    this.vertexAttributeObjects.push(vertexAttributeObject);
+  }
+
+  setInstanceCount(count: number) {
+    this.instanceCount = count;
+  }
+
+  async setIndexBuffer(indexBuffer: IndexBuffer) {
+    this.indexBuffer = indexBuffer;
+    await this.indexBuffer.updateGpuBuffer();
   }
 
   async build() {
     await this.buildMultiSampleTexture();
     await this.buildDepthStencilTexture();
-    await this.buildBindGroup();
     await this.buildPipelines();
   }
 
-  private async buildBindGroup(): Promise<GPUBindGroup> {
+  private async updateBindGroup(): Promise<GPUBindGroup> {
     const label = `${this.label ?? "Unlabelled"} Bind Group`;
     const layoutLabel = `${this.label ?? "Unlabelled"} Bind Group Layout`;
     const entries: GPUBindGroupEntry[] = [];
@@ -222,18 +245,21 @@ export class PipelineGroup extends Mixins {
           throw new Error("Shader module not set");
         }
 
-        if (this.vertexAttributeObject?.layout === undefined) {
-          throw new Error("Vertex attribute layout not set");
-        }
-
         if (pipeline.type === "render") {
+          const vaoLayouts: GPUVertexBufferLayout[] = [];
+          this.vertexAttributeObjects.forEach((vao) => {
+            if (vao.layout === undefined) {
+              throw new Error("Vertex attribute layout not set");
+            }
+            vaoLayouts.push(vao.layout);
+          });
           pipeline.gpuPipeline = await device.createRenderPipelineAsync({
             label: `${pipeline.label ?? "Unlabelled"} Render Pipeline`,
             layout: this.pipelineLayout,
             vertex: {
               module: pipeline.shaderModule,
               entryPoint: pipeline.shaderEntries.vertex ?? "vertexMain",
-              buffers: [this.vertexAttributeObject.layout],
+              buffers: vaoLayouts,
             },
             fragment: {
               module: pipeline.shaderModule,
