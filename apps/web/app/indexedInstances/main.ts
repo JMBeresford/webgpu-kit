@@ -152,16 +152,13 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const viewMatrix = mat4.create();
   const projMatrix = mat4.create();
-  mat4.lookAt(viewMatrix, [1, 0, 2], [0, 0, 0], [0, 1, 0]);
-  mat4.perspective(projMatrix, 45, 1, 0.1, 100);
-
-  mat4.multiply(viewMatrix, projMatrix, viewMatrix);
+  const viewProjMatrix = mat4.create();
 
   const matrixUniform = new Uniform({
     label: "Matrix uniform",
     binding: 0,
     visibility: GPUShaderStage.VERTEX,
-    arrayBuffer: new Float32Array(viewMatrix.values()),
+    arrayBuffer: new Float32Array(viewProjMatrix.values()),
   });
 
   const timeUniform = new Uniform({
@@ -174,12 +171,24 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   await pipelineGroup.addUniform(matrixUniform);
   await pipelineGroup.addUniform(timeUniform);
 
+  async function updateViewProjMatrix(): Promise<void> {
+    mat4.lookAt(viewMatrix, [1, 0, 2], [0, 0, 0], [0, 1, 0]);
+    mat4.perspective(projMatrix, 45, canvas.width / canvas.height, 0.1, 100);
+
+    mat4.multiply(viewProjMatrix, projMatrix, viewMatrix);
+    if (indexedDB.cmp(viewProjMatrix, matrixUniform.cpuBuffer) !== 0) {
+      matrixUniform.cpuBuffer?.set(viewProjMatrix);
+      await matrixUniform.updateGpuBuffer();
+    }
+  }
+
   pipeline.setOnBeforePass(async () => {
     if (timeUniform.cpuBuffer === undefined) {
       return;
     }
     timeUniform.cpuBuffer[0] = performance.now() / 1000;
     await timeUniform.updateGpuBuffer();
+    await updateViewProjMatrix();
   });
 
   const executor = new Executor({

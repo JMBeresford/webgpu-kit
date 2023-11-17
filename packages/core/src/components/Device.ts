@@ -27,11 +27,18 @@ export function WithDevice<TBase extends Constructor<Partial<WithCanvas>>>(
     }
 
     setDevice(d: GPUDevice): void {
-      this.device = d;
+      this._device = d;
+      this.configureContext();
+    }
+
+    configureContext() {
+      if (!this._device) {
+        throw new Error("Attempted to configure context w/o device.");
+      }
 
       if (this.context && this.canvasFormat) {
         this.context.configure({
-          device: d,
+          device: this._device,
           format: this.canvasFormat,
         });
       }

@@ -1,5 +1,6 @@
 import type { PipelineGroup } from "./PipelineGroup";
 import { WithLabel } from "./components/Label";
+import { clamp } from "./utils";
 
 const Mixins = WithLabel();
 
@@ -8,6 +9,7 @@ const Mixins = WithLabel();
  */
 export type ExecutorOptions = {
   label?: string;
+  autoResizeCanvas?: boolean;
 };
 
 /**
@@ -16,10 +18,12 @@ export type ExecutorOptions = {
  */
 export class Executor extends Mixins {
   pipelineGroups: PipelineGroup[] = [];
+  autoResizeCanvas: boolean;
 
   constructor(options: ExecutorOptions) {
     super();
     this.label = options.label;
+    this.autoResizeCanvas = options.autoResizeCanvas ?? true;
   }
 
   async addPipelineGroup(group: PipelineGroup): Promise<this> {
@@ -43,6 +47,10 @@ export class Executor extends Mixins {
 
     const { context } = group;
     const device = await group.getDevice();
+
+    if (this.autoResizeCanvas) {
+      await this.handleResize(group);
+    }
 
     const commandEncoder = device.createCommandEncoder();
 
@@ -137,6 +145,33 @@ export class Executor extends Mixins {
     );
 
     device.queue.submit([commandEncoder.finish()]);
+  }
+
+  async handleResize(group: PipelineGroup): Promise<void> {
+    const { canvas } = group;
+    const device = await group.getDevice();
+
+    const targetWidth = clamp(
+      canvas.clientWidth,
+      1,
+      device.limits.maxTextureDimension2D,
+    );
+
+    const targetHeight = clamp(
+      canvas.clientHeight,
+      1,
+      device.limits.maxTextureDimension2D,
+    );
+
+    if (targetHeight !== canvas.height || targetWidth !== canvas.width) {
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      group.configureContext();
+
+      await group.buildMultiSampleTexture();
+      await group.buildDepthStencilTexture();
+    }
   }
 
   /**
