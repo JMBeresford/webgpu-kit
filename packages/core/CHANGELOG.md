@@ -1,5 +1,11 @@
 # @wgpu-kit/core
 
+## 1.0.1
+
+### Patch Changes
+
+- [`9e6addf`](https://github.com/JMBeresford/wgpu-kit/commit/9e6addf6d96db01dbc51dd6bf6d69bf5439a7d0a) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix: export bindgroup
+
 ## 1.0.0
 
 ### Major Changes
