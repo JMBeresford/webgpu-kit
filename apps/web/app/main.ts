@@ -5,6 +5,7 @@ import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
 import { Executor } from "@wgpu-kit/core/src/Executor";
 import { Uniform } from "@wgpu-kit/core/src/Uniform";
 import { Storage } from "@wgpu-kit/core/src/Storage";
+import { BindGroup } from "@wgpu-kit/core/src/BindGroup";
 import {
   GRID_SIZE,
   WORKGROUP_SIZE,
@@ -100,10 +101,14 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     canvas,
   });
 
+  const bindGroup = new BindGroup();
+
+  await bindGroup.addUniform(gridUniform);
+  await bindGroup.addUniform(stepUniform);
+  await bindGroup.addStorage(gridStorage);
+
+  pipelineGroup.addBindGroup(bindGroup);
   pipelineGroup.addVertexAttributeObject(vao);
-  await pipelineGroup.addUniform(gridUniform);
-  await pipelineGroup.addUniform(stepUniform);
-  await pipelineGroup.addStorage(gridStorage);
 
   const executor = await new Executor({
     label: "Cell Executor",

@@ -35,14 +35,10 @@ export class Executor extends Mixins {
 
   private async runPipelineGroup(group: PipelineGroup): Promise<void> {
     const vaos = group.vertexAttributeObjects;
-    const bindGroup = group.bindGroup;
+    const bindGroups = group.bindGroups;
 
     if (vaos.length === 0) {
       throw new Error("Vertex attribute object not set");
-    }
-
-    if (bindGroup === undefined) {
-      throw new Error("Bind group not set");
     }
 
     const { context } = group;
@@ -106,7 +102,13 @@ export class Executor extends Mixins {
             i++;
           }
 
-          pass.setBindGroup(0, bindGroup);
+          bindGroups.forEach((bindGroup) => {
+            if (!bindGroup.group) {
+              throw new Error("Bind group not set");
+            }
+            pass.setBindGroup(bindGroup.index, bindGroup.group);
+          });
+
           const indexBuffer = group.indexBuffer;
 
           if (indexBuffer?.gpuBuffer !== undefined) {
@@ -131,7 +133,15 @@ export class Executor extends Mixins {
         ) {
           const pass = commandEncoder.beginComputePass();
           pass.setPipeline(pipeline.gpuPipeline);
-          pass.setBindGroup(0, bindGroup);
+
+          bindGroups.forEach((bindGroup) => {
+            if (!bindGroup.group) {
+              throw new Error("Bind group not set");
+            }
+
+            pass.setBindGroup(bindGroup.index, bindGroup.group);
+          });
+
           pass.dispatchWorkgroups(
             pipeline.workgroupCount[0],
             pipeline.workgroupCount[1],

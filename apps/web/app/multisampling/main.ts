@@ -7,6 +7,7 @@ import { Uniform } from "@wgpu-kit/core/src/Uniform";
 import { VertexAttributeObject } from "@wgpu-kit/core/src/VertexAttributeObject";
 import { Texture } from "@wgpu-kit/core/src/Texture";
 import { Sampler } from "@wgpu-kit/core/src/Sampler";
+import { BindGroup } from "@wgpu-kit/core/src/BindGroup";
 import texture from "./logo.png";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
@@ -127,9 +128,13 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     arrayBuffer: new Float32Array(viewMatrix.values()),
   });
 
-  await pipelineGroup.addTexture(logoTex);
-  await pipelineGroup.addSampler(sampler);
-  await pipelineGroup.addUniform(matrixUniform);
+  const bindGroup = new BindGroup();
+
+  await bindGroup.addTexture(logoTex);
+  await bindGroup.addSampler(sampler);
+  await bindGroup.addUniform(matrixUniform);
+
+  pipelineGroup.addBindGroup(bindGroup);
 
   const executor = new Executor({
     label: "Render executor",

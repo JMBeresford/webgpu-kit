@@ -12,5 +12,5 @@ export function Example(): JSX.Element {
     void runExample(ref.current);
   }, []);
 
-  return <canvas height={640} ref={ref} width={640} />;
+  return <canvas ref={ref} style={{ width: "640px", height: "640px" }} />;
 }

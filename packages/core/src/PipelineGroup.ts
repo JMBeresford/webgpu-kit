@@ -1,9 +1,6 @@
+import type { BindGroup } from "./BindGroup";
 import type { IndexBuffer } from "./IndexBuffer";
 import type { Pipeline } from "./Pipeline";
-import type { Sampler } from "./Sampler";
-import type { Storage } from "./Storage";
-import type { Texture } from "./Texture";
-import type { Uniform } from "./Uniform";
 import type { VertexAttributeObject } from "./VertexAttributeObject";
 import { WithCanvas } from "./components/Canvas";
 import { WithDepthStencil } from "./components/DepthStencil";
@@ -34,18 +31,14 @@ export type PipelineGroupOptions = {
  *
  */
 export class PipelineGroup extends Mixins {
-  private _bindGroup?: GPUBindGroup;
-  private bindGroupLayout?: GPUBindGroupLayout;
-  private pipelineLayout?: GPUPipelineLayout;
+  private _pipelineLayout?: GPUPipelineLayout;
+  private _bindGroups: BindGroup[] = [];
+
   vertexAttributeObjects: VertexAttributeObject[] = [];
   pipelines: Pipeline[];
   instanceCount: number;
   indexBuffer?: IndexBuffer;
   vertexCount: number;
-  uniforms: Uniform[] = [];
-  storages: Storage[] = [];
-  textures: Texture[] = [];
-  samplers: Sampler[] = [];
 
   constructor(options: PipelineGroupOptions) {
     super();
@@ -68,40 +61,12 @@ export class PipelineGroup extends Mixins {
     this.vertexCount = options.vertexCount;
   }
 
-  get bindGroup() {
-    return this._bindGroup;
+  get bindGroups() {
+    return this._bindGroups;
   }
 
-  async addUniform(uniform: Uniform): Promise<void> {
-    if (uniform.gpuBuffer === undefined && uniform.cpuBuffer !== undefined) {
-      await uniform.setBuffer(uniform.cpuBuffer);
-    }
-    this.uniforms.push(uniform);
-    await this.updateBindGroup();
-  }
-
-  async addStorage(storage: Storage): Promise<void> {
-    if (storage.gpuBuffer === undefined && storage.cpuBuffer !== undefined) {
-      await storage.setBuffer(storage.cpuBuffer);
-    }
-    this.storages.push(storage);
-    await this.updateBindGroup();
-  }
-
-  async addTexture(texture: Texture): Promise<void> {
-    if (texture.gpuTexture === undefined) {
-      await texture.updateTexture();
-    }
-    this.textures.push(texture);
-    await this.updateBindGroup();
-  }
-
-  async addSampler(sampler: Sampler): Promise<void> {
-    if (sampler.gpuSampler === undefined) {
-      await sampler.updateSampler();
-    }
-    this.samplers.push(sampler);
-    await this.updateBindGroup();
+  addBindGroup(bindGroup: BindGroup): void {
+    this._bindGroups.push(bindGroup);
   }
 
   addVertexAttributeObject(vertexAttributeObject: VertexAttributeObject): void {
@@ -123,121 +88,29 @@ export class PipelineGroup extends Mixins {
     await this.buildPipelines();
   }
 
-  private async updateBindGroup(): Promise<GPUBindGroup> {
-    const label = `${this.label ?? "Unlabelled"} Bind Group`;
-    const layoutLabel = `${this.label ?? "Unlabelled"} Bind Group Layout`;
-    const entries: GPUBindGroupEntry[] = [];
-    const layoutEntries: GPUBindGroupLayoutEntry[] = [];
-
-    for (const uniform of this.uniforms) {
-      if (uniform.gpuBuffer === undefined) {
-        throw new Error("Uniform buffer not set");
-      }
-
-      entries.push({
-        binding: uniform.binding,
-        resource: {
-          buffer: uniform.gpuBuffer,
-        },
-      });
-
-      layoutEntries.push({
-        binding: uniform.binding,
-        visibility: uniform.visibility,
-        buffer: {
-          type: "uniform",
-        },
-      });
-    }
-
-    for (const storage of this.storages) {
-      if (storage.gpuBuffer === undefined) {
-        throw new Error("Storage buffer not set");
-      }
-
-      entries.push({
-        binding: storage.binding,
-        resource: {
-          buffer: storage.gpuBuffer,
-        },
-      });
-
-      layoutEntries.push({
-        binding: storage.binding,
-        visibility: storage.visibility,
-        buffer: storage.bufferOptions,
-      });
-    }
-
-    for (const texture of this.textures) {
-      if (texture.gpuTexture === undefined) {
-        throw new Error("Texture not set");
-      }
-
-      entries.push({
-        binding: texture.binding,
-        resource: texture.gpuTexture.createView(),
-      });
-
-      layoutEntries.push({
-        binding: texture.binding,
-        visibility: texture.visibility,
-        texture: {
-          multisampled: texture.gpuTexture.sampleCount > 1,
-        },
-      });
-    }
-
-    for (const sampler of this.samplers) {
-      if (sampler.gpuSampler === undefined) {
-        throw new Error("Sampler not set");
-      }
-
-      entries.push({
-        binding: sampler.binding,
-        resource: sampler.gpuSampler,
-      });
-
-      layoutEntries.push({
-        binding: sampler.binding,
-        visibility: sampler.visibility,
-        sampler: {},
-      });
-    }
-
-    const device = await this.getDevice();
-
-    this.bindGroupLayout = device.createBindGroupLayout({
-      label: layoutLabel,
-      entries: layoutEntries,
-    });
-
-    this._bindGroup = device.createBindGroup({
-      label,
-      layout: this.bindGroupLayout,
-      entries,
-    });
-
-    return this._bindGroup;
-  }
-
   private async buildPipelines() {
-    if (!this.bindGroupLayout) {
-      throw new Error("Bind group layout not built");
-    }
-
     const device = await this.getDevice();
 
-    this.pipelineLayout = device.createPipelineLayout({
+    const layouts = this.bindGroups
+      .sort((a, b) => a.index - b.index)
+      .map((bg) => bg.layout);
+
+    if (layouts.some((layout) => layout === undefined)) {
+      throw new Error("Bind group layout not set");
+    }
+
+    const bindGroupLayouts = layouts as GPUBindGroupLayout[];
+
+    this._pipelineLayout = device.createPipelineLayout({
       label: `${this.label ?? "Unlabelled"} Pipeline Layout`,
-      bindGroupLayouts: [this.bindGroupLayout],
+      bindGroupLayouts,
     });
 
     await Promise.all(
       this.pipelines.map(async (pipeline) => {
         await pipeline.build();
 
-        if (this.pipelineLayout === undefined) {
+        if (this._pipelineLayout === undefined) {
           throw new Error("Pipeline layout not built");
         }
 
@@ -253,9 +126,10 @@ export class PipelineGroup extends Mixins {
             }
             vaoLayouts.push(vao.layout);
           });
+
           pipeline.gpuPipeline = await device.createRenderPipelineAsync({
             label: `${pipeline.label ?? "Unlabelled"} Render Pipeline`,
-            layout: this.pipelineLayout,
+            layout: this._pipelineLayout,
             vertex: {
               module: pipeline.shaderModule,
               entryPoint: pipeline.shaderEntries.vertex ?? "vertexMain",
@@ -278,7 +152,7 @@ export class PipelineGroup extends Mixins {
         } else {
           pipeline.gpuPipeline = await device.createComputePipelineAsync({
             label: `${pipeline.label ?? "Unlabelled"} Compute Pipeline`,
-            layout: this.pipelineLayout,
+            layout: this._pipelineLayout,
             compute: {
               module: pipeline.shaderModule,
               entryPoint: pipeline.shaderEntries.compute ?? "computeMain",

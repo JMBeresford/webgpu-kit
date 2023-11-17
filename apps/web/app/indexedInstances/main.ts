@@ -6,6 +6,7 @@ import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
 import { Uniform } from "@wgpu-kit/core/src/Uniform";
 import { VertexAttributeObject } from "@wgpu-kit/core/src/VertexAttributeObject";
 import { IndexBuffer } from "@wgpu-kit/core/src/IndexBuffer";
+import { BindGroup } from "@wgpu-kit/core/src/BindGroup";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   const vertices = [
@@ -168,8 +169,12 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     arrayBuffer: new Float32Array([0]),
   });
 
-  await pipelineGroup.addUniform(matrixUniform);
-  await pipelineGroup.addUniform(timeUniform);
+  const bindGroup = new BindGroup();
+
+  await bindGroup.addUniform(matrixUniform);
+  await bindGroup.addUniform(timeUniform);
+
+  pipelineGroup.addBindGroup(bindGroup);
 
   async function updateViewProjMatrix(): Promise<void> {
     mat4.lookAt(viewMatrix, [1, 0, 2], [0, 0, 0], [0, 1, 0]);
