@@ -1,5 +1,23 @@
 # web
 
+## 1.1.0
+
+### Minor Changes
+
+- [`0dc4424`](https://github.com/JMBeresford/wgpu-kit/commit/0dc4424fb0cc8c9ef45817ca353397fa09c65e3b) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(core): full bind group support
+
+### Patch Changes
+
+- [`e4e5a7d`](https://github.com/JMBeresford/wgpu-kit/commit/e4e5a7d208143b8050870f61a8b1f7e7f46689b5) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat!(core): enable indexed instanced draws
+
+  - allow multiple VAOs per pipelinegroup
+  - enable instanced step mode vaos
+
+- [`5d541ca`](https://github.com/JMBeresford/wgpu-kit/commit/5d541ca924b722cbe1c9ef2e47e4c7940e46ae24) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat(core): auto-resize canvas
+
+- Updated dependencies [[`e4e5a7d`](https://github.com/JMBeresford/wgpu-kit/commit/e4e5a7d208143b8050870f61a8b1f7e7f46689b5), [`0dc4424`](https://github.com/JMBeresford/wgpu-kit/commit/0dc4424fb0cc8c9ef45817ca353397fa09c65e3b), [`5d541ca`](https://github.com/JMBeresford/wgpu-kit/commit/5d541ca924b722cbe1c9ef2e47e4c7940e46ae24)]:
+  - @wgpu-kit/core@1.0.0
+
 ## 1.0.15
 
 ### Patch Changes
