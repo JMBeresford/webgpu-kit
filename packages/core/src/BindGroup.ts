@@ -12,18 +12,39 @@ const mixins = WithDevice(WithLabel());
  */
 export type BindGroupOptions = {
   label?: string;
+
+  /**
+   * The index of the bind group. This is used to determine which bind group
+   * to use in a shader (denoted by the value of the group directive).
+   *
+   * e.g.
+   * ```wgsl
+   *  @group(0) @binding(0) var tex: texture_2d<f32>;
+   *  @group(0) @binding(1) var texSampler: sampler;
+   * ```
+   * would have an index of 0.
+   */
   index?: number;
+
+  /**
+   * The {@link GPUBindGroupLayout} that describes the bindings in this bind group.
+   * If not set, a bind group layout will be generated from the resources in this
+   * bind group.
+   */
+  layout?: GPUBindGroupLayout;
 };
 
 /**
  * A group of {@link Uniform}s, {@link Storage}s, {@link Texture}s and {@link Sampler}s
- * that share the same {@link GPUBindGroupLayout}.
+ * described by a {@link GPUBindGroupLayout}. This is used to bind resources to a
+ * GPU resource (e.g. {@link GPUBuffer}, {@link GPUTexture}) in a shader.
  */
 export class BindGroup extends mixins {
-  private _layout?: GPUBindGroupLayout;
+  private _givenLayout?: GPUBindGroupLayout;
+  private _generatedLayout?: GPUBindGroupLayout;
   private _group?: GPUBindGroup;
-  private _index;
 
+  index: number;
   uniforms: Uniform[] = [];
   storages: Storage[] = [];
   textures: Texture[] = [];
@@ -32,22 +53,19 @@ export class BindGroup extends mixins {
   constructor(options: BindGroupOptions = {}) {
     super();
     this.label = options.label;
-    this._index = options.index ?? 0;
+    this.index = options.index ?? 0;
+    this._givenLayout = options.layout;
   }
 
   get layout() {
-    return this._layout;
+    return this._givenLayout ?? this._generatedLayout;
   }
 
   get group() {
     return this._group;
   }
 
-  get index() {
-    return this._index;
-  }
-
-  async addUniform(...uniforms: Uniform[]): Promise<void> {
+  async addUniforms(...uniforms: Uniform[]): Promise<void> {
     await Promise.all(
       uniforms.map(async (uniform) => {
         if (uniform.gpuBuffer === undefined) {
@@ -57,10 +75,9 @@ export class BindGroup extends mixins {
     );
 
     this.uniforms.push(...uniforms);
-    await this.updateBindGroup();
   }
 
-  async addStorage(...storages: Storage[]): Promise<void> {
+  async addStorages(...storages: Storage[]): Promise<void> {
     await Promise.all(
       storages.map(async (storage) => {
         if (storage.gpuBuffer === undefined) {
@@ -70,10 +87,9 @@ export class BindGroup extends mixins {
     );
 
     this.storages.push(...storages);
-    await this.updateBindGroup();
   }
 
-  async addTexture(...textures: Texture[]): Promise<void> {
+  async addTextures(...textures: Texture[]): Promise<void> {
     await Promise.all(
       textures.map(async (texture) => {
         if (texture.gpuTexture === undefined) {
@@ -83,10 +99,9 @@ export class BindGroup extends mixins {
     );
 
     this.textures.push(...textures);
-    await this.updateBindGroup();
   }
 
-  async addSampler(...samplers: Sampler[]): Promise<void> {
+  async addSamplers(...samplers: Sampler[]): Promise<void> {
     await Promise.all(
       samplers.map(async (sampler) => {
         if (sampler.gpuSampler === undefined) {
@@ -96,10 +111,16 @@ export class BindGroup extends mixins {
     );
 
     this.samplers.push(...samplers);
-    await this.updateBindGroup();
   }
 
-  private async updateBindGroup(): Promise<GPUBindGroup> {
+  /**
+   * Update the {@link GPUBindGroup} and {@link GPUBindGroupLayout} for this
+   * bind group, if using an automatically generated layout. This will create
+   * a new bind group and bind group layout if one does not already exist. This
+   * will generally only be called once, after all resources have been added to
+   * the bind group.
+   */
+  async updateBindGroup(): Promise<GPUBindGroup> {
     const label = `${this.label ?? "Unlabelled"} Bind Group`;
     const layoutLabel = `${this.label ?? "Unlabelled"} Bind Group Layout`;
     const entries: GPUBindGroupEntry[] = [];
@@ -183,14 +204,18 @@ export class BindGroup extends mixins {
 
     const device = await this.getDevice();
 
-    this._layout = device.createBindGroupLayout({
+    this._generatedLayout = device.createBindGroupLayout({
       label: layoutLabel,
       entries: layoutEntries,
     });
 
+    if (!this.layout) {
+      throw new Error("Bind group layout not set");
+    }
+
     this._group = device.createBindGroup({
       label,
-      layout: this._layout,
+      layout: this.layout,
       entries,
     });
 

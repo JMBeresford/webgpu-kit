@@ -14,7 +14,9 @@
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "ui": "workspace:*"
+    "stats.js": "^0.17.0",
+    "ui": "workspace:*",
+    "wgsl-noise": "^1.0.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.19",

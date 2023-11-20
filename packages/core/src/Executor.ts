@@ -14,11 +14,12 @@ export type ExecutorOptions = {
 
 /**
  * An executor class that executes each pipeline in its contained
- * {@link PipelineGroup}s.
+ * {@link PipelineGroup}s. This is the main entry point for rendering
+ * a scene, or executing compute operations.
  */
 export class Executor extends Mixins {
   pipelineGroups: PipelineGroup[] = [];
-  autoResizeCanvas: boolean;
+  autoResizeCanvas = true;
 
   constructor(options: ExecutorOptions) {
     super();
@@ -26,11 +27,14 @@ export class Executor extends Mixins {
     this.autoResizeCanvas = options.autoResizeCanvas ?? true;
   }
 
-  async addPipelineGroup(group: PipelineGroup): Promise<this> {
-    await group.build();
-    this.pipelineGroups.push(group);
+  async addPipelineGroups(...groups: PipelineGroup[]): Promise<void> {
+    await Promise.all(
+      groups.map(async (group) => {
+        await group.build();
+      }),
+    );
 
-    return this;
+    this.pipelineGroups.push(...groups);
   }
 
   private async runPipelineGroup(group: PipelineGroup): Promise<void> {
@@ -50,114 +54,110 @@ export class Executor extends Mixins {
 
     const commandEncoder = device.createCommandEncoder();
 
-    await Promise.all(
-      group.pipelines.map(async (pipeline) => {
-        await pipeline.onBeforePass(pipeline);
+    for (const pipeline of group.pipelines) {
+      await pipeline.onBeforePass(pipeline);
 
-        if (
-          pipeline.type === "render" &&
-          pipeline.gpuPipeline instanceof GPURenderPipeline
-        ) {
-          const multiSampleTextureView =
-            group.multiSampleState.count > 1
-              ? group.multiSampleTextureView
-              : undefined;
-
-          const view =
-            multiSampleTextureView ?? context.getCurrentTexture().createView();
-
-          const resolveTarget = multiSampleTextureView
-            ? context.getCurrentTexture().createView()
+      if (
+        pipeline.type === "render" &&
+        pipeline.gpuPipeline instanceof GPURenderPipeline
+      ) {
+        const multiSampleTextureView =
+          group.multiSampleState.count > 1
+            ? group.multiSampleTextureView
             : undefined;
 
-          const renderPassDescriptor: GPURenderPassDescriptor = {
-            colorAttachments: [
-              {
-                view,
-                resolveTarget,
-                loadOp: pipeline.clearColor ? "clear" : "load",
-                clearValue: pipeline.clearColor,
-                storeOp: "store",
-              } satisfies GPURenderPassColorAttachment,
-            ],
-            depthStencilAttachment: undefined,
+        const view =
+          multiSampleTextureView ?? context.getCurrentTexture().createView();
+
+        const resolveTarget = multiSampleTextureView
+          ? context.getCurrentTexture().createView()
+          : undefined;
+
+        const renderPassDescriptor: GPURenderPassDescriptor = {
+          colorAttachments: [
+            {
+              view,
+              resolveTarget,
+              loadOp: pipeline.clearColor ? "clear" : "load",
+              clearValue: pipeline.clearColor,
+              storeOp: "store",
+            } satisfies GPURenderPassColorAttachment,
+          ],
+          depthStencilAttachment: undefined,
+        };
+
+        if (group.depthStencilEnabled && group.depthStencilTextureView) {
+          renderPassDescriptor.depthStencilAttachment = {
+            view: group.depthStencilTextureView,
+            ...group.depthStencilAttachment,
           };
-
-          if (group.depthStencilEnabled && group.depthStencilTextureView) {
-            renderPassDescriptor.depthStencilAttachment = {
-              view: group.depthStencilTextureView,
-              ...group.depthStencilAttachment,
-            };
-          }
-
-          const pass = commandEncoder.beginRenderPass(renderPassDescriptor);
-
-          pass.setPipeline(pipeline.gpuPipeline);
-          let i = 0;
-          for (const vao of vaos) {
-            if (vao.gpuBuffer === undefined) {
-              throw new Error("GPU buffer not set");
-            }
-            pass.setVertexBuffer(i, vao.gpuBuffer);
-            i++;
-          }
-
-          bindGroups.forEach((bindGroup) => {
-            if (!bindGroup.group) {
-              throw new Error("Bind group not set");
-            }
-            pass.setBindGroup(bindGroup.index, bindGroup.group);
-          });
-
-          const indexBuffer = group.indexBuffer;
-
-          if (indexBuffer?.gpuBuffer !== undefined) {
-            const fmt =
-              indexBuffer.cpuBuffer instanceof Uint32Array
-                ? "uint32"
-                : "uint16";
-            pass.setIndexBuffer(indexBuffer.gpuBuffer, fmt);
-            pass.drawIndexed(
-              indexBuffer.indexCount ?? indexBuffer.cpuBuffer.length,
-              group.instanceCount,
-              indexBuffer.firstIndex,
-            );
-          } else {
-            pass.draw(group.vertexCount, group.instanceCount);
-          }
-
-          pass.end();
-        } else if (
-          pipeline.type === "compute" &&
-          pipeline.gpuPipeline instanceof GPUComputePipeline
-        ) {
-          const pass = commandEncoder.beginComputePass();
-          pass.setPipeline(pipeline.gpuPipeline);
-
-          bindGroups.forEach((bindGroup) => {
-            if (!bindGroup.group) {
-              throw new Error("Bind group not set");
-            }
-
-            pass.setBindGroup(bindGroup.index, bindGroup.group);
-          });
-
-          pass.dispatchWorkgroups(
-            pipeline.workgroupCount[0],
-            pipeline.workgroupCount[1],
-            pipeline.workgroupCount[2],
-          );
-          pass.end();
         }
 
-        await pipeline.onAfterPass(pipeline);
-      }),
-    );
+        const pass = commandEncoder.beginRenderPass(renderPassDescriptor);
+
+        pass.setPipeline(pipeline.gpuPipeline);
+        let i = 0;
+        for (const vao of vaos) {
+          if (vao.gpuBuffer === undefined) {
+            throw new Error("GPU buffer not set");
+          }
+          pass.setVertexBuffer(i, vao.gpuBuffer);
+          i++;
+        }
+
+        bindGroups.forEach((bindGroup) => {
+          if (!bindGroup.group) {
+            throw new Error("Bind group not set");
+          }
+          pass.setBindGroup(bindGroup.index, bindGroup.group);
+        });
+
+        const indexBuffer = group.indexBuffer;
+
+        if (indexBuffer?.gpuBuffer !== undefined) {
+          const fmt =
+            indexBuffer.cpuBuffer instanceof Uint32Array ? "uint32" : "uint16";
+          pass.setIndexBuffer(indexBuffer.gpuBuffer, fmt);
+          pass.drawIndexed(
+            indexBuffer.indexCount ?? indexBuffer.cpuBuffer.length,
+            group.instanceCount,
+            indexBuffer.firstIndex,
+          );
+        } else {
+          pass.draw(group.vertexCount, group.instanceCount);
+        }
+
+        pass.end();
+      } else if (
+        pipeline.type === "compute" &&
+        pipeline.gpuPipeline instanceof GPUComputePipeline
+      ) {
+        const pass = commandEncoder.beginComputePass();
+        pass.setPipeline(pipeline.gpuPipeline);
+
+        bindGroups.forEach((bindGroup) => {
+          if (!bindGroup.group) {
+            throw new Error("Bind group not set");
+          }
+
+          pass.setBindGroup(bindGroup.index, bindGroup.group);
+        });
+
+        pass.dispatchWorkgroups(
+          pipeline.workgroupCount[0],
+          pipeline.workgroupCount[1],
+          pipeline.workgroupCount[2],
+        );
+        pass.end();
+      }
+
+      await pipeline.onAfterPass(pipeline);
+    }
 
     device.queue.submit([commandEncoder.finish()]);
   }
 
-  async handleResize(group: PipelineGroup): Promise<void> {
+  private async handleResize(group: PipelineGroup): Promise<void> {
     const { canvas } = group;
     const device = await group.getDevice();
 

@@ -42,7 +42,7 @@ describe("VertexAttributeObject", () => {
     });
 
     const vao = new VertexAttributeObject({ itemCount: 3 });
-    await vao.addAttribute(attribute);
+    await vao.addAttributes(attribute);
     expect(vao.attributes.length).toBe(1);
     expect(vao.cpuBuffer).toEqual(vertices);
   });
@@ -70,8 +70,8 @@ describe("VertexAttributeObject", () => {
     });
 
     const vao = new VertexAttributeObject({ itemCount: 3 });
-    await vao.addAttribute(position);
-    await vao.addAttribute(color);
+    await vao.addAttributes(position);
+    await vao.addAttributes(color);
     expect(vao.attributes.length).toBe(2);
     expect(vao.cpuBuffer).toEqual(
       new Float32Array([-1, -1, 1, 0, 0, 0, 1, 0, 1, 0, 1, -1, 0, 0, 1]),

@@ -69,10 +69,12 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     readOnly: false,
   });
 
-  const vao = await new VertexAttributeObject({
+  const vao = new VertexAttributeObject({
     label: "Cell VAO",
     itemCount: vertices.length / 2,
-  }).addAttribute(posAttribute);
+  });
+
+  await vao.addAttributes(posAttribute);
 
   const renderPipeline = new Pipeline({
     label: "Render Pipeline",
@@ -103,16 +105,17 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const bindGroup = new BindGroup();
 
-  await bindGroup.addUniform(gridUniform);
-  await bindGroup.addUniform(stepUniform);
-  await bindGroup.addStorage(gridStorage);
+  await bindGroup.addUniforms(gridUniform, stepUniform);
+  await bindGroup.addStorages(gridStorage);
 
-  pipelineGroup.addBindGroup(bindGroup);
+  await pipelineGroup.setBindGroups(bindGroup);
   pipelineGroup.addVertexAttributeObject(vao);
 
-  const executor = await new Executor({
+  const executor = new Executor({
     label: "Cell Executor",
-  }).addPipelineGroup(pipelineGroup);
+  });
+
+  await executor.addPipelineGroups(pipelineGroup);
 
   async function tick(): Promise<void> {
     await executor.run();
@@ -121,7 +124,4 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   }
 
   await tick();
-
-  // await executor.run();
-  // await executor.run();
 }

@@ -10,12 +10,18 @@ const Mixins = WithGpuSampler(WithDevice(WithLabel()));
 export type SamplerOptions = {
   label?: string;
   binding: number;
+
+  /**
+   * The shader stages that this uniform is visible to.
+   * e.g. GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT would make the uniform
+   * visible to both the vertex and fragment shaders.
+   */
   visibility: GPUShaderStageFlags;
   options?: GPUSamplerDescriptor;
 };
 
 /**
- * Sampler object used to sample textures
+ * Sampler object used to sample textures in a shader.
  */
 export class Sampler extends Mixins {
   readonly binding: number;

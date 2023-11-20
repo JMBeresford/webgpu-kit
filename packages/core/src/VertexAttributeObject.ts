@@ -17,7 +17,7 @@ export type VAOOptions = {
 
 /**
  * A GPU vertex attribute object that is composed of multiple {@link Attribute}s
- * to be used in a {@link PipelineGroup}
+ * to be used in a {@link PipelineGroup}.
  */
 export class VertexAttributeObject extends Mixins {
   readonly attributes: Attribute[] = [];
@@ -32,13 +32,11 @@ export class VertexAttributeObject extends Mixins {
     this.stepMode = options.stepMode ?? "vertex";
   }
 
-  async addAttribute(attribute: Attribute): Promise<this> {
-    this.attributes.push(attribute);
+  async addAttributes(...attributes: Attribute[]): Promise<void> {
+    this.attributes.push(...attributes);
 
     this.updateLayout();
     await this.updateBuffer();
-
-    return this;
   }
 
   private updateLayout(): void {

@@ -30,7 +30,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     itemCount: vertices.length / 2,
   });
 
-  await vao.addAttribute(posAttribute);
+  await vao.addAttributes(posAttribute);
 
   const pipeline = new Pipeline({
     label: "Render pipeline",
@@ -130,17 +130,17 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const bindGroup = new BindGroup();
 
-  await bindGroup.addTexture(logoTex);
-  await bindGroup.addSampler(sampler);
-  await bindGroup.addUniform(matrixUniform);
+  await bindGroup.addTextures(logoTex);
+  await bindGroup.addSamplers(sampler);
+  await bindGroup.addUniforms(matrixUniform);
 
-  pipelineGroup.addBindGroup(bindGroup);
+  await pipelineGroup.setBindGroups(bindGroup);
 
   const executor = new Executor({
     label: "Render executor",
   });
 
-  await executor.addPipelineGroup(pipelineGroup);
+  await executor.addPipelineGroups(pipelineGroup);
 
   async function tick(): Promise<void> {
     await executor.run();

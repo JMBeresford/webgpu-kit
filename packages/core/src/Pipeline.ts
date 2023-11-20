@@ -6,18 +6,42 @@ import { WithShader } from "./components/Shader";
 const Mixins = WithShader(WithDevice(WithId(WithLabel())));
 export type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
 
+type WorkgroupSize = [number, number | undefined, number | undefined];
+type WorkgroupCount = [number, number | undefined, number | undefined];
+
 /**
  * {@link Pipeline} constructor parameters
  */
 export type PipelineOptions = {
   label?: string;
   type?: "render" | "compute";
+
+  /**
+   * The callback to run before each pass of the pipeline
+   */
   onBeforePass?: PipelineCallback;
+
+  /**
+   * The callback to run after each pass of the pipeline
+   */
   onAfterPass?: PipelineCallback;
   device?: GPUDevice;
   shader: string;
-  workgroupSize?: [number, number, number];
-  workgroupCount?: [number, number, number];
+
+  /**
+   * The size of the workgroup to run a compute shader with
+   */
+  workgroupSize?: WorkgroupSize;
+
+  /**
+   * The number of workgroups to run a compute shader with
+   */
+  workgroupCount?: WorkgroupCount;
+
+  /**
+   * The color to clear the screen with before running a render shader.
+   * Defaults to [0, 0, 0, 1] (black).
+   */
   clearColor?: GPUColor;
 };
 
@@ -29,8 +53,8 @@ export class Pipeline extends Mixins {
   onBeforePass: PipelineCallback = () => {};
   onAfterPass: PipelineCallback = () => {};
   gpuPipeline?: GPURenderPipeline | GPUComputePipeline;
-  workgroupSize: [number, number, number];
-  workgroupCount: [number, number, number];
+  workgroupSize: WorkgroupSize;
+  workgroupCount: WorkgroupCount;
   clearColor?: GPUColor = [0, 0, 0, 1];
 
   constructor(options: PipelineOptions) {
@@ -45,8 +69,8 @@ export class Pipeline extends Mixins {
     }
 
     this.setShader(options.shader);
-    this.workgroupSize = options.workgroupSize ?? [64, 64, 64];
-    this.workgroupCount = options.workgroupCount ?? [8, 8, 8];
+    this.workgroupSize = options.workgroupSize ?? [8, 8, undefined];
+    this.workgroupCount = options.workgroupCount ?? [1, 1, undefined];
 
     if (options.clearColor) {
       this.clearColor = options.clearColor;
@@ -57,11 +81,11 @@ export class Pipeline extends Mixins {
     await this.buildShaderModule();
   }
 
-  setWorkgroupSize(size: [number, number, number]): void {
+  setWorkgroupSize(size: WorkgroupSize): void {
     this.workgroupSize = size;
   }
 
-  setWorkgroupCount(count: [number, number, number]): void {
+  setWorkgroupCount(count: WorkgroupCount): void {
     this.workgroupCount = count;
   }
 

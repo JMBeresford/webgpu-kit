@@ -12,6 +12,11 @@ const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
 export type IndexBufferOptions = {
   label?: string;
   arrayBuffer: IndexArray;
+
+  /**
+   * The number of indices to draw. If not set, the length of the array buffer
+   * will be used.
+   */
   indexCount?: number;
   firstIndex?: number;
   baseIndex?: number;
@@ -19,7 +24,7 @@ export type IndexBufferOptions = {
 
 /**
  * An index buffer that is used in a {@link VertexAttributeObject} to
- * use indexed drawing.
+ * direct indexed drawing operations.
  */
 export class IndexBuffer extends Mixins {
   declare cpuBuffer: IndexArray;
@@ -30,14 +35,15 @@ export class IndexBuffer extends Mixins {
   constructor(options: IndexBufferOptions) {
     super();
     this.label = options.label;
-    this.setCpuBuffer(options.arrayBuffer);
+    this.cpuBuffer = options.arrayBuffer;
     this.indexCount = options.indexCount;
     this.firstIndex = options.firstIndex;
     this.baseIndex = options.baseIndex;
   }
 
-  setCpuBuffer(indexBuffer: IndexArray) {
+  async setCpuBuffer(indexBuffer: IndexArray) {
     this.cpuBuffer = indexBuffer;
+    await this.updateGpuBuffer();
   }
 
   setIndexCount(indexCount: number) {

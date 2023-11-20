@@ -9,19 +9,29 @@ import { type ArrayType } from "./utils";
  */
 export type StorageOptions = {
   label?: string;
+
+  /**
+   * The binding number of the storage object in the {@link BindGroup}.
+   */
   binding: number;
+
+  /**
+   * The shader stages that this uniform is visible to.
+   * e.g. GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT would make the uniform
+   * visible to both the vertex and fragment shaders.
+   */
   visibility: GPUShaderStageFlags;
   readOnly?: boolean;
-  arrayBuffer?: ArrayType;
+  arrayBuffer: ArrayType;
 };
 
 const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
 
 /**
- * A GPU storage object
+ * A GPU storage object that can be used in a {@link BindGroup}.
  */
 export class Storage extends Mixins {
-  readonly binding: number;
+  binding: number;
   readonly visibility: GPUShaderStageFlags;
   readonly bufferOptions: {
     type: "storage" | "read-only-storage";
@@ -39,7 +49,7 @@ export class Storage extends Mixins {
     };
   }
 
-  async setBuffer(buffer: ArrayType): Promise<void> {
+  async setCpuBuffer(buffer: ArrayType): Promise<void> {
     this.cpuBuffer = buffer;
     await this.updateGpuBuffer();
   }

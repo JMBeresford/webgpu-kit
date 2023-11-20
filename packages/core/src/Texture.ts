@@ -10,12 +10,22 @@ const Mixins = WithGpuTexture(WithCpuBuffer(WithDevice(WithLabel())));
  */
 export type TextureOptions = {
   label?: string;
+
+  /**
+   * The binding number of the texture object in the {@link BindGroup}.
+   */
   binding: number;
+
+  /**
+   * The shader stages that this uniform is visible to.
+   * e.g. GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT would make the uniform
+   * visible to both the vertex and fragment shaders.
+   */
   visibility: GPUShaderStageFlags;
 };
 
 /**
- * A GPU texture object
+ * A GPU texture object that can be used in a {@link BindGroup}.
  */
 export class Texture extends Mixins {
   readonly binding: number;

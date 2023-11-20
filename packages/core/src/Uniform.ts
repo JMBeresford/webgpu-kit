@@ -9,7 +9,17 @@ import { type ArrayType } from "./utils";
  */
 export type UniformOptions = {
   label?: string;
+
+  /**
+   * The binding number of the uniform object in the {@link BindGroup}.
+   */
   binding: number;
+
+  /**
+   * The shader stages that this uniform is visible to.
+   * e.g. GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT would make the uniform
+   * visible to both the vertex and fragment shaders.
+   */
   visibility: GPUShaderStageFlags;
   arrayBuffer?: ArrayType;
 };
@@ -17,7 +27,7 @@ export type UniformOptions = {
 const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
 
 /**
- * A GPU uniform object
+ * A GPU uniform object that can be used in a {@link BindGroup}.
  */
 export class Uniform extends Mixins {
   readonly binding: number;
@@ -31,7 +41,7 @@ export class Uniform extends Mixins {
     this.cpuBuffer = options.arrayBuffer;
   }
 
-  async setBuffer(buffer: ArrayType): Promise<void> {
+  async setCpuBuffer(buffer: ArrayType): Promise<void> {
     this.cpuBuffer = buffer;
     await this.updateGpuBuffer();
   }

@@ -69,9 +69,15 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      stats.js:
+        specifier: ^0.17.0
+        version: 0.17.0
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
+      wgsl-noise:
+        specifier: ^1.0.1
+        version: 1.0.1
     devDependencies:
       '@next/eslint-plugin-next':
         specifier: ^13.4.19
@@ -5653,6 +5659,10 @@ packages:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
     dev: true
 
+  /stats.js@0.17.0:
+    resolution: {integrity: sha512-hNKz8phvYLPEcRkeG1rsGmV5ChMjKDAWU7/OJJdDErPBNChQXxCo3WZurGpnWc6gZhAzEPFad1aVgyOANH1sMw==}
+    dev: false
+
   /std-env@3.4.3:
     resolution: {integrity: sha512-f9aPhy8fYBuMN+sNfakZV18U39PbalgjXG3lLB9WkaYTxijru61wb57V9wxxNthXM5Sd88ETBWi29qLAsHO52Q==}
     dev: true
@@ -6503,6 +6513,10 @@ packages:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
     dev: true
+
+  /wgsl-noise@1.0.1:
+    resolution: {integrity: sha512-sNdIgAuyTztnUAxSQ6uQkAZsDiQpSQDPHLBovwc8lhyrJYCTcsLukpW+ic5jMcxn4z5u4NX/gQF0f0qpsFdwXg==}
+    dev: false
 
   /whatwg-encoding@2.0.0:
     resolution: {integrity: sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==}

@@ -56,8 +56,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     itemCount: vertices.length / 3,
   });
 
-  await vao.addAttribute(posAttribute);
-  await vao.addAttribute(colorAttribute);
+  await vao.addAttributes(posAttribute, colorAttribute);
 
   const instancedVao = new VertexAttributeObject({
     itemCount: instanceCount,
@@ -93,8 +92,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     shaderLocation: 3,
   });
 
-  await instancedVao.addAttribute(timeAttribute);
-  await instancedVao.addAttribute(posOffsetAttribute);
+  await instancedVao.addAttributes(timeAttribute, posOffsetAttribute);
 
   const pipeline = new Pipeline({
     label: "Render pipeline",
@@ -171,10 +169,10 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const bindGroup = new BindGroup();
 
-  await bindGroup.addUniform(matrixUniform);
-  await bindGroup.addUniform(timeUniform);
+  await bindGroup.addUniforms(matrixUniform);
+  await bindGroup.addUniforms(timeUniform);
 
-  pipelineGroup.addBindGroup(bindGroup);
+  await pipelineGroup.setBindGroups(bindGroup);
 
   async function updateViewProjMatrix(): Promise<void> {
     mat4.lookAt(viewMatrix, [1, 0, 2], [0, 0, 0], [0, 1, 0]);
@@ -200,7 +198,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     label: "Render executor",
   });
 
-  await executor.addPipelineGroup(pipelineGroup);
+  await executor.addPipelineGroups(pipelineGroup);
 
   async function tick(): Promise<void> {
     await executor.run();

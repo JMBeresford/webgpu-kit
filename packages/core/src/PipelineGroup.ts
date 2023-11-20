@@ -22,13 +22,16 @@ export type PipelineGroupOptions = {
   enableMultiSampling?: boolean;
   enableDepthStencil?: boolean;
   instanceCount?: number;
+
+  /**
+   * The number of vertices to draw in a render pipeline.
+   */
   vertexCount: number;
 };
 
 /**
- * A group of {@link Pipeline}s that share the same {@link VertexAttributeObject}
- * and bind group layout.
- *
+ * A group of {@link Pipeline}s that share the same {@link VertexAttributeObject}s
+ * and {@link BindGroup}s.
  */
 export class PipelineGroup extends Mixins {
   private _pipelineLayout?: GPUPipelineLayout;
@@ -65,8 +68,16 @@ export class PipelineGroup extends Mixins {
     return this._bindGroups;
   }
 
-  addBindGroup(bindGroup: BindGroup): void {
-    this._bindGroups.push(bindGroup);
+  async setBindGroups(...bindGroups: BindGroup[]): Promise<void> {
+    await Promise.all(
+      bindGroups.map(async (bindGroup) => {
+        if (bindGroup.group === undefined) {
+          await bindGroup.updateBindGroup();
+        }
+      }),
+    );
+
+    this._bindGroups = bindGroups;
   }
 
   addVertexAttributeObject(vertexAttributeObject: VertexAttributeObject): void {
