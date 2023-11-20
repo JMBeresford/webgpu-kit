@@ -1,5 +1,14 @@
 # web
 
+## 1.1.2
+
+### Patch Changes
+
+- [`123e547`](https://github.com/JMBeresford/wgpu-kit/commit/123e5473ed4f95532a383c4c8f9ede52a39e8a11) Thanks [@JMBeresford](https://github.com/JMBeresford)! - feat: minor bind group API refactor
+
+- Updated dependencies [[`123e547`](https://github.com/JMBeresford/wgpu-kit/commit/123e5473ed4f95532a383c4c8f9ede52a39e8a11)]:
+  - @wgpu-kit/core@1.0.2
+
 ## 1.1.1
 
 ### Patch Changes
