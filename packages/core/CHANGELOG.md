@@ -1,5 +1,12 @@
 # @wgpu-kit/core
 
+## 1.0.3
+
+### Patch Changes
+
+- [`5b18405`](https://github.com/JMBeresford/wgpu-kit/commit/5b1840596a01a5729c21672de5186d95d97474f7) Thanks [@JMBeresford](https://github.com/JMBeresford)! - - minor consistency fixes
+  - docs update
+
 ## 1.0.2
 
 ### Patch Changes
