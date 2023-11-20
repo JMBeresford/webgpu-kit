@@ -109,7 +109,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   await bindGroup.addStorages(gridStorage);
 
   await pipelineGroup.setBindGroups(bindGroup);
-  pipelineGroup.addVertexAttributeObject(vao);
+  pipelineGroup.addVertexAttributeObjects(vao);
 
   const executor = new Executor({
     label: "Cell Executor",

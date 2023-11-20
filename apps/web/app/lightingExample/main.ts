@@ -224,11 +224,10 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   });
 
   await pipelineGroup.setBindGroups(bindGroup);
-  pipelineGroup.addVertexAttributeObject(vao);
-  pipelineGroup.addVertexAttributeObject(instancedVao);
+  pipelineGroup.addVertexAttributeObjects(vao, instancedVao);
   await pipelineGroup.setIndexBuffer(indexBuffer);
 
-  const executor = new Executor({});
+  const executor = new Executor();
 
   await executor.addPipelineGroups(pipelineGroup);
 

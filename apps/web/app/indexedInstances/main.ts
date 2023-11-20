@@ -145,8 +145,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     canvas,
   });
 
-  pipelineGroup.addVertexAttributeObject(vao);
-  pipelineGroup.addVertexAttributeObject(instancedVao);
+  pipelineGroup.addVertexAttributeObjects(vao, instancedVao);
   await pipelineGroup.setIndexBuffer(indexBuffer);
 
   const viewMatrix = mat4.create();

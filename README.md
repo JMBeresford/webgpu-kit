@@ -1,6 +1,6 @@
 # WGPUKit
 
-### An all-purpose webGPU toolkit
+### A minimal webGPU toolkit for rendering and compute operations
 
 > UNDER HEAVY DEVELOPMENT
 
@@ -34,8 +34,9 @@ Other packages are planned to expose additional APIs:
 ## Packages
 
 - [core]
-- forward - TODO
 - shaders - TODO
+- forward - TODO
+- react - TODO
 
 ## Installation
 

@@ -89,7 +89,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     canvas,
   });
 
-  pipelineGroup.addVertexAttributeObject(vao);
+  pipelineGroup.addVertexAttributeObjects(vao);
 
   pipelineGroup.setMultiSampleAlphaToCoverageEnabled(true);
 

@@ -21,10 +21,10 @@ export class Executor extends Mixins {
   pipelineGroups: PipelineGroup[] = [];
   autoResizeCanvas = true;
 
-  constructor(options: ExecutorOptions) {
+  constructor(options?: ExecutorOptions) {
     super();
-    this.label = options.label;
-    this.autoResizeCanvas = options.autoResizeCanvas ?? true;
+    this.label = options?.label;
+    this.autoResizeCanvas = options?.autoResizeCanvas ?? true;
   }
 
   async addPipelineGroups(...groups: PipelineGroup[]): Promise<void> {

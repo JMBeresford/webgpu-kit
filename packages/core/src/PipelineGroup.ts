@@ -80,8 +80,10 @@ export class PipelineGroup extends Mixins {
     this._bindGroups = bindGroups;
   }
 
-  addVertexAttributeObject(vertexAttributeObject: VertexAttributeObject): void {
-    this.vertexAttributeObjects.push(vertexAttributeObject);
+  addVertexAttributeObjects(
+    ...vertexAttributeObjects: VertexAttributeObject[]
+  ): void {
+    this.vertexAttributeObjects.push(...vertexAttributeObjects);
   }
 
   setInstanceCount(count: number) {
