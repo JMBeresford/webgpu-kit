@@ -130,7 +130,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     const z = r * Math.cos(phi);
 
     // x, y, z, life, weight, ...padding
-    const life = 0.5 + Math.pow(Math.random(), 4) * 0.5;
+    const life = Math.pow(Math.random(), 4);
     const weight = 0.2 + Math.pow(Math.random(), 4) * 0.3;
     const speed = 0.5 + Math.pow(Math.random(), 3) * 0.5;
     const timeOffset = Math.random() * 1000;
@@ -181,7 +181,13 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   await bindGroup2.addStorages(offsetsStorage, offsetsStorage2);
   await bindGroup2.updateBindGroup();
 
-  const pipeline = new Pipeline({ shader, clearColor: [0.5, 0.45, 0.425, 1] });
+  const pipeline = new Pipeline({
+    shader,
+    clearColor: [0.5, 0.45, 0.425, 1],
+    canvas,
+    enableDepthStencil: true,
+    enableMultiSampling: true,
+  });
 
   function getTime(): number {
     return performance.now() / 1000;
@@ -218,9 +224,6 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     pipelines: [computePipeline, pipeline],
     vertexCount: sphere.vertices.length / 3,
     instanceCount,
-    canvas,
-    enableDepthStencil: true,
-    enableMultiSampling: true,
   });
 
   await pipelineGroup.setBindGroups(bindGroup);

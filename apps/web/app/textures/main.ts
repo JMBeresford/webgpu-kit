@@ -33,6 +33,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const pipeline = new Pipeline({
     label: "Render pipeline",
+    canvas,
     shader: /* wgsl */ `
       struct VertexInput {
         @location(0) pos: vec2<f32>,
@@ -84,7 +85,6 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     label: "Render pipeline group",
     pipelines: [pipeline],
     vertexCount: vertices.length / 2,
-    canvas,
   });
 
   pipelineGroup.addVertexAttributeObjects(vao);

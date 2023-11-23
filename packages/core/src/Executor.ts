@@ -1,4 +1,5 @@
 import type { PipelineGroup } from "./PipelineGroup";
+import type { Pipeline } from "./Pipeline";
 import { WithLabel } from "./components/Label";
 import { clamp } from "./utils";
 
@@ -45,12 +46,7 @@ export class Executor extends Mixins {
       throw new Error("Vertex attribute object not set");
     }
 
-    const { context } = group;
     const device = await group.getDevice();
-
-    if (this.autoResizeCanvas) {
-      await this.handleResize(group);
-    }
 
     const commandEncoder = device.createCommandEncoder();
 
@@ -61,9 +57,14 @@ export class Executor extends Mixins {
         pipeline.type === "render" &&
         pipeline.gpuPipeline instanceof GPURenderPipeline
       ) {
+        if (this.autoResizeCanvas) {
+          await this.handleResize(pipeline, device);
+        }
+
+        const { context } = pipeline;
         const multiSampleTextureView =
-          group.multiSampleState.count > 1
-            ? group.multiSampleTextureView
+          pipeline.multiSampleState.count > 1
+            ? pipeline.multiSampleTextureView
             : undefined;
 
         const view =
@@ -86,16 +87,17 @@ export class Executor extends Mixins {
           depthStencilAttachment: undefined,
         };
 
-        if (group.depthStencilEnabled && group.depthStencilTextureView) {
+        if (pipeline.depthStencilEnabled && pipeline.depthStencilTextureView) {
           renderPassDescriptor.depthStencilAttachment = {
-            view: group.depthStencilTextureView,
-            ...group.depthStencilAttachment,
+            view: pipeline.depthStencilTextureView,
+            ...pipeline.depthStencilAttachment,
           };
         }
 
         const pass = commandEncoder.beginRenderPass(renderPassDescriptor);
 
         pass.setPipeline(pipeline.gpuPipeline);
+
         let i = 0;
         for (const vao of vaos) {
           if (vao.gpuBuffer === undefined) {
@@ -157,10 +159,11 @@ export class Executor extends Mixins {
     device.queue.submit([commandEncoder.finish()]);
   }
 
-  private async handleResize(group: PipelineGroup): Promise<void> {
-    const { canvas } = group;
-    const device = await group.getDevice();
-
+  private async handleResize(
+    pipeline: Pipeline,
+    device: GPUDevice,
+  ): Promise<void> {
+    const { canvas } = pipeline;
     const targetWidth = clamp(
       canvas.clientWidth,
       1,
@@ -177,10 +180,10 @@ export class Executor extends Mixins {
       canvas.width = targetWidth;
       canvas.height = targetHeight;
 
-      group.configureContext();
+      pipeline.configureContext();
 
-      await group.buildMultiSampleTexture();
-      await group.buildDepthStencilTexture();
+      await pipeline.buildMultiSampleTexture();
+      await pipeline.buildDepthStencilTexture();
     }
   }
 

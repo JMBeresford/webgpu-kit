@@ -34,6 +34,9 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const pipeline = new Pipeline({
     label: "Render pipeline",
+    canvas,
+    enableMultiSampling: true,
+    enableDepthStencil: true,
     shader: /* wgsl */ `
       struct VertexInput {
         @builtin(instance_index) instanceIndex: u32,
@@ -84,14 +87,9 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     instanceCount: 5,
     vertexCount: vertices.length / 2,
     pipelines: [pipeline],
-    enableMultiSampling: true,
-    enableDepthStencil: true,
-    canvas,
   });
 
   pipelineGroup.addVertexAttributeObjects(vao);
-
-  pipelineGroup.setMultiSampleAlphaToCoverageEnabled(true);
 
   const logoTex = new Texture({
     label: "Logo texture",

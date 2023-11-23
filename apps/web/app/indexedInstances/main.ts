@@ -96,6 +96,9 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   const pipeline = new Pipeline({
     label: "Render pipeline",
+    enableDepthStencil: true,
+    enableMultiSampling: true,
+    canvas,
     shader: /* wgsl */ `
       struct VertexInput {
         @builtin(instance_index) instanceIndex: u32,
@@ -140,9 +143,6 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     instanceCount,
     vertexCount: vertices.length / 3,
     pipelines: [pipeline],
-    enableDepthStencil: true,
-    enableMultiSampling: true,
-    canvas,
   });
 
   pipelineGroup.addVertexAttributeObjects(vao, instancedVao);

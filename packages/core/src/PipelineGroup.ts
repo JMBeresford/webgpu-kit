@@ -2,15 +2,10 @@ import type { BindGroup } from "./BindGroup";
 import type { IndexBuffer } from "./IndexBuffer";
 import type { Pipeline } from "./Pipeline";
 import type { VertexAttributeObject } from "./VertexAttributeObject";
-import { WithCanvas } from "./components/Canvas";
-import { WithDepthStencil } from "./components/DepthStencil";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
-import { WithMultiSampling } from "./components/MultiSampling";
 
-const Mixins = WithCanvas(
-  WithDevice(WithMultiSampling(WithDepthStencil(WithLabel()))),
-);
+const Mixins = WithDevice(WithLabel());
 
 /**
  * {@link PipelineGroup} constructor parameters
@@ -18,9 +13,6 @@ const Mixins = WithCanvas(
 export type PipelineGroupOptions = {
   label?: string;
   pipelines?: Pipeline[];
-  canvas?: HTMLCanvasElement;
-  enableMultiSampling?: boolean;
-  enableDepthStencil?: boolean;
   instanceCount?: number;
 
   /**
@@ -48,18 +40,6 @@ export class PipelineGroup extends Mixins {
     this.label = options.label;
     this.pipelines = options.pipelines ?? [];
 
-    if (options.canvas) {
-      this.setCanvas(options.canvas);
-    }
-
-    if (options.enableMultiSampling) {
-      this.setMultiSampleCount(4);
-    }
-
-    if (options.enableDepthStencil) {
-      this.depthStencilEnabled = true;
-    }
-
     this.instanceCount = options.instanceCount ?? 1;
     this.vertexCount = options.vertexCount;
   }
@@ -78,6 +58,7 @@ export class PipelineGroup extends Mixins {
     );
 
     this._bindGroups = bindGroups;
+    await this.updatePipelineLayout();
   }
 
   addVertexAttributeObjects(
@@ -96,14 +77,11 @@ export class PipelineGroup extends Mixins {
   }
 
   async build() {
-    await this.buildMultiSampleTexture();
-    await this.buildDepthStencilTexture();
     await this.buildPipelines();
   }
 
-  private async buildPipelines() {
+  private async updatePipelineLayout() {
     const device = await this.getDevice();
-
     const layouts = this.bindGroups
       .sort((a, b) => a.index - b.index)
       .map((bg) => bg.layout);
@@ -118,6 +96,10 @@ export class PipelineGroup extends Mixins {
       label: `${this.label ?? "Unlabelled"} Pipeline Layout`,
       bindGroupLayouts,
     });
+  }
+
+  private async buildPipelines() {
+    const device = await this.getDevice();
 
     await Promise.all(
       this.pipelines.map(async (pipeline) => {
@@ -140,37 +122,13 @@ export class PipelineGroup extends Mixins {
             vaoLayouts.push(vao.layout);
           });
 
-          pipeline.gpuPipeline = await device.createRenderPipelineAsync({
-            label: `${pipeline.label ?? "Unlabelled"} Render Pipeline`,
-            layout: this._pipelineLayout,
-            vertex: {
-              module: pipeline.shaderModule,
-              entryPoint: pipeline.shaderEntries.vertex ?? "vertexMain",
-              buffers: vaoLayouts,
-            },
-            fragment: {
-              module: pipeline.shaderModule,
-              entryPoint: pipeline.shaderEntries.fragment ?? "fragmentMain",
-              targets: [
-                {
-                  format: this.canvasFormat,
-                },
-              ],
-            },
-            multisample: this.multiSampleState,
-            depthStencil: this.depthStencilEnabled
-              ? this.depthStencilState
-              : undefined,
-          });
+          pipeline.gpuPipeline = await device.createRenderPipelineAsync(
+            pipeline.getRenderDescriptor(vaoLayouts, this._pipelineLayout),
+          );
         } else {
-          pipeline.gpuPipeline = await device.createComputePipelineAsync({
-            label: `${pipeline.label ?? "Unlabelled"} Compute Pipeline`,
-            layout: this._pipelineLayout,
-            compute: {
-              module: pipeline.shaderModule,
-              entryPoint: pipeline.shaderEntries.compute ?? "computeMain",
-            },
-          });
+          pipeline.gpuPipeline = await device.createComputePipelineAsync(
+            pipeline.getComputeDescriptor(this._pipelineLayout),
+          );
         }
       }),
     );

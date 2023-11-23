@@ -79,6 +79,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   const renderPipeline = new Pipeline({
     label: "Render Pipeline",
     shader: renderShader,
+    canvas,
   });
 
   const computePipeline = new Pipeline({
@@ -100,7 +101,6 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
     pipelines: [computePipeline, renderPipeline],
     vertexCount: vertices.length / 2,
     instanceCount: GRID_SIZE * GRID_SIZE,
-    canvas,
   });
 
   const bindGroup = new BindGroup();
