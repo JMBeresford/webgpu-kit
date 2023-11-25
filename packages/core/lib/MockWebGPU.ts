@@ -14,6 +14,8 @@ export const MockContext = {
   getSwapChainPreferredFormat: () => "rgba8unorm",
 } as unknown as GPUCanvasContext;
 
+export const MockCanvasFormat: GPUTextureFormat = "rgba8unorm";
+
 export const MockAdapter = {} as unknown as GPUAdapter;
 
 export const MockWebGPU: Record<string, unknown> = {

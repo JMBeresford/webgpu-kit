@@ -2,10 +2,11 @@ import type { Sampler } from "./Sampler";
 import type { Storage } from "./Storage";
 import type { Texture } from "./Texture";
 import type { Uniform } from "./Uniform";
+import { WithCanvas } from "./components/Canvas";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 
-const mixins = WithDevice(WithLabel());
+const components = WithDevice(WithCanvas(WithLabel()));
 
 /**
  * {@link BindGroup} constructor parameters
@@ -39,7 +40,7 @@ export type BindGroupOptions = {
  * described by a {@link GPUBindGroupLayout}. This is used to bind resources to a
  * GPU resource (e.g. {@link GPUBuffer}, {@link GPUTexture}) in a shader.
  */
-export class BindGroup extends mixins {
+export class BindGroup extends components {
   private _givenLayout?: GPUBindGroupLayout;
   private _generatedLayout?: GPUBindGroupLayout;
   private _group?: GPUBindGroup;

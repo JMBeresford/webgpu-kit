@@ -1,26 +1,13 @@
-import { type Constructor } from "../utils";
-import type { WithCanvas } from "./Canvas";
-import type { WithDevice } from "./Device";
+import { WithCanvas } from "./Canvas";
+import { WithDevice } from "./Device";
+import { WithLabel } from "./Label";
 
-export interface MultiSamplingComponent {
-  multiSampleTexture?: GPUTexture;
-  multiSampleTextureView?: GPUTextureView;
-  multiSampleState: Required<GPUMultisampleState>;
+const components = WithDevice(WithCanvas(WithLabel()));
 
-  setMultiSampleCount: (count: 1 | 4) => void;
-  setMultiSampleMask: (mask: number) => void;
-  setMultiSampleAlphaToCoverageEnabled: (enabled: boolean) => void;
-  buildMultiSampleTexture: () => Promise<void>;
-}
-
-export type WithMultiSampling = InstanceType<
-  ReturnType<typeof WithMultiSampling>
->;
-
-export function WithMultiSampling<
-  TBase extends Constructor<WithDevice & WithCanvas>,
->(Base: TBase) {
-  return class extends Base implements MultiSamplingComponent {
+export function WithMultiSampling<TBase extends typeof components>(
+  Base: TBase,
+) {
+  return class extends Base {
     multiSampleTexture?: GPUTexture;
     multiSampleTextureView?: GPUTextureView;
     multiSampleState: Required<GPUMultisampleState> = {

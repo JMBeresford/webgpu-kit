@@ -1,29 +1,17 @@
-import type { Constructor } from "../utils";
-import { fallbackToEmpty } from "../utils";
-import type { WithDevice } from "./Device";
-import type { WithLabel } from "./Label";
+import { WithCanvas } from "./Canvas";
+import { WithDevice } from "./Device";
+import { WithLabel } from "./Label";
 
-export interface ShaderComponent {
-  shader: string;
-  shaderModule?: GPUShaderModule;
-  shaderEntries: ShaderEntries;
-
-  setShader: (shader: string) => void;
-  buildShaderModule: () => Promise<void>;
-  setShaderEntries: (entries: ShaderEntries) => void;
-}
-
-export type WithShader = InstanceType<ReturnType<typeof WithShader>>;
 export type ShaderEntries = {
   vertex?: string;
   fragment?: string;
   compute?: string;
 };
 
-export function WithShader<
-  TBase extends Constructor<WithDevice & Partial<WithLabel>>,
->(Base?: TBase) {
-  return class extends fallbackToEmpty(Base) implements ShaderComponent {
+const components = WithDevice(WithCanvas(WithLabel()));
+
+export function WithShader<TBase extends typeof components>(Base: TBase) {
+  return class extends Base {
     shader = "";
     shaderModule?: GPUShaderModule;
     shaderEntries: ShaderEntries = {

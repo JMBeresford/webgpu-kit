@@ -1,8 +1,9 @@
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import { WithGpuSampler } from "./components/GpuSamplerObject";
+import { WithCanvas } from "./components/Canvas";
 
-const Mixins = WithGpuSampler(WithDevice(WithLabel()));
+const components = WithGpuSampler(WithDevice(WithCanvas(WithLabel())));
 
 /**
  * {@link Sampler} constructor parameters
@@ -23,7 +24,7 @@ export type SamplerOptions = {
 /**
  * Sampler object used to sample textures in a shader.
  */
-export class Sampler extends Mixins {
+export class Sampler extends components {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;
 

@@ -3,6 +3,7 @@ import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { type ArrayType } from "./utils";
+import { WithCanvas } from "./components/Canvas";
 
 /**
  * {@link Uniform} constructor parameters
@@ -24,7 +25,9 @@ export type UniformOptions = {
   arrayBuffer?: ArrayType;
 };
 
-const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
+const Mixins = WithGpuBuffer(
+  WithCpuBuffer(WithDevice(WithCanvas(WithLabel()))),
+);
 
 /**
  * A GPU uniform object that can be used in a {@link BindGroup}.

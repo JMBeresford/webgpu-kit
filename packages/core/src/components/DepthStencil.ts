@@ -1,40 +1,12 @@
-import { type Constructor } from "../utils";
-import type { WithCanvas } from "./Canvas";
-import type { WithDevice } from "./Device";
-import type { WithMultiSampling } from "./MultiSampling";
+import { WithCanvas } from "./Canvas";
+import { WithDevice } from "./Device";
+import { WithLabel } from "./Label";
+import { WithMultiSampling } from "./MultiSampling";
 
-export interface DepthStencilComponent {
-  depthStencilEnabled: boolean;
-  depthStencilTexture?: GPUTexture;
-  depthStencilTextureView?: GPUTextureView;
-  depthStencilState: GPUDepthStencilState;
-  depthStencilAttachment: Partial<GPURenderPassDepthStencilAttachment>;
+const components = WithMultiSampling(WithDevice(WithCanvas(WithLabel())));
 
-  setDepthWriteEnabled: (enabled: boolean) => void;
-  setDepthCompare: (compare: GPUCompareFunction) => void;
-  setDepthStencilFormat: (format: GPUTextureFormat) => void;
-  setStencilBack: (state: GPUStencilFaceState) => void;
-  setStencilFront: (state: GPUStencilFaceState) => void;
-  setDepthBias: (bias: number) => void;
-  setDepthBiasSlopeScale: (scale: number) => void;
-  setDepthBiasClamp: (clamp: number) => void;
-  setStencilReadMask: (mask: number) => void;
-  setStencilWriteMask: (mask: number) => void;
-  setDepthStencilAttachment: (
-    attachment: Partial<GPURenderPassDepthStencilAttachment>,
-    replace?: boolean,
-  ) => void;
-  buildDepthStencilTexture: () => Promise<void>;
-}
-
-export type WithDepthStencil = InstanceType<
-  ReturnType<typeof WithDepthStencil>
->;
-
-export function WithDepthStencil<
-  TBase extends Constructor<WithCanvas & WithDevice & WithMultiSampling>,
->(Base: TBase) {
-  return class extends Base implements DepthStencilComponent {
+export function WithDepthStencil<TBase extends typeof components>(Base: TBase) {
+  return class extends Base {
     depthStencilEnabled = false;
     depthStencilTexture?: GPUTexture;
     depthStencilTextureView?: GPUTextureView;

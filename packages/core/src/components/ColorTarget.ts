@@ -1,20 +1,10 @@
-import type { Constructor } from "../utils";
-import type { WithCanvas } from "./Canvas";
+import { WithCanvas } from "./Canvas";
+import { WithLabel } from "./Label";
 
-/**
- * @internal
- */
-export type ColorTargetComponent = {
-  colorTarget: GPUColorTargetState;
-};
+const components = WithCanvas(WithLabel());
 
-/**
- * @internal
- */
-export function WithColorTarget<TBase extends Constructor<WithCanvas>>(
-  Base: TBase,
-) {
-  return class extends Base implements ColorTargetComponent {
+export function WithColorTarget<TBase extends typeof components>(Base: TBase) {
+  return class extends Base {
     colorTarget: GPUColorTargetState = {
       format: this.canvasFormat,
       blend: {

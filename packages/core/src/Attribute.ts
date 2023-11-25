@@ -1,9 +1,10 @@
+import { WithCanvas } from "./components/Canvas";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import type { ArrayType } from "./utils";
 
-const Mixins = WithDevice(WithCpuBuffer(WithLabel()));
+const components = WithDevice(WithCanvas(WithCpuBuffer(WithLabel())));
 
 /**
  * {@link Attribute} constructor parameters
@@ -59,7 +60,7 @@ export type AttributeOptions = {
 /**
  * An attribute object that contains vertex data
  */
-export class Attribute extends Mixins {
+export class Attribute extends components {
   readonly format: GPUVertexFormat;
   readonly shaderLocation: number;
   readonly itemSize: number;

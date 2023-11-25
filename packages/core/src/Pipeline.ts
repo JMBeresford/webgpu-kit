@@ -6,9 +6,9 @@ import { WithCanvas } from "./components/Canvas";
 import { WithMultiSampling } from "./components/MultiSampling";
 import { WithDepthStencil } from "./components/DepthStencil";
 
-const Mixins = WithColorTarget(
+const components = WithColorTarget(
   WithDepthStencil(
-    WithMultiSampling(WithCanvas(WithShader(WithDevice(WithLabel())))),
+    WithMultiSampling(WithShader(WithDevice(WithCanvas(WithLabel())))),
   ),
 );
 export type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
@@ -62,7 +62,7 @@ export type PipelineOptions = {
 /**
  * A pipeline that runs either a render or compute operation
  */
-export class Pipeline extends Mixins {
+export class Pipeline extends components {
   type: "render" | "compute" = "render";
   onBeforePass: PipelineCallback = () => {};
   onAfterPass: PipelineCallback = () => {};
@@ -79,7 +79,7 @@ export class Pipeline extends Mixins {
     this.onAfterPass = options.onAfterPass ?? this.onAfterPass;
 
     if (options.device) {
-      this.device = options.device;
+      this._device = options.device;
     }
 
     this.setShader(options.shader);

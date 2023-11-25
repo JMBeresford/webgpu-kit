@@ -2,9 +2,12 @@ import { WithGpuBuffer } from "./components/GpuBufferObject";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
+import { WithCanvas } from "./components/Canvas";
 
 type IndexArray = Uint16Array | Uint32Array;
-const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
+const components = WithCpuBuffer(
+  WithGpuBuffer(WithDevice(WithCanvas(WithLabel()))),
+);
 
 /**
  * {@link IndexBuffer} constructor parameters
@@ -26,7 +29,7 @@ export type IndexBufferOptions = {
  * An index buffer that is used in a {@link VertexAttributeObject} to
  * direct indexed drawing operations.
  */
-export class IndexBuffer extends Mixins {
+export class IndexBuffer extends components {
   declare cpuBuffer: IndexArray;
   indexCount?: number;
   firstIndex?: number;

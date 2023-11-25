@@ -3,8 +3,11 @@ import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import type { Attribute } from "./Attribute";
 import { WithCpuBuffer } from "./components/CpuBuffer";
+import { WithCanvas } from "./components/Canvas";
 
-const Mixins = WithCpuBuffer(WithGpuBuffer(WithDevice(WithLabel())));
+const components = WithCpuBuffer(
+  WithGpuBuffer(WithDevice(WithCanvas(WithLabel()))),
+);
 
 /**
  * {@link VertexAttributeObject} constructor parameters
@@ -19,7 +22,7 @@ export type VAOOptions = {
  * A GPU vertex attribute object that is composed of multiple {@link Attribute}s
  * to be used in a {@link PipelineGroup}.
  */
-export class VertexAttributeObject extends Mixins {
+export class VertexAttributeObject extends components {
   readonly attributes: Attribute[] = [];
   layout?: GPUVertexBufferLayout;
   itemCount: number;

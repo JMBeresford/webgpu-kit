@@ -1,9 +1,12 @@
+import { WithCanvas } from "./components/Canvas";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { WithDevice } from "./components/Device";
 import { WithGpuTexture } from "./components/GpuTextureObject";
 import { WithLabel } from "./components/Label";
 
-const Mixins = WithGpuTexture(WithCpuBuffer(WithDevice(WithLabel())));
+const components = WithGpuTexture(
+  WithCpuBuffer(WithDevice(WithCanvas(WithLabel()))),
+);
 
 /**
  * {@link Texture} constructor parameters
@@ -27,7 +30,7 @@ export type TextureOptions = {
 /**
  * A GPU texture object that can be used in a {@link BindGroup}.
  */
-export class Texture extends Mixins {
+export class Texture extends components {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;
 

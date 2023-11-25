@@ -3,6 +3,7 @@ import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 import { WithCpuBuffer } from "./components/CpuBuffer";
 import { type ArrayType } from "./utils";
+import { WithCanvas } from "./components/Canvas";
 
 /**
  * {@link Storage} constructor parameters
@@ -25,12 +26,14 @@ export type StorageOptions = {
   arrayBuffer: ArrayType;
 };
 
-const Mixins = WithGpuBuffer(WithCpuBuffer(WithDevice(WithLabel())));
+const components = WithGpuBuffer(
+  WithCpuBuffer(WithDevice(WithCanvas(WithLabel()))),
+);
 
 /**
  * A GPU storage object that can be used in a {@link BindGroup}.
  */
-export class Storage extends Mixins {
+export class Storage extends components {
   binding: number;
   readonly visibility: GPUShaderStageFlags;
   readonly bufferOptions: {

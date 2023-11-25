@@ -1,19 +1,12 @@
-import type { Constructor } from "../utils";
-import { fallbackToEmpty, getDefaultDevice } from "../utils";
-import type { WithCanvas } from "./Canvas";
+import { getDefaultDevice } from "../utils";
+import { WithCanvas } from "./Canvas";
+import { WithLabel } from "./Label";
 
-export interface DeviceComponent {
-  getDevice: () => Promise<GPUDevice>;
-  setDevice: (d: GPUDevice) => void;
-}
+const components = WithCanvas(WithLabel());
 
-export type WithDevice = InstanceType<ReturnType<typeof WithDevice>>;
-
-export function WithDevice<TBase extends Constructor<Partial<WithCanvas>>>(
-  Base?: TBase,
-) {
-  return class extends fallbackToEmpty(Base) implements DeviceComponent {
-    /** @internal */
+export type WithDevice = typeof WithDevice;
+export function WithDevice<TBase extends typeof components>(Base: TBase) {
+  return class extends Base {
     _device?: GPUDevice;
 
     async getDevice(): Promise<GPUDevice> {
@@ -36,12 +29,10 @@ export function WithDevice<TBase extends Constructor<Partial<WithCanvas>>>(
         throw new Error("Attempted to configure context w/o device.");
       }
 
-      if (this.context && this.canvasFormat) {
-        this.context.configure({
-          device: this._device,
-          format: this.canvasFormat,
-        });
-      }
+      this.context.configure({
+        device: this._device,
+        format: this.canvasFormat,
+      });
     }
   };
 }

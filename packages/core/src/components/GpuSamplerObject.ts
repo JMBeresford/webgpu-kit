@@ -1,20 +1,11 @@
-import type { Constructor } from "../utils";
-import type { WithDevice } from "./Device";
-import type { WithLabel } from "./Label";
+import { WithCanvas } from "./Canvas";
+import { WithDevice } from "./Device";
+import { WithLabel } from "./Label";
 
-export interface GpuSamplerComponent {
-  gpuSampler?: GPUSampler;
-  samplerOptions: GPUSamplerDescriptor;
+const components = WithDevice(WithCanvas(WithLabel()));
 
-  updateSampler: (options?: GPUSamplerDescriptor) => Promise<void>;
-}
-
-export type WithGpuSampler = InstanceType<ReturnType<typeof WithGpuSampler>>;
-
-export function WithGpuSampler<
-  TBase extends Constructor<WithDevice & Partial<WithLabel>>,
->(Base: TBase) {
-  return class extends Base implements GpuSamplerComponent {
+export function WithGpuSampler<TBase extends typeof components>(Base: TBase) {
+  return class extends Base {
     gpuSampler?: GPUSampler;
     samplerOptions: GPUSamplerDescriptor = {
       magFilter: "linear",

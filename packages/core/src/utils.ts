@@ -4,9 +4,9 @@
 export type ConstructorArgs = any[];
 
 /** @internal */
-export type Constructor<T = Record<string, unknown>> = new (
+export type Constructor = new (
   ...args: ConstructorArgs
-) => T;
+) => NonNullable<unknown>;
 
 export type ArrayType =
   | Float32Array
@@ -16,8 +16,15 @@ export type ArrayType =
   | Uint8ClampedArray;
 
 /** @internal */
-export function fallbackToEmpty<T extends Constructor>(Base?: T): T {
-  return Base ?? (class {} as T);
+export function fallbackToEmpty<T>(Base?: T) {
+  if (Base !== undefined) {
+    return Base;
+  }
+
+  return class {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor -- private
+    constructor(..._args: ConstructorArgs) {}
+  };
 }
 
 let defaultDevice: GPUDevice | undefined;
@@ -39,7 +46,7 @@ let _canvas: HTMLCanvasElement | undefined;
 let _context: GPUCanvasContext | undefined;
 
 /** @internal */
-export function defaultCanvas(): HTMLCanvasElement {
+export function getDefaultCanvas(): HTMLCanvasElement {
   if (_canvas) {
     return _canvas;
   }
@@ -51,11 +58,11 @@ export function defaultCanvas(): HTMLCanvasElement {
 }
 
 /** @internal */
-export function defaultContext(): GPUCanvasContext {
+export function getDefaultContext(): GPUCanvasContext {
   if (_context) {
     return _context;
   }
-  const ctx = defaultCanvas().getContext("webgpu");
+  const ctx = getDefaultCanvas().getContext("webgpu");
   if (!ctx) {
     throw new Error("Could not get WebGPU context");
   }
@@ -64,7 +71,7 @@ export function defaultContext(): GPUCanvasContext {
 }
 
 /** @internal */
-export function defaultCanvasFormat(): GPUTextureFormat {
+export function getDefaultCanvasFormat(): GPUTextureFormat {
   try {
     return navigator.gpu.getPreferredCanvasFormat();
   } catch {

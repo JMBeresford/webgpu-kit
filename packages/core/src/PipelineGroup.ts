@@ -2,10 +2,11 @@ import type { BindGroup } from "./BindGroup";
 import type { IndexBuffer } from "./IndexBuffer";
 import type { Pipeline } from "./Pipeline";
 import type { VertexAttributeObject } from "./VertexAttributeObject";
+import { WithCanvas } from "./components/Canvas";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 
-const Mixins = WithDevice(WithLabel());
+const components = WithDevice(WithCanvas(WithLabel()));
 
 /**
  * {@link PipelineGroup} constructor parameters
@@ -25,7 +26,7 @@ export type PipelineGroupOptions = {
  * A group of {@link Pipeline}s that share the same {@link VertexAttributeObject}s
  * and {@link BindGroup}s.
  */
-export class PipelineGroup extends Mixins {
+export class PipelineGroup extends components {
   private _pipelineLayout?: GPUPipelineLayout;
   private _bindGroups: BindGroup[] = [];
 

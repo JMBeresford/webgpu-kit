@@ -3,7 +3,7 @@ import type { Pipeline } from "./Pipeline";
 import { WithLabel } from "./components/Label";
 import { clamp } from "./utils";
 
-const Mixins = WithLabel();
+const components = WithLabel();
 
 /**
  * {@link Executor} constructor parameters
@@ -18,7 +18,7 @@ export type ExecutorOptions = {
  * {@link PipelineGroup}s. This is the main entry point for rendering
  * a scene, or executing compute operations.
  */
-export class Executor extends Mixins {
+export class Executor extends components {
   pipelineGroups: PipelineGroup[] = [];
   autoResizeCanvas = true;
 

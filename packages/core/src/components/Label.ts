@@ -1,17 +1,11 @@
-import type { Constructor } from "../utils";
-import { fallbackToEmpty } from "../utils";
+import type { ConstructorArgs } from "../utils";
 
-export interface LabelComponent {
-  label?: string;
-
-  setLabel: (label: string) => void;
-}
-
-export type WithLabel = InstanceType<ReturnType<typeof WithLabel>>;
-
-export function WithLabel<TBase extends Constructor>(Base?: TBase) {
-  return class extends fallbackToEmpty(Base) implements LabelComponent {
+export function WithLabel() {
+  return class Label {
     label?: string;
+
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor -- private
+    constructor(..._args: ConstructorArgs) {}
 
     setLabel(label: string): void {
       this.label = label;
