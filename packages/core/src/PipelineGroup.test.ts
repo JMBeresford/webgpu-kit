@@ -4,6 +4,7 @@ import {
   MockDevice,
   MockCanvas,
   MockContext,
+  MockCanvasFormat,
 } from "../lib/MockWebGPU";
 import { PipelineGroup } from "./PipelineGroup";
 
@@ -18,10 +19,10 @@ vi.mock("./utils", async () => {
 
   return {
     ...(actual as Record<string, unknown>),
-    defaultDevice: () => MockDevice,
-    defaultCanvas: () => MockCanvas,
-    defaultContext: () => MockContext,
-    defaultCanvasFormat: () => "rgba8unorm",
+    getDefaultDevice: () => MockDevice,
+    getDefaultCanvas: () => MockCanvas,
+    getDefaultContext: () => MockContext,
+    getDefaultCanvasFormat: () => MockCanvasFormat,
   };
 });
 
