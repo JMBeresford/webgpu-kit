@@ -1,4 +1,4 @@
-export const GRID_SIZE = 512;
+export const GRID_SIZE = 256;
 export const WORKGROUP_SIZE = 16;
 
 export const renderShader = /* wgsl */ `

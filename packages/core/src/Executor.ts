@@ -61,10 +61,18 @@ export class Executor extends components {
           await this.handleResize(pipeline, device);
         }
 
-        const { context } = pipeline;
+        const { pipelineDescriptor } = pipeline;
+        const {
+          context,
+          clearColor,
+          depthStencilEnabled,
+          depthStencilTextureView,
+          depthStencilAttachment,
+        } = pipelineDescriptor;
+
         const multiSampleTextureView =
-          pipeline.multiSampleState.count > 1
-            ? pipeline.multiSampleTextureView
+          pipelineDescriptor.multiSampleState.count > 1
+            ? pipelineDescriptor.multiSampleTextureView
             : undefined;
 
         const view =
@@ -79,18 +87,18 @@ export class Executor extends components {
             {
               view,
               resolveTarget,
-              loadOp: pipeline.clearColor ? "clear" : "load",
-              clearValue: pipeline.clearColor,
+              loadOp: clearColor ? "clear" : "load",
+              clearValue: clearColor,
               storeOp: "store",
             } satisfies GPURenderPassColorAttachment,
           ],
           depthStencilAttachment: undefined,
         };
 
-        if (pipeline.depthStencilEnabled && pipeline.depthStencilTextureView) {
+        if (depthStencilEnabled && depthStencilTextureView) {
           renderPassDescriptor.depthStencilAttachment = {
-            view: pipeline.depthStencilTextureView,
-            ...pipeline.depthStencilAttachment,
+            view: depthStencilTextureView,
+            ...depthStencilAttachment,
           };
         }
 
@@ -163,7 +171,7 @@ export class Executor extends components {
     pipeline: Pipeline,
     device: GPUDevice,
   ): Promise<void> {
-    const { canvas } = pipeline;
+    const { canvas } = pipeline.pipelineDescriptor;
     const targetWidth = clamp(
       canvas.clientWidth,
       1,
@@ -180,10 +188,11 @@ export class Executor extends components {
       canvas.width = targetWidth;
       canvas.height = targetHeight;
 
-      pipeline.configureContext();
+      const { pipelineDescriptor } = pipeline;
+      pipelineDescriptor.configureContext();
 
-      await pipeline.buildMultiSampleTexture();
-      await pipeline.buildDepthStencilTexture();
+      await pipelineDescriptor.buildMultiSampleTexture();
+      await pipelineDescriptor.buildDepthStencilTexture();
     }
   }
 

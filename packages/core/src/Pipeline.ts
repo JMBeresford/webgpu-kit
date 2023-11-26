@@ -1,16 +1,7 @@
 import { WithLabel } from "./components/Label";
-import { WithDevice } from "./components/Device";
-import { WithShader } from "./components/Shader";
-import { WithColorTarget } from "./components/ColorTarget";
-import { WithCanvas } from "./components/Canvas";
-import { WithMultiSampling } from "./components/MultiSampling";
-import { WithDepthStencil } from "./components/DepthStencil";
+import { PipelineDescriptor } from "./PipelineDescriptor";
 
-const components = WithColorTarget(
-  WithDepthStencil(
-    WithMultiSampling(WithShader(WithDevice(WithCanvas(WithLabel())))),
-  ),
-);
+const components = WithLabel();
 export type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
 
 type WorkgroupSize = [number, number | undefined, number | undefined];
@@ -63,13 +54,13 @@ export type PipelineOptions = {
  * A pipeline that runs either a render or compute operation
  */
 export class Pipeline extends components {
-  type: "render" | "compute" = "render";
+  readonly type: "render" | "compute" = "render";
   onBeforePass: PipelineCallback = () => {};
   onAfterPass: PipelineCallback = () => {};
   gpuPipeline?: GPURenderPipeline | GPUComputePipeline;
   workgroupSize: WorkgroupSize;
   workgroupCount: WorkgroupCount;
-  clearColor?: GPUColor = [0, 0, 0, 1];
+  pipelineDescriptor: PipelineDescriptor;
 
   constructor(options: PipelineOptions) {
     super();
@@ -78,36 +69,21 @@ export class Pipeline extends components {
     this.onBeforePass = options.onBeforePass ?? this.onBeforePass;
     this.onAfterPass = options.onAfterPass ?? this.onAfterPass;
 
-    if (options.device) {
-      this._device = options.device;
-    }
-
-    this.setShader(options.shader);
     this.workgroupSize = options.workgroupSize ?? [8, 8, undefined];
     this.workgroupCount = options.workgroupCount ?? [1, 1, undefined];
 
-    if (options.clearColor) {
-      this.clearColor = options.clearColor;
-    }
-
-    if (options.canvas) {
-      this.setCanvas(options.canvas);
-    }
-
-    if (options.enableMultiSampling) {
-      this.setMultiSampleCount(4);
-    }
-
-    if (options.enableDepthStencil) {
-      this.depthStencilEnabled = true;
-    }
+    this.pipelineDescriptor = new PipelineDescriptor({
+      type: this.type,
+      shader: options.shader,
+      clearColor: options.clearColor,
+      multisample: options.enableMultiSampling,
+      depthStencil: options.enableDepthStencil,
+      canvas: options.canvas,
+    });
   }
 
   async build(): Promise<void> {
-    await this.buildShaderModule();
-    this.configureContext();
-    await this.buildMultiSampleTexture();
-    await this.buildDepthStencilTexture();
+    await this.pipelineDescriptor.build();
   }
 
   setWorkgroupSize(size: WorkgroupSize): void {
@@ -127,48 +103,31 @@ export class Pipeline extends components {
   }
 
   setClearColor(color: GPUColor): void {
-    this.clearColor = color;
+    this.pipelineDescriptor.clearColor = color;
   }
 
   getRenderDescriptor(
     buffers: GPUVertexBufferLayout[],
     layout: GPUPipelineLayout,
   ): GPURenderPipelineDescriptor {
-    if (!this.shaderModule) {
-      throw new Error("Shader module not set");
-    }
-
     if (this.type !== "render") {
       throw new Error("Pipeline is not a render pipeline");
     }
 
-    return {
+    const renderDescriptor: GPURenderPipelineDescriptor = {
       label: `${this.label ?? "Unlabelled"} Render Pipeline`,
       layout,
-      vertex: {
-        module: this.shaderModule,
-        entryPoint: "vertexMain",
-        buffers,
-      },
-      fragment: {
-        module: this.shaderModule,
-        entryPoint: "fragmentMain",
-        targets: [this.colorTarget],
-      },
-      multisample: this.multiSampleState,
-      depthStencil: this.depthStencilEnabled
-        ? this.depthStencilState
-        : undefined,
+      ...this.pipelineDescriptor.getRenderDescriptor(),
     };
+
+    renderDescriptor.vertex.buffers = buffers;
+
+    return renderDescriptor;
   }
 
   getComputeDescriptor(
     layout: GPUPipelineLayout,
   ): GPUComputePipelineDescriptor {
-    if (!this.shaderModule) {
-      throw new Error("Shader module not set");
-    }
-
     if (this.type !== "compute") {
       throw new Error("Pipeline is not a compute pipeline");
     }
@@ -176,10 +135,7 @@ export class Pipeline extends components {
     return {
       label: `${this.label ?? "Unlabelled"} Compute Pipeline`,
       layout,
-      compute: {
-        module: this.shaderModule,
-        entryPoint: "computeMain",
-      },
+      ...this.pipelineDescriptor.getComputeDescriptor(),
     };
   }
 }

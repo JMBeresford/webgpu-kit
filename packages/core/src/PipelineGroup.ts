@@ -110,7 +110,7 @@ export class PipelineGroup extends components {
           throw new Error("Pipeline layout not built");
         }
 
-        if (pipeline.shaderModule === undefined) {
+        if (pipeline.pipelineDescriptor.shaderModule === undefined) {
           throw new Error("Shader module not set");
         }
 
