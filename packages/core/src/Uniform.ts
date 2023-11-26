@@ -25,14 +25,14 @@ export type UniformOptions = {
   arrayBuffer?: ArrayType;
 };
 
-const Mixins = WithGpuBuffer(
+const components = WithGpuBuffer(
   WithCpuBuffer(WithDevice(WithCanvas(WithLabel()))),
 );
 
 /**
  * A GPU uniform object that can be used in a {@link BindGroup}.
  */
-export class Uniform extends Mixins {
+export class Uniform extends components {
   readonly binding: number;
   readonly visibility: GPUShaderStageFlags;
 
