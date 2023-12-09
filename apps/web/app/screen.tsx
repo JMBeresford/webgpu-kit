@@ -25,5 +25,5 @@ export function Screen(): JSX.Element {
     };
   }, []);
 
-  return <div ref={ref} className={styles.screen} />;
+  return <div className={styles.screen} ref={ref} />;
 }

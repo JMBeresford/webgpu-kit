@@ -35,6 +35,6 @@ export default function Page(props: { params: { slug: string } }): JSX.Element {
   );
 }
 
-export function getStaticParams(): { slug: string }[] {
+export function generateStaticParams(): { slug: string }[] {
   return Examples.map((example) => ({ slug: example.url }));
 }
