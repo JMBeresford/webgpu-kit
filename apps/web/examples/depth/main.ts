@@ -114,7 +114,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   const viewMatrix = mat4.create();
   const projMatrix = mat4.create();
   mat4.lookAt(viewMatrix, [1, 0, 2], [0, 0, 0], [0, 1, 0]);
-  mat4.perspective(projMatrix, 45, 1, 0.1, 100);
+  mat4.perspective(projMatrix, 45, canvas.width / canvas.height, 0.1, 100);
 
   mat4.multiply(viewMatrix, projMatrix, viewMatrix);
 

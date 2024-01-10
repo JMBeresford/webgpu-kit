@@ -2,13 +2,17 @@ import type { ForwardedRef } from "react";
 import { forwardRef } from "react";
 import styles from "./styles.module.scss";
 
-type ButtonProps = { primary?: boolean; small?: boolean, bare?: boolean } & JSX.IntrinsicElements["button"];
+type ButtonProps = {
+  primary?: boolean;
+  small?: boolean;
+  bare?: boolean;
+  outline?: boolean;
+} & JSX.IntrinsicElements["button"];
 
 function ButtonImpl(
-  { children, primary, small, bare, className, ...props }: ButtonProps,
+  { children, primary, small, bare, outline, className, ...props }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
 ): JSX.Element {
-
   let classes = styles.button;
   if (primary) {
     classes += ` ${styles.primary}`;
@@ -18,6 +22,9 @@ function ButtonImpl(
   }
   if (bare) {
     classes += ` ${styles.bare}`;
+  }
+  if (outline) {
+    classes += ` ${styles.outline}`;
   }
 
   return (

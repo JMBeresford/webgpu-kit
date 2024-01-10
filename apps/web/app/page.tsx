@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ButtonGroup, Button } from "ui/button";
 import { Scene } from "../scene";
+import { ExternalLinkIcon } from "../components/external-link-icon";
 import styles from "./styles.module.scss";
 import { Screen } from "./screen";
 
@@ -49,7 +50,7 @@ export default function Page(): JSX.Element {
         </div>
 
         <aside>
-          <h4>Homework Time!</h4>
+          <h4>Read more:</h4>
 
           <ul>
             <li>
@@ -58,7 +59,8 @@ export default function Page(): JSX.Element {
                 rel="noopener"
                 target="_blank"
               >
-                What&apos;s a... WebGPU?
+                What is WebGPU?
+                <ExternalLinkIcon />
               </a>
             </li>
             <li>
@@ -68,13 +70,10 @@ export default function Page(): JSX.Element {
                 target="_blank"
               >
                 From WebGL to WebGPU
+                <ExternalLinkIcon />
               </a>
             </li>
-          </ul>
 
-          <h4>Extra Credit</h4>
-
-          <ul>
             <li>
               <a
                 href="https://www.w3.org/TR/webgpu/"
@@ -82,6 +81,7 @@ export default function Page(): JSX.Element {
                 target="_blank"
               >
                 The WebGPU spec
+                <ExternalLinkIcon />
               </a>
             </li>
 
@@ -92,6 +92,7 @@ export default function Page(): JSX.Element {
                 target="_blank"
               >
                 The WGSL spec
+                <ExternalLinkIcon />
               </a>
             </li>
           </ul>

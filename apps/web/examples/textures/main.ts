@@ -51,6 +51,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
         var output = VertexOutput();
 
         output.pos = vec4<f32>(input.pos * scale, 0.0, 1.0);
+        output.pos.x = output.pos.x / ${canvas.width / canvas.height};
         output.uv = (input.pos + 1.0) / 2.0;
         output.uv = vec2<f32>(output.uv.x, 1.0 - output.uv.y);
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect, useMemo, useState } from "react";
 import { Examples } from "../../../examples";
 import type { Example as ExampleData } from "../../../examples";
+import { WebgpuCheck } from "./webgpu-check";
 
 type Props = {
   title: ExampleData["title"];
@@ -10,6 +11,8 @@ type Props = {
 
 export function ExampleFrame(props: Props): JSX.Element {
   const ref = useRef<HTMLCanvasElement>(null);
+  const [error, setError] = useState(false);
+
   const data = useMemo(
     () => Examples.find((example) => example.url === props.title),
     [props.title],
@@ -20,17 +23,19 @@ export function ExampleFrame(props: Props): JSX.Element {
   }
 
   useEffect(() => {
-    async function runExample(): Promise<void> {
-      if (ref.current && data) {
-        await data.run(ref.current);
-      }
+    if (ref.current) {
+      data.run(ref.current).catch((e) => {
+        // eslint-disable-next-line no-console -- logging
+        console.error(e);
+        setError(true);
+      });
     }
-
-    runExample().catch((error) => {
-      // eslint-disable-next-line no-console -- logging
-      console.error(error);
-    });
   }, [data]);
 
-  return <canvas ref={ref} />;
+  return (
+    <>
+      <canvas ref={ref} />
+      <WebgpuCheck error={error} />
+    </>
+  );
 }

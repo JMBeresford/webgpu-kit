@@ -14,29 +14,46 @@
   color: #fff;
 
   transition:
-    background-color 0.15s ease-in-out,
-    color 0.15s ease-in-out;
+    background-color 0.25s,
+    color 0.25s;
 
-  &:not(.bare):hover {
+  transition-timing-function: ease-in;
+
+  &:hover {
     background-color: #000;
     color: #fff;
+    transition-timing-function: ease-out;
   }
 }
 
-.button.small {
+.small {
   padding: 0.5em 1em;
 }
 
-.button.primary {
+.primary {
   background-color: #fff;
   border: 1px solid #fff;
   color: #333;
 }
 
-.button.bare {
+.bare {
   background-color: rgba(255, 255, 255, 0);
   border: none;
   color: inherit;
+
+  &:hover {
+    background-color: unset;
+  }
+}
+
+.outline {
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #fff;
+  color: #fff;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 }
 
 .buttongroup {

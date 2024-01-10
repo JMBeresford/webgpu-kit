@@ -2,15 +2,11 @@ import type { ReactNode } from "react";
 import { GeistSans } from "geist/font/sans";
 import Link from "next/link";
 import { Header, HeaderTitle } from "ui/header";
-import { FaExternalLinkAlt } from "react-icons/fa";
 import { Nav } from "ui/nav";
 import "./main.scss";
 import { Button } from "ui/button";
-
-const iconProps = {
-  size: "0.7em",
-  style: { verticalAlign: "top", marginLeft: "0.25em", opacity: 0.5 },
-};
+import { ExternalLinkIcon } from "../components/external-link-icon";
+import { HeaderScreen } from "./header-screen";
 
 export default function Layout(props: { children: ReactNode }): JSX.Element {
   return (
@@ -28,7 +24,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
                 target="_blank"
               >
                 API
-                <FaExternalLinkAlt {...iconProps} />
+                <ExternalLinkIcon />
               </a>
 
               <a
@@ -37,7 +33,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
                 target="_blank"
               >
                 Source
-                <FaExternalLinkAlt {...iconProps} />
+                <ExternalLinkIcon />
               </a>
 
               <Link href="/examples">
@@ -50,6 +46,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
                 </Button>
               </Link>
             </Nav>
+            <HeaderScreen />
           </Header>
 
           <div id="content">{props.children}</div>

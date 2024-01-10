@@ -51,6 +51,18 @@
   transition: opacity 0.75s ease-in-out;
 }
 
+.header-screen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  transition: opacity 0.35s ease-in-out;
+}
+
 .why {
   display: flex;
   justify-content: space-between;
@@ -63,6 +75,7 @@
   p {
     max-width: 60ch;
     font-size: 1.2em;
+    line-height: 130%;
   }
 
   aside {
@@ -88,6 +101,13 @@
 
       a {
         color: inherit;
+
+        opacity: 0.75;
+        transition: opacity 0.15s ease-in-out;
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
