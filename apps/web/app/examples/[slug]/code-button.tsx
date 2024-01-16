@@ -24,13 +24,15 @@ export function CodeButton(): JSX.Element {
   return (
     <div className={styles["code-btn"]}>
       <div className={showingCode ? "" : styles.show}>
-        <Button onClick={handleClick} primary>
+        <Button onClick={handleClick} primary small>
           Show Code
         </Button>
       </div>
 
       <div className={showingCode ? styles.show : ""}>
-        <Button onClick={handleClick}>Hide Code</Button>
+        <Button onClick={handleClick} small>
+          Hide Code
+        </Button>
       </div>
     </div>
   );

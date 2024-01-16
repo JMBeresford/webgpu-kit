@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ButtonGroup, Button } from "ui/button";
+import { Card, CardTitle } from "ui/card";
 import { Scene } from "../scene";
 import { ExternalLinkIcon } from "../components/external-link-icon";
 import styles from "./styles.module.scss";
@@ -97,6 +98,43 @@ export default function Page(): JSX.Element {
             </li>
           </ul>
         </aside>
+      </section>
+
+      <hr className={styles.rule} />
+
+      <section className={styles.cards}>
+        <Card>
+          <CardTitle>Streamlined Development</CardTitle>
+          <p>
+            WGPU-Kit minimizes the need for repetitive code by providing
+            sensible defaults. However, it still allows for detailed
+            configuration akin to raw WebGPU code when necessary.
+          </p>
+        </Card>
+        <Card>
+          <CardTitle>Harness the Power of Modern GPUs</CardTitle>
+          <p>
+            With WGPU-Kit, you&apos;re no longer constrained by outdated GPU
+            APIs. Embrace the power of modern graphics workflows without any
+            compromises or workarounds.
+          </p>
+        </Card>
+        <Card>
+          <CardTitle>Simplified API with Pipeline Groups</CardTitle>
+          <p>
+            WGPU-Kit&apos;s simple API allows you to group both render pipelines
+            and compute pipelines by shared resources, streamlining your
+            workflow.
+          </p>
+        </Card>
+        <Card>
+          <CardTitle>Flexible Levels of Abstraction</CardTitle>
+          <p>
+            Whether you need full control over pipeline creation, shader code,
+            and operational control, or you prefer a simple, conventional scene
+            graph for a straightforward renderer, WGPU-Kit has you covered.
+          </p>
+        </Card>
       </section>
     </>
   );

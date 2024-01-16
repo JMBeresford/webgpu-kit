@@ -1,13 +1,18 @@
 .header {
   width: 100%;
-  padding: 1em 2em;
 
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  grid-template-columns: auto;
-  justify-items: end;
-  align-items: center;
+  .wrapper {
+    margin: 0 auto;
+    max-width: min(90%, 1500px);
+    padding: 1em 0;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-template-columns: auto;
+    justify-items: end;
+    align-items: center;
+  }
 }
 
 .title {

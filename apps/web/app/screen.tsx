@@ -6,7 +6,7 @@ import styles from "./styles.module.scss";
 
 export function Screen(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
-  const scrolled = usePageScroll();
+  const scrolled = usePageScroll({ threshold: 750, relativeToViewport: true });
 
   return (
     <div

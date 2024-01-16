@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin: 10lvh 0;
+  margin: 4em 0 5.5em;
 
   h1 {
     max-width: 30ch;
@@ -17,7 +17,7 @@
     background: linear-gradient(
       75deg,
       rgba(255, 255, 255, 1) 0%,
-      rgba(200, 200, 220, 1) 100%
+      rgba(200, 200, 200, 1) 100%
     );
 
     background-clip: text;
@@ -58,45 +58,60 @@
 
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
+  border-bottom: solid 1px #333;
 
   opacity: 0;
   transition: opacity 0.35s ease-in-out;
 }
 
+.rule {
+  margin: 3.5em 0;
+  padding: 0;
+  border: solid 1px #777;
+
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
 .why {
   display: flex;
-  justify-content: space-between;
+  gap: 3em;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 
   h2 {
-    font-size: 3em;
-    margin-bottom: 0.5em;
+    font-size: 3.25em;
+    margin-bottom: 0.35em;
   }
 
   p {
     max-width: 60ch;
     font-size: 1.2em;
     line-height: 130%;
+    color: rgba(255, 255, 255, 0.75);
   }
 
   aside {
     border-radius: 8px;
-    padding: 1em 0;
     color: #ddd;
 
     h4 {
-      font-size: 1.5em;
+      font-size: 1.3em;
       margin-bottom: 0.5em;
     }
 
     ul {
+      display: flex;
+      gap: 1em;
       list-style: none;
 
-      &:first-of-type {
-        margin-bottom: 1em;
-      }
-
       li {
-        margin-bottom: 0.25em;
+        font-size: 0.9em;
       }
 
       a {
@@ -110,5 +125,26 @@
         }
       }
     }
+  }
+}
+
+.cards {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em;
+
+  > div {
+    flex-grow: 1;
+    flex-basis: 20%;
+    min-width: 350px;
+    max-width: fit-content;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 75ch;
+    line-height: 150%;
   }
 }

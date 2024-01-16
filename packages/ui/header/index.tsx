@@ -8,7 +8,7 @@ function HeaderImpl(
 ): JSX.Element {
   return (
     <header className={`${styles.header} ${className}`} ref={ref} {...props}>
-      {children}
+      <div className={styles.wrapper}>{children}</div>
     </header>
   );
 }

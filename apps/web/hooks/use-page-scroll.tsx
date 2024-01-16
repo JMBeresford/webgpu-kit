@@ -1,13 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export function usePageScroll(threshold = 10): boolean {
+export function usePageScroll(opts?: {
+  threshold?: number;
+  relativeToViewport?: boolean;
+}): boolean {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const listener: () => void = () => {
-      const vh = window.innerHeight * 0.01;
-      if (window.scrollY > threshold * vh) {
+      const threshold = opts?.threshold ?? 20;
+      let scroll = window.scrollY;
+
+      if (opts?.relativeToViewport) {
+        scroll += window.innerHeight;
+      }
+
+      if (scroll >= threshold) {
         setScrolled(true);
       } else {
         setScrolled(false);
@@ -16,11 +25,13 @@ export function usePageScroll(threshold = 10): boolean {
 
     listener();
     window.addEventListener("scroll", listener);
+    window.addEventListener("resize", listener);
 
     return () => {
       window.removeEventListener("scroll", listener);
+      window.removeEventListener("resize", listener);
     };
-  }, [threshold]);
+  }, [opts]);
 
   return scrolled;
 }
