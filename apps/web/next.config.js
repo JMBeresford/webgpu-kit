@@ -1,5 +1,6 @@
 module.exports = {
   output: "export",
+  basePath: "/wgpu-kit",
   reactStrictMode: true,
   transpilePackages: ["ui"],
 
