@@ -42,10 +42,10 @@ jobs:
           version: 8
       - name: Install Deps
         run: pnpm install
-      - name: Build
+      - name: Build Docs
         run: pnpm run build --filter docs
-        run: pnpm run build --filter web
-        run: mv ./apps/docs/dist ./apps/web/out/docs
+      - name: Build Web
+        run: pnpm run build --filter web && mv ./apps/docs/dist ./apps/web/out/docs
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
