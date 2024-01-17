@@ -16,10 +16,7 @@ export function DesktopHeader(): JSX.Element {
         <Link href="/"> WGPU-Kit </Link>
       </HeaderTitle>
       <Nav>
-        <Link href="/docs">
-          API
-          <ExternalLinkIcon />
-        </Link>
+        <Link href="/docs">API</Link>
 
         <a
           href="https://github.com/JMBeresford/wgpu-kit"
@@ -51,7 +48,7 @@ export function MobileHeader(): JSX.Element {
   return (
     <Header id="root-header-mobile" ref={ref}>
       <HeaderTitle>
-        <Link href="/"> WGPU-Kit </Link>
+        <Link href="/">WGPU-Kit</Link>
       </HeaderTitle>
 
       <button
@@ -66,10 +63,7 @@ export function MobileHeader(): JSX.Element {
       </button>
 
       <Nav>
-        <Link href="/docs">
-          API
-          <ExternalLinkIcon />
-        </Link>
+        <Link href="/docs">API</Link>
         <a
           href="https://github.com/JMBeresford/wgpu-kit"
           rel="noopener"

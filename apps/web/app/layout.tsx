@@ -47,10 +47,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
                 </li>
 
                 <li>
-                  <Link href="/docs">
-                    API
-                    <ExternalLinkIcon />
-                  </Link>
+                  <Link href="/docs">API</Link>
                 </li>
               </ul>
             </FooterColumn>
