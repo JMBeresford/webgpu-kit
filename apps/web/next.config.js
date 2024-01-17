@@ -1,6 +1,6 @@
 module.exports = {
   output: "export",
-  basePath: "/wgpu-kit",
+  basePath: process.env.NODE_ENV === "production" ? "/wgpu-kit" : "",
   reactStrictMode: true,
   transpilePackages: ["ui"],
 

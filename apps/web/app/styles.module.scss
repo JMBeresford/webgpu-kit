@@ -5,11 +5,12 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin: 4em 0 5.5em;
+  height: 75svh;
+  max-height: 900px;
 
   h1 {
     max-width: 30ch;
-    font-size: 4.25em;
+    font-size: calc(2.5em + 1.5vw);
     font-weight: 800;
     letter-spacing: -0.035em;
 
