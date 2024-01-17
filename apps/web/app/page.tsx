@@ -21,13 +21,9 @@ export default function Page(): JSX.Element {
         </p>
 
         <ButtonGroup className={styles.buttons}>
-          <a
-            href="https://jmberesford.github.io/wgpu-kit/"
-            rel="noopener"
-            target="_blank"
-          >
+          <Link href="/docs">
             <Button primary>Explore WGPU-Kit</Button>
-          </a>
+          </Link>
 
           <Link className={styles.button} href="/examples">
             <Button>View the Examples</Button>
