@@ -47,14 +47,10 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
                 </li>
 
                 <li>
-                  <a
-                    href="https://jmberesford.github.io/wgpu-kit/"
-                    rel="noopener"
-                    target="_blank"
-                  >
+                  <Link href="/docs">
                     API
                     <ExternalLinkIcon />
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </FooterColumn>
