@@ -1,6 +1,19 @@
 .main {
+  padding-top: 1em;
+
+  > a {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1em;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+
+    &:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+  }
+
   h1 {
-    margin: 1em 0;
+    margin-bottom: 1em;
     font-size: 4em;
   }
 }
@@ -8,7 +21,7 @@
 .examples {
   display: flex;
   flex-direction: column;
-  margin-bottom: 15lvh;
+  margin-bottom: 2em;
   gap: 1em;
 
   a {
@@ -37,5 +50,32 @@
 
   &:hover {
     filter: brightness(1.2);
+  }
+}
+
+@media (max-width: 600px) {
+  .main {
+    h1 {
+      font-size: 2.5em;
+    }
+  }
+
+  .example {
+    flex-direction: column;
+    gap: 0.5em;
+
+    h2 {
+      font-size: 1.5em;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.9em;
+    }
+
+    &,
+    &:hover {
+      filter: none;
+    }
   }
 }

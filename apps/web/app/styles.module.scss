@@ -31,13 +31,17 @@
   }
 
   .buttons {
+    margin-top: 2em;
     filter: drop-shadow(0 0 0.5em rgb(0, 0, 0));
   }
 }
 
 #scene {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100lvh;
   z-index: -1;
 }
 
@@ -53,7 +57,11 @@
 
 .header-screen {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   z-index: -1;
 
   background-color: rgba(0, 0, 0, 0.5);
@@ -83,6 +91,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    text-align: center;
+  }
 
   h2 {
     font-size: 3.25em;
@@ -137,14 +153,69 @@
 
   > div {
     flex-grow: 1;
-    flex-basis: 20%;
-    min-width: 350px;
+    flex-basis: 25%;
+    min-width: 300px;
     max-width: fit-content;
   }
 
   p {
     color: rgba(255, 255, 255, 0.75);
-    max-width: 75ch;
+    max-width: 45ch;
     line-height: 150%;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    gap: 1.5em;
+
+    h1 {
+      font-size: 2.25em;
+      max-width: 100%;
+    }
+
+    p {
+      font-size: 0.95em;
+      max-width: 30ch;
+    }
+
+    .buttons {
+      width: 100%;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
+      button {
+        font-size: 1em;
+        padding: 0.75em 1.25em;
+      }
+    }
+  }
+
+  .why {
+    h2 {
+      font-size: 2.5em;
+    }
+
+    p {
+      max-width: 30ch;
+      font-size: 1em;
+    }
+
+    aside {
+      h4 {
+        font-size: 1.1em;
+      }
+
+      ul {
+        flex-direction: column;
+        gap: 0.5em;
+
+        li {
+          font-size: 0.8em;
+        }
+      }
+    }
   }
 }

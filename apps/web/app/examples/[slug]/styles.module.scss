@@ -1,12 +1,10 @@
 .main {
   width: 100%;
-  min-height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: 1fr;
   padding: 1.5em 0;
   gap: 2em;
-  margin-bottom: 15lvh;
 }
 
 .info {
@@ -20,6 +18,7 @@
   .back {
     grid-area: back-btn;
     color: inherit;
+    text-decoration: none;
 
     opacity: 0.8;
     transition: opacity 0.2s ease-in-out;
@@ -75,21 +74,14 @@ $drop-shadow-color: rgba(255, 255, 255, 0.05);
 .content {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
 
   border-radius: 10px;
   overflow: hidden;
-  // border: 3px solid rgba(255, 255, 255, 0.85);
   box-shadow:
     -8px -8px 25px 0px $drop-shadow-color,
     8px 8px 25px 0px $drop-shadow-color,
     -8px 8px 25px 0px $drop-shadow-color,
     8px -8px 25px 0px $drop-shadow-color;
-
-  canvas {
-    width: 100%;
-    height: 100%;
-  }
 
   .source {
     background-color: rgba(0, 0, 0, 0.65);
@@ -161,4 +153,58 @@ $drop-shadow-color: rgba(255, 255, 255, 0.05);
   opacity: 1;
   pointer-events: auto;
   touch-action: auto;
+}
+
+@media (max-width: 600px) {
+  .content {
+    canvas {
+      width: 100%;
+      aspect-ratio: 1.125;
+    }
+  }
+  .info {
+    gap: 1em;
+    grid-template-areas:
+      "back-btn"
+      "title"
+      "description"
+      "code-btn";
+
+    .code-btn {
+      justify-content: flex-start;
+      font-size: 0.85em;
+    }
+
+    h1 {
+      font-size: 2.5em;
+    }
+
+    p {
+      font-size: 1em;
+    }
+  }
+
+  .toast {
+    position: fixed;
+    width: fit-content;
+    max-width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 2em;
+    padding: 0.5em 0.75em;
+    gap: 1em;
+
+    h4 {
+      font-size: 1.125em;
+    }
+
+    p {
+      max-width: unset;
+      font-size: 0.85em;
+    }
+
+    button {
+      font-size: 0.95em;
+    }
+  }
 }

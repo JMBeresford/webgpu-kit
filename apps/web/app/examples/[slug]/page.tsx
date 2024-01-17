@@ -18,7 +18,7 @@ export default function Page(props: { params: { slug: string } }): JSX.Element {
     <main className={styles.main}>
       <div className={styles.info}>
         <Link className={styles.back} href="/examples">
-          back to examples
+          ← back to examples
         </Link>
 
         <h1>{exampleData.title}</h1>

@@ -5,6 +5,7 @@ import styles from "./styles.module.scss";
 export default function Page(): JSX.Element {
   return (
     <main className={styles.main}>
+      <Link href="/">← back</Link>
       <h1>Examples</h1>
 
       <div className={styles.examples}>

@@ -20,7 +20,7 @@ export default function Page(): JSX.Element {
           high-performance, cross-platform, web-based graphics applications.
         </p>
 
-        <ButtonGroup className={styles.buttons} style={{ marginTop: "2rem" }}>
+        <ButtonGroup className={styles.buttons}>
           <a
             href="https://jmberesford.github.io/wgpu-kit/"
             rel="noopener"
@@ -36,7 +36,7 @@ export default function Page(): JSX.Element {
       </main>
 
       <section className={styles.why}>
-        <div>
+        <main>
           <h2>Why Choose WGPU-Kit?</h2>
 
           <p>
@@ -44,11 +44,15 @@ export default function Page(): JSX.Element {
             of web graphics. This low-level graphics API harnesses the power of
             modern GPU hardware, enabling visually rich and interactive
             applications that push the boundaries of what&apos;s possible in a
-            browser. With WGPU-Kit, you get the combined power of WebGPU&apos;s
+            browser.
+          </p>
+
+          <p>
+            With WGPU-Kit, you get the combined power of WebGPU&apos;s
             future-proof technology and a library designed to make it easy to
             leverage that power.
           </p>
-        </div>
+        </main>
 
         <aside>
           <h4>Read more:</h4>

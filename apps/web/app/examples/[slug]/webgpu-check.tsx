@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Toast, ToastAction, ToastContent } from "ui/toast";
 import { ExternalLinkIcon } from "../../../components/external-link-icon";
+import styles from "./styles.module.scss";
 
 export function WebgpuCheck({
   error = false,
@@ -26,8 +27,13 @@ export function WebgpuCheck({
   }, []);
 
   return (
-    <Toast kind="error" title="Oops, no GPU!" visible={!hasGpu || error}>
-      <ToastContent>This example could not run in this browser</ToastContent>
+    <Toast
+      className={styles.toast}
+      kind="error"
+      title="Oops, no GPU!"
+      visible={!hasGpu || error}
+    >
+      <ToastContent>The example could not run in this browser</ToastContent>
       <ToastAction
         onClick={() => {
           window.open(

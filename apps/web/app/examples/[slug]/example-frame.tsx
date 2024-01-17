@@ -34,7 +34,15 @@ export function ExampleFrame(props: Props): JSX.Element {
 
   return (
     <>
-      <canvas ref={ref} />
+      <div style={{ width: "100%", height: "100%" }}>
+        <canvas
+          ref={ref}
+          style={{
+            display: "block",
+            width: "100%",
+          }}
+        />
+      </div>
       <WebgpuCheck error={error} />
     </>
   );

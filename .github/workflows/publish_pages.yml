@@ -1,8 +1,10 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Build and Deploy docs to Pages
+name: Build and Deploy to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes/PRs targeting the default branch
+  pull_request:
+    branches: ["main"]
   push:
     branches: ["main"]
 
@@ -42,12 +44,14 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm run build --filter docs
+        run: pnpm run build --filter web
+        run: mv ./apps/docs/dist ./apps/web/out/docs
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: './apps/docs/dist'
+          path: './apps/web/out'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

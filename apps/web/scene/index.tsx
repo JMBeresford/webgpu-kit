@@ -8,7 +8,7 @@ export function Scene(
 ): JSX.Element {
   return (
     <div {...props}>
-      <Canvas>
+      <Canvas dpr={[1, 2]}>
         <Grid />
       </Canvas>
     </div>
