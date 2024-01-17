@@ -1,0 +1,24 @@
+.footer {
+  width: 100%;
+
+  .wrapper {
+    margin: 0 auto;
+    width: min(90%, 1500px);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2em;
+
+    padding: 3em 0 5em;
+  }
+
+  ul {
+    list-style: none;
+  }
+}
+
+.column {
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: fit-content;
+}

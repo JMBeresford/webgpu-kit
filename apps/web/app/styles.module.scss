@@ -1,0 +1,221 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 4em 0 5.5em;
+
+  h1 {
+    max-width: 30ch;
+    font-size: 4.25em;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+
+    background: rgb(221, 221, 221);
+    background: linear-gradient(
+      75deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(200, 200, 200, 1) 100%
+    );
+
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+  }
+
+  p {
+    max-width: 50ch;
+    font-size: 1.25em;
+  }
+
+  .buttons {
+    margin-top: 2em;
+    filter: drop-shadow(0 0 0.5em rgb(0, 0, 0));
+  }
+}
+
+#scene {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100lvh;
+  z-index: -1;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+
+  transition: opacity 0.75s ease-in-out;
+}
+
+.header-screen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  z-index: -1;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border-bottom: solid 1px #333;
+
+  opacity: 0;
+  transition: opacity 0.35s ease-in-out;
+}
+
+.rule {
+  margin: 3.5em 0;
+  padding: 0;
+  border: solid 1px #777;
+
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.why {
+  display: flex;
+  gap: 3em;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 3.25em;
+    margin-bottom: 0.35em;
+  }
+
+  p {
+    max-width: 60ch;
+    font-size: 1.2em;
+    line-height: 130%;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  aside {
+    border-radius: 8px;
+    color: #ddd;
+
+    h4 {
+      font-size: 1.3em;
+      margin-bottom: 0.5em;
+    }
+
+    ul {
+      display: flex;
+      gap: 1em;
+      list-style: none;
+
+      li {
+        font-size: 0.9em;
+      }
+
+      a {
+        color: inherit;
+
+        opacity: 0.75;
+        transition: opacity 0.15s ease-in-out;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.cards {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em;
+
+  > div {
+    flex-grow: 1;
+    flex-basis: 25%;
+    min-width: 300px;
+    max-width: fit-content;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 45ch;
+    line-height: 150%;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    gap: 1.5em;
+
+    h1 {
+      font-size: 2.25em;
+      max-width: 100%;
+    }
+
+    p {
+      font-size: 0.95em;
+      max-width: 30ch;
+    }
+
+    .buttons {
+      width: 100%;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
+      button {
+        font-size: 1em;
+        padding: 0.75em 1.25em;
+      }
+    }
+  }
+
+  .why {
+    h2 {
+      font-size: 2.5em;
+    }
+
+    p {
+      max-width: 30ch;
+      font-size: 1em;
+    }
+
+    aside {
+      h4 {
+        font-size: 1.1em;
+      }
+
+      ul {
+        flex-direction: column;
+        gap: 0.5em;
+
+        li {
+          font-size: 0.8em;
+        }
+      }
+    }
+  }
+}

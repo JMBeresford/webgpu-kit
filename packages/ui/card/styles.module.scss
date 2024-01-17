@@ -1,0 +1,36 @@
+.card {
+  position: relative;
+  padding: 2em;
+  text-align: center;
+  display: grid;
+  grid-template-areas:
+    "title"
+    "content";
+  width: min-content;
+
+  .background {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #222;
+    border-radius: 10px;
+    z-index: -1;
+
+    background: black;
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.8) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .title {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin-bottom: 0.85em;
+  }
+
+  .content {
+    margin-bottom: 2em;
+  }
+}

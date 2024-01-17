@@ -1,0 +1,76 @@
+.toast {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  z-index: 9999;
+
+  display: grid;
+  place-items: center start;
+  gap: 0.5em 3em;
+  grid-template-areas: "message action";
+
+  padding: 0.75em 1.25em;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+
+  pointer-events: none;
+  touch-action: none;
+  opacity: 0;
+
+  transition: opacity 0.5s;
+  transition-timing-function: ease-in;
+
+  .title {
+    grid-area: title;
+    font-size: 1.25em;
+  }
+
+  .message {
+    grid-area: message;
+    font-size: 0.95em;
+  }
+
+  .action {
+    grid-area: action;
+    place-self: center;
+    font-size: 1em;
+    font-weight: 400;
+    z-index: 5;
+
+    display: flex;
+  }
+
+  .innerBtn {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    border: none;
+    z-index: 0;
+  }
+
+  &.withTitle {
+    grid-template-areas:
+      "title action"
+      "message action";
+  }
+
+  &.info {
+    background-color: #000;
+    color: #ddd;
+  }
+
+  &.error {
+    background-color: #903232;
+    color: #fff;
+  }
+
+  &.show {
+    pointer-events: auto;
+    touch-action: auto;
+    opacity: 1;
+    transition-timing-function: ease-in;
+  }
+}
