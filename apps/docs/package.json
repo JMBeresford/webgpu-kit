@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "version": "0.0.4",
-  "description": "Documentation for the wgpu-kit packages",
+  "description": "Documentation for the webgpu-kit packages",
   "private": true,
   "scripts": {
     "build": "typedoc"

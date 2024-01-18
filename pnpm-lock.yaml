@@ -63,7 +63,7 @@ importers:
       '@types/three':
         specifier: ^0.159.0
         version: 0.159.0
-      '@wgpu-kit/core':
+      '@webgpu-kit/core':
         specifier: workspace:*
         version: link:../../packages/core
       geist:

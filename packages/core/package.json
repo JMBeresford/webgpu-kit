@@ -1,13 +1,13 @@
 {
-  "name": "@wgpu-kit/core",
+  "name": "@webgpu-kit/core",
   "version": "1.0.4",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "dist/wgpu-kit_core.umd.cjs",
-  "module": "dist/wgpu-kit_core.js",
-  "types": "dist/wgpu-kit_core.d.ts",
+  "main": "dist/webgpu-kit_core.umd.cjs",
+  "module": "dist/webgpu-kit_core.js",
+  "types": "dist/webgpu-kit_core.d.ts",
   "scripts": {
     "build": "tsc && vite build",
     "preview": "vite preview",

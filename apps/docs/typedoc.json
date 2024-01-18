@@ -1,6 +1,6 @@
 {
   "extends": "./typedoc.base.json",
-  "name": "wgpu-kit",
+  "name": "webgpu-kit",
   "out": "./dist",
   "entryPoints": ["../../packages/core/src/*.ts"],
   "entryPointStrategy": "resolve",

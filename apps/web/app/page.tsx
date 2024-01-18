@@ -16,13 +16,13 @@ export default function Page(): JSX.Element {
         <h1>The power of modern web graphics. In the palm of your hand.</h1>
 
         <p>
-          WGPU-Kit is a collection of libraries that make it easy to build
+          WebGPU-kit is a collection of libraries that make it easy to build
           high-performance, cross-platform, web-based graphics applications.
         </p>
 
         <ButtonGroup className={styles.buttons}>
           <Link href="/docs">
-            <Button primary>Explore WGPU-Kit</Button>
+            <Button primary>Explore WebGPU-kit</Button>
           </Link>
 
           <Link className={styles.button} href="/examples">
@@ -33,10 +33,10 @@ export default function Page(): JSX.Element {
 
       <section className={styles.why}>
         <main>
-          <h2>Why Choose WGPU-Kit?</h2>
+          <h2>Why Choose WebGPU-kit?</h2>
 
           <p>
-            WGPU-Kit is built on the foundation of WebGPU, the next generation
+            WebGPU-kit is built on the foundation of WebGPU, the next generation
             of web graphics. This low-level graphics API harnesses the power of
             modern GPU hardware, enabling visually rich and interactive
             applications that push the boundaries of what&apos;s possible in a
@@ -44,7 +44,7 @@ export default function Page(): JSX.Element {
           </p>
 
           <p>
-            With WGPU-Kit, you get the combined power of WebGPU&apos;s
+            With WebGPU-kit, you get the combined power of WebGPU&apos;s
             future-proof technology and a library designed to make it easy to
             leverage that power.
           </p>
@@ -106,7 +106,7 @@ export default function Page(): JSX.Element {
         <Card>
           <CardTitle>Streamlined Development</CardTitle>
           <p>
-            WGPU-Kit minimizes the need for repetitive code by providing
+            WebGPU-kit minimizes the need for repetitive code by providing
             sensible defaults. However, it still allows for detailed
             configuration akin to raw WebGPU code when necessary.
           </p>
@@ -114,7 +114,7 @@ export default function Page(): JSX.Element {
         <Card>
           <CardTitle>Harness the Power of Modern GPUs</CardTitle>
           <p>
-            With WGPU-Kit, you&apos;re no longer constrained by outdated GPU
+            With WebGPU-kit, you&apos;re no longer constrained by outdated GPU
             APIs. Embrace the power of modern graphics workflows without any
             compromises or workarounds.
           </p>
@@ -122,9 +122,9 @@ export default function Page(): JSX.Element {
         <Card>
           <CardTitle>Simplified API with Pipeline Groups</CardTitle>
           <p>
-            WGPU-Kit&apos;s simple API allows you to group both render pipelines
-            and compute pipelines by shared resources, streamlining your
-            workflow.
+            WebGPU-kit&apos;s simple API allows you to group both render
+            pipelines and compute pipelines by shared resources, streamlining
+            your workflow.
           </p>
         </Card>
         <Card>
@@ -132,7 +132,7 @@ export default function Page(): JSX.Element {
           <p>
             Whether you need full control over pipeline creation, shader code,
             and operational control, or you prefer a simple, conventional scene
-            graph for a straightforward renderer, WGPU-Kit has you covered.
+            graph for a straightforward renderer, WebGPU-kit has you covered.
           </p>
         </Card>
       </section>

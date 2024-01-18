@@ -1,4 +1,4 @@
-# @wgpu-kit/core
+# @webgpu-kit/core
 
 ### A light wrapper around the webGPU API that aims to reduce boilerplate for render and compute operations.
 
@@ -23,13 +23,13 @@
 Run the following to add the package to your project:
 
 ```sh
-npm i @wgpu-kit/core
+npm i @webgpu-kit/core
 
 # or
-yarn add @wgpu-kit/core
+yarn add @webgpu-kit/core
 
 # or
-pnpm i @wgpu-kit/core
+pnpm i @webgpu-kit/core
 ```
 
 ### Overview
@@ -39,7 +39,7 @@ pipelines. An understanding of the webGPU spec/API is recommended but not stricl
 
 Read up on the webGPU spec [here](https://gpuweb.github.io/gpuweb/).
 
-In @wgpu-kit/core, pipelines are intended to be shader-driven. They are generally intended also to be
+In @webgpu-kit/core, pipelines are intended to be shader-driven. They are generally intended also to be
 executed in groups of pipelines that share bind-groups (GPU resources).
 
 The following simple example showcases how one would render a quad to a canvas:
@@ -72,7 +72,7 @@ import {
   Pipeline,
   PipelineGroup,
   Executor,
-} from "@wgpu-kit/core";
+} from "@webgpu-kit/core";
 import myShader from "./myShader.wgsl";
 
 const canvas = document.querySelector(".myCanvas");
@@ -142,7 +142,7 @@ operation is defined. These pipelines are executed in batches (or singularly, if
 To create a [pipeline][pipeline_source] you can do the following:
 
 ```ts
-import { Pipeline } from "@wgpu-kit/core";
+import { Pipeline } from "@webgpu-kit/core";
 import myShader from "./myShader.wgsl";
 
 const pipeline = new Pipeline({
@@ -163,7 +163,7 @@ render and/or compute passes within a shared context.
 To create a [pipeline group][pipeline_group_source] you can do the following:
 
 ```ts
-import { PipelineGroup, Pipeline } from "@wgpu-kit/core";
+import { PipelineGroup, Pipeline } from "@webgpu-kit/core";
 import myShader1 from "./myShader1.wgsl";
 import myShader2 from "./myShader2.wgsl";
 
@@ -235,7 +235,7 @@ fn fragmentMain(input: VertexOutput) {
 ```
 
 ```ts
-import { Uniform, Storage, Sampler, Texture, BindGroup } from "@wgpu-kit/core";
+import { Uniform, Storage, Sampler, Texture, BindGroup } from "@webgpu-kit/core";
 
 // assume we have a pipeline group already defined
 import myPipelineGroup from "./myPipelineGroup";
@@ -276,7 +276,7 @@ await myPipelineGroup.setBindGroups(bindGroup);
 > in the Uniform instantiation. This is **mandatory**.
 
 ```ts
-import { Uniform } from "@wgpu-kit/core";
+import { Uniform } from "@webgpu-kit/core";
 
 const myShader = wgsl`
 
@@ -306,7 +306,7 @@ await myBindGroup.addUniforms(myColorUniform);
 > in the Storage instantiation. This is **mandatory**.
 
 ```ts
-import { Storage } from "@wgpu-kit/core";
+import { Storage } from "@webgpu-kit/core";
 
 const myShader = wgsl`
   @group(0) @binding(0) var<storage> vertexColors: array<vec3<f32>>;
@@ -350,7 +350,7 @@ fn fragmentMain(input: VertexOutput) {
 ```
 
 ```ts
-import { Sampler, Texture, Pipeline } from "@wgpu-kit/core";
+import { Sampler, Texture, Pipeline } from "@webgpu-kit/core";
 import myShader from "./myShader.wgsl";
 import myImage from "./myImage.png";
 
@@ -390,7 +390,7 @@ import {
   Attribute,
   VertexAttributeObject,
   PipelineGroup,
-} from "@wgpu-kit/core";
+} from "@webgpu-kit/core";
 
 const vertices = [
   // triangle 1

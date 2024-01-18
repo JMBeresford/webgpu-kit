@@ -1,13 +1,13 @@
 import { mat4 } from "gl-matrix";
-import { Attribute } from "@wgpu-kit/core/src/Attribute";
-import { Executor } from "@wgpu-kit/core/src/Executor";
-import { Pipeline } from "@wgpu-kit/core/src/Pipeline";
-import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
-import { Uniform } from "@wgpu-kit/core/src/Uniform";
-import { VertexAttributeObject } from "@wgpu-kit/core/src/VertexAttributeObject";
-import { Texture } from "@wgpu-kit/core/src/Texture";
-import { Sampler } from "@wgpu-kit/core/src/Sampler";
-import { BindGroup } from "@wgpu-kit/core/src/BindGroup";
+import { Attribute } from "@webgpu-kit/core/src/Attribute";
+import { Executor } from "@webgpu-kit/core/src/Executor";
+import { Pipeline } from "@webgpu-kit/core/src/Pipeline";
+import { PipelineGroup } from "@webgpu-kit/core/src/PipelineGroup";
+import { Uniform } from "@webgpu-kit/core/src/Uniform";
+import { VertexAttributeObject } from "@webgpu-kit/core/src/VertexAttributeObject";
+import { Texture } from "@webgpu-kit/core/src/Texture";
+import { Sampler } from "@webgpu-kit/core/src/Sampler";
+import { BindGroup } from "@webgpu-kit/core/src/BindGroup";
 import texture from "./logo.png";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {

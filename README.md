@@ -1,4 +1,4 @@
-# WGPUKit
+# WebGPU-Kit
 
 ### A minimal webGPU toolkit for rendering and compute operations
 
@@ -18,7 +18,7 @@
 
 ## About this project
 
-WGPUKit aims to provide varying levels of abstraction around the webGPU spec.
+WebGPU-Kit aims to provide varying levels of abstraction around the webGPU spec.
 
 The [core] package is intended to be a small wrapper around webGPU to reduce boilerplate and
 to make construction and execution of pipelines more straight-forward.
@@ -43,10 +43,10 @@ Other packages are planned to expose additional APIs:
 In order to install the packages run the following:
 
 ```sh
-# npm i @wgpu-kit/<package>
+# npm i @webgpu-kit/<package>
 
 # e.g. to install the core package
-npm i @wgpu-kit/core
+npm i @webgpu-kit/core
 ```
 
 [core]: ./packages/core/

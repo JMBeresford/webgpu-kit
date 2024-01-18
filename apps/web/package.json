@@ -12,7 +12,7 @@
     "@react-three/drei": "^9.90.1",
     "@react-three/fiber": "^8.15.12",
     "@types/three": "^0.159.0",
-    "@wgpu-kit/core": "workspace:*",
+    "@webgpu-kit/core": "workspace:*",
     "geist": "^1.2.0",
     "gl-matrix": "^3.4.3",
     "glsl-noise": "^0.0.0",

@@ -18,7 +18,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
 
           <Footer id="root-footer">
             <FooterColumn>
-              <h1>WGPU-Kit</h1>
+              <h1>WebGPU-kit</h1>
 
               <p>
                 A minimal webGPU toolkit for rendering and compute pipelines
@@ -37,7 +37,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/JMBeresford/wgpu-kit"
+                    href="https://github.com/JMBeresford/webgpu-kit"
                     rel="noopener"
                     target="_blank"
                   >
@@ -107,7 +107,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
               <ul>
                 <li>
                   <a
-                    href="https://github.com/JMBeresford/wgpu-kit/issues?q=is:issue+is:open+sort:updated-desc"
+                    href="https://github.com/JMBeresford/webgpu-kit/issues?q=is:issue+is:open+sort:updated-desc"
                     rel="noopener"
                     target="_blank"
                   >
@@ -117,7 +117,7 @@ export default function Layout(props: { children: ReactNode }): JSX.Element {
 
                 <li>
                   <a
-                    href="https://github.com/JMBeresford/wgpu-kit/blob/main/CONTRUBUTING.md"
+                    href="https://github.com/JMBeresford/webgpu-kit/blob/main/CONTRUBUTING.md"
                     rel="noopener"
                     target="_blank"
                   >

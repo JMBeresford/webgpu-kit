@@ -1,11 +1,11 @@
-import { Attribute } from "@wgpu-kit/core/src/Attribute";
-import { VertexAttributeObject } from "@wgpu-kit/core/src/VertexAttributeObject";
-import { Pipeline } from "@wgpu-kit/core/src/Pipeline";
-import { PipelineGroup } from "@wgpu-kit/core/src/PipelineGroup";
-import { Executor } from "@wgpu-kit/core/src/Executor";
-import { Uniform } from "@wgpu-kit/core/src/Uniform";
-import { Storage } from "@wgpu-kit/core/src/Storage";
-import { BindGroup } from "@wgpu-kit/core/src/BindGroup";
+import { Attribute } from "@webgpu-kit/core/src/Attribute";
+import { VertexAttributeObject } from "@webgpu-kit/core/src/VertexAttributeObject";
+import { Pipeline } from "@webgpu-kit/core/src/Pipeline";
+import { PipelineGroup } from "@webgpu-kit/core/src/PipelineGroup";
+import { Executor } from "@webgpu-kit/core/src/Executor";
+import { Uniform } from "@webgpu-kit/core/src/Uniform";
+import { Storage } from "@webgpu-kit/core/src/Storage";
+import { BindGroup } from "@webgpu-kit/core/src/BindGroup";
 import {
   GRID_SIZE,
   WORKGROUP_SIZE,

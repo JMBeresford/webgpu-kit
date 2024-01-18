@@ -11,8 +11,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "./src/index.ts"),
-      name: "WGPU-Kit Core",
-      fileName: "wgpu-kit_core",
+      name: "webgpu-kit Core",
+      fileName: "webgpu-kit_core",
     },
   },
   plugins: [

@@ -13,13 +13,13 @@ export function DesktopHeader(): JSX.Element {
   return (
     <Header id="root-header">
       <HeaderTitle>
-        <Link href="/"> WGPU-Kit </Link>
+        <Link href="/">WebGPU-kit</Link>
       </HeaderTitle>
       <Nav>
         <Link href="/docs">API</Link>
 
         <a
-          href="https://github.com/JMBeresford/wgpu-kit"
+          href="https://github.com/JMBeresford/webgpu-kit"
           rel="noopener"
           target="_blank"
         >
@@ -48,7 +48,7 @@ export function MobileHeader(): JSX.Element {
   return (
     <Header id="root-header-mobile" ref={ref}>
       <HeaderTitle>
-        <Link href="/">WGPU-Kit</Link>
+        <Link href="/">WebGPU-kit</Link>
       </HeaderTitle>
 
       <button
@@ -65,7 +65,7 @@ export function MobileHeader(): JSX.Element {
       <Nav>
         <Link href="/docs">API</Link>
         <a
-          href="https://github.com/JMBeresford/wgpu-kit"
+          href="https://github.com/JMBeresford/webgpu-kit"
           rel="noopener"
           target="_blank"
         >
