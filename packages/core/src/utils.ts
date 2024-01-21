@@ -42,46 +42,15 @@ export async function getDefaultDevice(): Promise<GPUDevice> {
   return _device;
 }
 
-let _canvas: HTMLCanvasElement | undefined;
-let _context: GPUCanvasContext | undefined;
-
-/** @internal */
-export function getDefaultCanvas(): HTMLCanvasElement {
-  if (_canvas) {
-    return _canvas;
-  }
-  const canvas = document.createElement("canvas");
-  canvas.width = 640;
-  canvas.height = 480;
-  _canvas = canvas;
-  return canvas;
-}
-
-/** @internal */
-export function getDefaultContext(): GPUCanvasContext {
-  if (_context) {
-    return _context;
-  }
-  const ctx = getDefaultCanvas().getContext("webgpu");
-  if (!ctx) {
-    throw new Error("Could not get WebGPU context");
-  }
-  _context = ctx;
-  return ctx;
-}
-
-/** @internal */
-export function getDefaultCanvasFormat(): GPUTextureFormat {
-  try {
-    return navigator.gpu.getPreferredCanvasFormat();
-  } catch {
-    throw new Error(`Could not get preferred canvas format`);
-  }
-}
+let tempCanvas: HTMLCanvasElement | undefined;
 
 /** @internal */
 export function getDataFromImage(image: HTMLImageElement): Uint8ClampedArray {
-  const canvas = document.createElement("canvas");
+  if (!tempCanvas) {
+    tempCanvas = document.createElement("canvas");
+  }
+
+  const canvas = tempCanvas;
   canvas.width = image.naturalWidth;
   canvas.height = image.naturalHeight;
   const ctx = canvas.getContext("2d");

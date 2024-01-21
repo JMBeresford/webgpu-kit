@@ -100,6 +100,10 @@ export function WithDepthStencil<TBase extends typeof components>(Base: TBase) {
         this.depthStencilTexture.destroy();
       }
 
+      if (!this.canvas) {
+        throw new Error("No canvas");
+      }
+
       if (this.depthStencilEnabled) {
         this.depthStencilTexture = device.createTexture({
           label: "Depth stencil texture",

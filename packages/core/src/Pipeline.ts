@@ -1,18 +1,22 @@
+import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
-import { PipelineDescriptor } from "./PipelineDescriptor";
+import {
+  ComputePipelineDescriptor,
+  RenderPipelineDescriptor,
+} from "./PipelineDescriptor";
 
-const components = WithLabel();
+const components = WithDevice(WithLabel());
+export type Pipeline = RenderPipeline | ComputePipeline;
 export type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
 
 type WorkgroupSize = [number, number | undefined, number | undefined];
 type WorkgroupCount = [number, number | undefined, number | undefined];
 
 /**
- * {@link Pipeline} constructor parameters
+ * {@link BasePipeline} constructor parameters
  */
-export type PipelineOptions = {
+type PipelineOptions = {
   label?: string;
-  type?: "render" | "compute";
 
   /**
    * The callback to run before each pass of the pipeline
@@ -25,17 +29,9 @@ export type PipelineOptions = {
   onAfterPass?: PipelineCallback;
   device?: GPUDevice;
   shader: string;
+};
 
-  /**
-   * The size of the workgroup to run a compute shader with
-   */
-  workgroupSize?: WorkgroupSize;
-
-  /**
-   * The number of workgroups to run a compute shader with
-   */
-  workgroupCount?: WorkgroupCount;
-
+export type RenderPipelineOptions = {
   /**
    * The color to clear the screen with before running a render shader.
    * Defaults to [0, 0, 0, 1] (black).
@@ -48,50 +44,125 @@ export type PipelineOptions = {
   canvas?: HTMLCanvasElement;
   enableMultiSampling?: boolean;
   enableDepthStencil?: boolean;
-};
+} & PipelineOptions;
 
-/**
- * A pipeline that runs either a render or compute operation
- */
-export class Pipeline extends components {
-  readonly type: "render" | "compute" = "render";
+export type ComputePipelineOptions = {
+  /**
+   * The size of the workgroup to run a compute shader with
+   */
+  workgroupSize?: WorkgroupSize;
+
+  /**
+   * The number of workgroups to run a compute shader with
+   */
+  workgroupCount?: WorkgroupCount;
+} & PipelineOptions;
+
+export class RenderPipeline extends components {
+  gpuPipeline?: GPURenderPipeline;
+  pipelineDescriptor: RenderPipelineDescriptor;
   onBeforePass: PipelineCallback = () => {};
   onAfterPass: PipelineCallback = () => {};
-  gpuPipeline?: GPURenderPipeline | GPUComputePipeline;
-  workgroupSize: WorkgroupSize;
-  workgroupCount: WorkgroupCount;
-  pipelineDescriptor: PipelineDescriptor;
+  clearColor?: GPUColor = [0, 0, 0, 1];
 
-  constructor(options: PipelineOptions) {
+  constructor(options: RenderPipelineOptions) {
     super();
+
     this.label = options.label;
-    this.type = options.type ?? "render";
-    this.onBeforePass = options.onBeforePass ?? this.onBeforePass;
-    this.onAfterPass = options.onAfterPass ?? this.onAfterPass;
+    if (options.onBeforePass) {
+      this.setOnBeforePass(options.onBeforePass);
+    }
 
-    this.workgroupSize = options.workgroupSize ?? [8, 8, undefined];
-    this.workgroupCount = options.workgroupCount ?? [1, 1, undefined];
+    if (options.onAfterPass) {
+      this.setOnAfterPass(options.onAfterPass);
+    }
 
-    this.pipelineDescriptor = new PipelineDescriptor({
-      type: this.type,
+    this.pipelineDescriptor = new RenderPipelineDescriptor({
       shader: options.shader,
-      clearColor: options.clearColor,
       multisample: options.enableMultiSampling,
       depthStencil: options.enableDepthStencil,
       canvas: options.canvas,
     });
   }
 
-  async build(): Promise<void> {
-    await this.pipelineDescriptor.build();
+  setClearColor(color?: GPUColor): void {
+    this.clearColor = color;
   }
 
-  setWorkgroupSize(size: WorkgroupSize): void {
-    this.workgroupSize = size;
+  async build(
+    layout: GPUPipelineLayout,
+    buffers: GPUVertexBufferLayout[],
+  ): Promise<void> {
+    await this.pipelineDescriptor.build(layout, buffers);
+
+    const { context, canvasFormat } = this.pipelineDescriptor;
+    const device = await this.getDevice();
+
+    if (!context) {
+      throw new Error("Pipeline context not set");
+    }
+
+    context.configure({
+      device,
+      format: canvasFormat,
+    });
+
+    if (!this.pipelineDescriptor.descriptor) {
+      throw new Error("Pipeline descriptor not set");
+    }
+
+    this.gpuPipeline = device.createRenderPipeline(
+      this.pipelineDescriptor.descriptor,
+    );
   }
 
-  setWorkgroupCount(count: WorkgroupCount): void {
-    this.workgroupCount = count;
+  setOnBeforePass(f: PipelineCallback): void {
+    this.onBeforePass = f;
+  }
+
+  setOnAfterPass(f: PipelineCallback): void {
+    this.onAfterPass = f;
+  }
+}
+
+export class ComputePipeline extends components {
+  gpuPipeline?: GPUComputePipeline;
+  pipelineDescriptor: ComputePipelineDescriptor;
+  workgroupSize: WorkgroupSize;
+  workgroupCount: WorkgroupCount;
+  onBeforePass: PipelineCallback = () => {};
+  onAfterPass: PipelineCallback = () => {};
+
+  constructor(options: ComputePipelineOptions) {
+    super();
+
+    this.workgroupSize = options.workgroupSize ?? [8, 8, undefined];
+    this.workgroupCount = options.workgroupCount ?? [1, 1, undefined];
+
+    this.pipelineDescriptor = new ComputePipelineDescriptor({
+      shader: options.shader,
+    });
+
+    if (options.onBeforePass) {
+      this.setOnBeforePass(options.onBeforePass);
+    }
+
+    if (options.onAfterPass) {
+      this.setOnAfterPass(options.onAfterPass);
+    }
+  }
+
+  async build(layout: GPUPipelineLayout): Promise<void> {
+    await this.pipelineDescriptor.build(layout);
+
+    if (!this.pipelineDescriptor.descriptor) {
+      throw new Error("Pipeline descriptor not set");
+    }
+
+    const device = await this.getDevice();
+    this.gpuPipeline = device.createComputePipeline(
+      this.pipelineDescriptor.descriptor,
+    );
   }
 
   setOnBeforePass(f: PipelineCallback): void {
@@ -102,40 +173,11 @@ export class Pipeline extends components {
     this.onAfterPass = f;
   }
 
-  setClearColor(color: GPUColor): void {
-    this.pipelineDescriptor.clearColor = color;
+  setWorkgroupSize(size: WorkgroupSize): void {
+    this.workgroupSize = size;
   }
 
-  getRenderDescriptor(
-    buffers: GPUVertexBufferLayout[],
-    layout: GPUPipelineLayout,
-  ): GPURenderPipelineDescriptor {
-    if (this.type !== "render") {
-      throw new Error("Pipeline is not a render pipeline");
-    }
-
-    const renderDescriptor: GPURenderPipelineDescriptor = {
-      label: `${this.label ?? "Unlabelled"} Render Pipeline`,
-      layout,
-      ...this.pipelineDescriptor.getRenderDescriptor(),
-    };
-
-    renderDescriptor.vertex.buffers = buffers;
-
-    return renderDescriptor;
-  }
-
-  getComputeDescriptor(
-    layout: GPUPipelineLayout,
-  ): GPUComputePipelineDescriptor {
-    if (this.type !== "compute") {
-      throw new Error("Pipeline is not a compute pipeline");
-    }
-
-    return {
-      label: `${this.label ?? "Unlabelled"} Compute Pipeline`,
-      layout,
-      ...this.pipelineDescriptor.getComputeDescriptor(),
-    };
+  setWorkgroupCount(count: WorkgroupCount): void {
+    this.workgroupCount = count;
   }
 }

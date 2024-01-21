@@ -1,6 +1,6 @@
 import { Attribute } from "@webgpu-kit/core/src/Attribute";
 import { VertexAttributeObject } from "@webgpu-kit/core/src/VertexAttributeObject";
-import { Pipeline } from "@webgpu-kit/core/src/Pipeline";
+import { RenderPipeline, ComputePipeline } from "@webgpu-kit/core/src/Pipeline";
 import { PipelineGroup } from "@webgpu-kit/core/src/PipelineGroup";
 import { Executor } from "@webgpu-kit/core/src/Executor";
 import { Uniform } from "@webgpu-kit/core/src/Uniform";
@@ -65,15 +65,14 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   await vao.addAttributes(posAttribute);
 
-  const renderPipeline = new Pipeline({
+  const renderPipeline = new RenderPipeline({
     label: "Render Pipeline",
     shader: renderShader,
     canvas,
   });
 
-  const computePipeline = new Pipeline({
+  const computePipeline = new ComputePipeline({
     label: "Cell Simulation Pipeline",
-    type: "compute",
     workgroupSize: [WORKGROUP_SIZE, WORKGROUP_SIZE, 1],
     workgroupCount: [GRID_SIZE / WORKGROUP_SIZE, GRID_SIZE / WORKGROUP_SIZE, 1],
     onAfterPass: async () => {

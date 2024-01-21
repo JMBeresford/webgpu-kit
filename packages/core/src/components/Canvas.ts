@@ -1,15 +1,10 @@
 import type { Constructor } from "../utils";
-import {
-  getDefaultCanvas,
-  getDefaultContext,
-  getDefaultCanvasFormat,
-} from "../utils";
 
 export function WithCanvas<TBase extends Constructor>(Base: TBase) {
   return class extends Base {
-    canvas: HTMLCanvasElement = getDefaultCanvas();
-    context: GPUCanvasContext = getDefaultContext();
-    canvasFormat: GPUTextureFormat = getDefaultCanvasFormat();
+    canvas?: HTMLCanvasElement;
+    context?: GPUCanvasContext;
+    canvasFormat: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat();
 
     setCanvas(canvas: HTMLCanvasElement) {
       this.canvas = canvas;

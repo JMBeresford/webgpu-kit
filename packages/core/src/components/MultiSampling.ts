@@ -37,6 +37,10 @@ export function WithMultiSampling<TBase extends typeof components>(
         this.multiSampleTexture.destroy();
       }
 
+      if (!this.canvas) {
+        throw new Error("No canvas");
+      }
+
       if (this.multiSampleState.count > 1) {
         this.multiSampleTexture = device.createTexture({
           label: "Multi-sample texture",

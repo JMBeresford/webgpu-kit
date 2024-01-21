@@ -1,7 +1,7 @@
 import { mat4 } from "gl-matrix";
 import { Attribute } from "@webgpu-kit/core/src/Attribute";
 import { Executor } from "@webgpu-kit/core/src/Executor";
-import { Pipeline } from "@webgpu-kit/core/src/Pipeline";
+import { RenderPipeline } from "@webgpu-kit/core/src/Pipeline";
 import { PipelineGroup } from "@webgpu-kit/core/src/PipelineGroup";
 import { Uniform } from "@webgpu-kit/core/src/Uniform";
 import { VertexAttributeObject } from "@webgpu-kit/core/src/VertexAttributeObject";
@@ -94,7 +94,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
 
   await instancedVao.addAttributes(timeAttribute, posOffsetAttribute);
 
-  const pipeline = new Pipeline({
+  const pipeline = new RenderPipeline({
     label: "Render pipeline",
     enableDepthStencil: true,
     enableMultiSampling: true,

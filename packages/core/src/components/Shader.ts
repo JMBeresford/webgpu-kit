@@ -1,14 +1,13 @@
-import { WithCanvas } from "./Canvas";
 import { WithDevice } from "./Device";
 import { WithLabel } from "./Label";
 
 export type ShaderEntries = {
-  vertex?: string;
-  fragment?: string;
-  compute?: string;
+  vertex: string;
+  fragment: string;
+  compute: string;
 };
 
-const components = WithDevice(WithCanvas(WithLabel()));
+const components = WithDevice(WithLabel());
 
 export function WithShader<TBase extends typeof components>(Base: TBase) {
   return class extends Base {

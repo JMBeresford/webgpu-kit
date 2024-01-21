@@ -1,8 +1,7 @@
-import { WithCanvas } from "./Canvas";
 import { WithDevice } from "./Device";
 import { WithLabel } from "./Label";
 
-const components = WithDevice(WithCanvas(WithLabel()));
+const components = WithDevice(WithLabel());
 
 export function WithGpuSampler<TBase extends typeof components>(Base: TBase) {
   return class extends Base {

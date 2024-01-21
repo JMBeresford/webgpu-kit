@@ -1,12 +1,12 @@
 import type { BindGroup } from "./BindGroup";
 import type { IndexBuffer } from "./IndexBuffer";
+import { RenderPipeline } from "./Pipeline";
 import type { Pipeline } from "./Pipeline";
 import type { VertexAttributeObject } from "./VertexAttributeObject";
-import { WithCanvas } from "./components/Canvas";
 import { WithDevice } from "./components/Device";
 import { WithLabel } from "./components/Label";
 
-const components = WithDevice(WithCanvas(WithLabel()));
+const components = WithDevice(WithLabel());
 
 /**
  * {@link PipelineGroup} constructor parameters
@@ -100,36 +100,24 @@ export class PipelineGroup extends components {
   }
 
   private async buildPipelines() {
-    const device = await this.getDevice();
-
     await Promise.all(
       this.pipelines.map(async (pipeline) => {
-        await pipeline.build();
-
         if (this._pipelineLayout === undefined) {
           throw new Error("Pipeline layout not built");
         }
 
-        if (pipeline.pipelineDescriptor.shaderModule === undefined) {
-          throw new Error("Shader module not set");
-        }
-
-        if (pipeline.type === "render") {
-          const vaoLayouts: GPUVertexBufferLayout[] = [];
+        if (pipeline instanceof RenderPipeline) {
+          const buffers: GPUVertexBufferLayout[] = [];
           this.vertexAttributeObjects.forEach((vao) => {
             if (vao.layout === undefined) {
               throw new Error("Vertex attribute layout not set");
             }
-            vaoLayouts.push(vao.layout);
+            buffers.push(vao.layout);
           });
 
-          pipeline.gpuPipeline = await device.createRenderPipelineAsync(
-            pipeline.getRenderDescriptor(vaoLayouts, this._pipelineLayout),
-          );
+          await pipeline.build(this._pipelineLayout, buffers);
         } else {
-          pipeline.gpuPipeline = await device.createComputePipelineAsync(
-            pipeline.getComputeDescriptor(this._pipelineLayout),
-          );
+          await pipeline.build(this._pipelineLayout);
         }
       }),
     );

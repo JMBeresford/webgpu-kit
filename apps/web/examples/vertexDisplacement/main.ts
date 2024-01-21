@@ -3,7 +3,8 @@ import {
   BindGroup,
   Executor,
   IndexBuffer,
-  Pipeline,
+  RenderPipeline,
+  ComputePipeline,
   PipelineGroup,
   Storage,
   Uniform,
@@ -180,7 +181,7 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   await bindGroup2.addStorages(offsetsStorage, offsetsStorage2);
   await bindGroup2.updateBindGroup();
 
-  const pipeline = new Pipeline({
+  const pipeline = new RenderPipeline({
     shader,
     clearColor: [0.5, 0.45, 0.425, 1],
     canvas,
@@ -193,9 +194,8 @@ export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   }
 
   let counter = 0;
-  const computePipeline = new Pipeline({
+  const computePipeline = new ComputePipeline({
     shader: computeShader,
-    type: "compute",
     workgroupSize: workGroupSize,
     workgroupCount: workGroupCount,
     onAfterPass: async () => {
