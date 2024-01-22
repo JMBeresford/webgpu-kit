@@ -69,7 +69,7 @@ fn fragmentMain(inputs: VertexOutput) -> location(0) vec4<f32> {
 import {
   Attribute,
   VertexAttributeObject,
-  Pipeline,
+  RenderPipeline,
   PipelineGroup,
   Executor,
 } from "@webgpu-kit/core";
@@ -98,9 +98,8 @@ const vao = new VertexAttributeObject({
 
 await vao.addAttributes(posAttribute);
 
-const pipeline = new Pipeline({
+const pipeline = new RenderPipeline({
   label: "myQuad Render pipeline",
-  type: "render",
   shader: myShader,
 });
 
@@ -139,16 +138,27 @@ operation is defined. These pipelines are executed in batches (or singularly, if
   - [Storage Buffers](#storage-buffers)
   - [Samplers and Textures](#samplers-and-textures)
 
-To create a [pipeline][pipeline_source] you can do the following:
+To create a [render pipeline][pipeline_source] you can do the following:
 
 ```ts
-import { Pipeline } from "@webgpu-kit/core";
+import { RenderPipeline } from "@webgpu-kit/core";
 import myShader from "./myShader.wgsl";
 
-const pipeline = new Pipeline({
-  label: "My Pipeline",
+const pipeline = new RenderPipeline({
+  label: "My Render Pipeline",
   shader: myShader,
-  type: "render",
+});
+```
+
+And similarly for a [compute pipeline][pipeline_source]:
+
+```ts
+import { ComputePipeline } from "@webgpu-kit/core";
+import myShader from "./myShader.wgsl";
+
+const pipeline = new ComputePipeline({
+  label: "My Compute Pipeline",
+  shader: myShader,
 });
 ```
 
@@ -170,13 +180,11 @@ import myShader2 from "./myShader2.wgsl";
 const pipeline1 = new Pipeline({
   label: "My Pipeline 1",
   shader: myShader1,
-  type: "render",
 });
 
 const pipeline2 = new Pipeline({
   label: "My Pipeline 2",
   shader: myShader2,
-  type: "compute",
 });
 
 const pipelineGroup = new PipelineGroup({
@@ -235,7 +243,13 @@ fn fragmentMain(input: VertexOutput) {
 ```
 
 ```ts
-import { Uniform, Storage, Sampler, Texture, BindGroup } from "@webgpu-kit/core";
+import {
+  Uniform,
+  Storage,
+  Sampler,
+  Texture,
+  BindGroup,
+} from "@webgpu-kit/core";
 
 // assume we have a pipeline group already defined
 import myPipelineGroup from "./myPipelineGroup";

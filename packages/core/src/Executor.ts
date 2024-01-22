@@ -175,8 +175,12 @@ export class Executor extends components {
     const pipelineDescriptor = pipeline.pipelineDescriptor;
     const { canvas, context, canvasFormat } = pipelineDescriptor;
 
-    if (!canvas || !context || !canvasFormat) {
+    if (!canvas) {
       throw new Error("Canvas not set");
+    }
+
+    if (!context) {
+      throw new Error("Context not set");
     }
 
     const targetWidth = clamp(
