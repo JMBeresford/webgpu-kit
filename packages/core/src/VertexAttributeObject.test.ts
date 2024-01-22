@@ -1,11 +1,5 @@
 import { it, describe, expect, vi } from "vitest";
-import {
-  MockWebGPU,
-  MockDevice,
-  MockContext,
-  MockCanvas,
-  MockCanvasFormat,
-} from "../lib/MockWebGPU";
+import { MockWebGPU, MockDevice, MockCanvasFormat } from "../lib/MockWebGPU";
 import { Attribute } from "./Attribute";
 import { VertexAttributeObject } from "./VertexAttributeObject";
 
@@ -21,8 +15,6 @@ vi.mock("./utils", async () => {
   return {
     ...(actual as Record<string, unknown>),
     getDefaultDevice: () => MockDevice,
-    getDefaultCanvas: () => MockCanvas,
-    getDefaultContext: () => MockContext,
     getDefaultCanvasFormat: () => MockCanvasFormat,
   };
 });

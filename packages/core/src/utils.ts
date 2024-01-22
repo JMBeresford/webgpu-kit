@@ -42,6 +42,11 @@ export async function getDefaultDevice(): Promise<GPUDevice> {
   return _device;
 }
 
+/** @internal */
+export function getDefaultCanvasFormat(): GPUTextureFormat {
+  return navigator.gpu.getPreferredCanvasFormat();
+}
+
 let tempCanvas: HTMLCanvasElement | undefined;
 
 /** @internal */
