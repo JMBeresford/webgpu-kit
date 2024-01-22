@@ -1,5 +1,5 @@
 import type { PipelineGroup } from "./PipelineGroup";
-import type { Pipeline } from "./Pipeline";
+import { RenderPipeline } from "./Pipeline";
 import { WithLabel } from "./components/Label";
 import { clamp } from "./utils";
 
@@ -53,18 +53,18 @@ export class Executor extends components {
     for (const pipeline of group.pipelines) {
       await pipeline.onBeforePass(pipeline);
 
-      if (
-        pipeline.type === "render" &&
-        pipeline.gpuPipeline instanceof GPURenderPipeline
-      ) {
+      if (!pipeline.gpuPipeline) {
+        throw new Error("GPU pipeline not set");
+      }
+
+      if (pipeline instanceof RenderPipeline) {
         if (this.autoResizeCanvas) {
           await this.handleResize(pipeline, device);
         }
 
-        const { pipelineDescriptor } = pipeline;
+        const { pipelineDescriptor, clearColor } = pipeline;
         const {
           context,
-          clearColor,
           depthStencilEnabled,
           depthStencilTextureView,
           depthStencilAttachment,
@@ -74,6 +74,10 @@ export class Executor extends components {
           pipelineDescriptor.multiSampleState.count > 1
             ? pipelineDescriptor.multiSampleTextureView
             : undefined;
+
+        if (!context) {
+          throw new Error("Context not set");
+        }
 
         const view =
           multiSampleTextureView ?? context.getCurrentTexture().createView();
@@ -106,13 +110,13 @@ export class Executor extends components {
 
         pass.setPipeline(pipeline.gpuPipeline);
 
-        let i = 0;
-        for (const vao of vaos) {
+        for (let i = 0; i < vaos.length; i++) {
+          const vao = vaos[i];
           if (vao.gpuBuffer === undefined) {
             throw new Error("GPU buffer not set");
           }
+
           pass.setVertexBuffer(i, vao.gpuBuffer);
-          i++;
         }
 
         bindGroups.forEach((bindGroup) => {
@@ -138,10 +142,7 @@ export class Executor extends components {
         }
 
         pass.end();
-      } else if (
-        pipeline.type === "compute" &&
-        pipeline.gpuPipeline instanceof GPUComputePipeline
-      ) {
+      } else {
         const pass = commandEncoder.beginComputePass();
         pass.setPipeline(pipeline.gpuPipeline);
 
@@ -168,10 +169,20 @@ export class Executor extends components {
   }
 
   private async handleResize(
-    pipeline: Pipeline,
+    pipeline: RenderPipeline,
     device: GPUDevice,
   ): Promise<void> {
-    const { canvas } = pipeline.pipelineDescriptor;
+    const pipelineDescriptor = pipeline.pipelineDescriptor;
+    const { canvas, context, canvasFormat } = pipelineDescriptor;
+
+    if (!canvas) {
+      throw new Error("Canvas not set");
+    }
+
+    if (!context) {
+      throw new Error("Context not set");
+    }
+
     const targetWidth = clamp(
       canvas.clientWidth,
       1,
@@ -188,8 +199,10 @@ export class Executor extends components {
       canvas.width = targetWidth;
       canvas.height = targetHeight;
 
-      const { pipelineDescriptor } = pipeline;
-      pipelineDescriptor.configureContext();
+      context.configure({
+        device,
+        format: canvasFormat,
+      });
 
       await pipelineDescriptor.buildMultiSampleTexture();
       await pipelineDescriptor.buildDepthStencilTexture();

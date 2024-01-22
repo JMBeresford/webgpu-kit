@@ -19,6 +19,11 @@ export const MockCanvasFormat: GPUTextureFormat = "rgba8unorm";
 export const MockAdapter = {} as unknown as GPUAdapter;
 
 export const MockWebGPU: Record<string, unknown> = {
+  navigator: {
+    gpu: {
+      getPreferredCanvasFormat: () => "rgba8unorm",
+    },
+  },
   // note that these values are not necessarily correct,
   // they came from github copilot and that thing is never
   // wrong

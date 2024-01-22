@@ -1,12 +1,11 @@
 import { getDataFromImage, bilinearInterpolation } from "../utils";
 import type { ArrayType } from "../utils";
-import { WithCanvas } from "./Canvas";
 import { WithDevice } from "./Device";
 import { WithLabel } from "./Label";
 
 export type MipMap = { data: Uint8ClampedArray; width: number; height: number };
 
-const components = WithDevice(WithCanvas(WithLabel()));
+const components = WithDevice(WithLabel());
 
 export function WithGpuTexture<TBase extends typeof components>(Base: TBase) {
   return class extends Base {
