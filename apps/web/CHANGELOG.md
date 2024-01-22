@@ -1,5 +1,14 @@
 # web
 
+## 1.1.5
+
+### Patch Changes
+
+- [#37](https://github.com/JMBeresford/webgpu-kit/pull/37) [`b38425e`](https://github.com/JMBeresford/webgpu-kit/commit/b38425e2c1f2d927b0b08641cb028a518159ae12) Thanks [@JMBeresford](https://github.com/JMBeresford)! - refactor(core)!: pipeline refactor
+
+- Updated dependencies [[`b38425e`](https://github.com/JMBeresford/webgpu-kit/commit/b38425e2c1f2d927b0b08641cb028a518159ae12)]:
+  - @webgpu-kit/core@1.1.0
+
 ## 1.1.4
 
 ### Patch Changes
