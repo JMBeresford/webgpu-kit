@@ -77,6 +77,10 @@ export class RenderPipeline extends components {
       this.setOnAfterPass(options.onAfterPass);
     }
 
+    if (options.clearColor) {
+      this.setClearColor(options.clearColor);
+    }
+
     this.pipelineDescriptor = new RenderPipelineDescriptor({
       shader: options.shader,
       multisample: options.enableMultiSampling,
