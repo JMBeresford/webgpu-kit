@@ -1,5 +1,11 @@
 # @webgpu-kit/core
 
+## 1.1.1
+
+### Patch Changes
+
+- [`631ecc7`](https://github.com/JMBeresford/webgpu-kit/commit/631ecc7e2cb70b9f765eb5a26a8ed521e43f33d5) Thanks [@JMBeresford](https://github.com/JMBeresford)! - fix(core): clear color in render pipelines
+
 ## 1.1.0
 
 ### Minor Changes
