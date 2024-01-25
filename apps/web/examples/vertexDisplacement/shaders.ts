@@ -1,4 +1,5 @@
 import { cnoise4D, snoise3Dgrad, math } from "wgsl-noise";
+import { diffuseLambertian, linearToGamma } from "@webgpu-kit/shaders/src";
 
 const instanceCount1D = 24;
 export const instanceCount = Math.pow(instanceCount1D, 3);
@@ -11,7 +12,7 @@ export const workGroupCount: [number, number, number] = [
 
 const workgroupThreads = workGroupSize[0] * workGroupSize[1] * workGroupSize[2];
 
-const common = `
+const common = /* wgsl */ `
   struct ParticleState {
     offset: vec3<f32>,
     life: f32,
@@ -31,7 +32,7 @@ const common = `
   @group(0) @binding(5) var<uniform> modelMatrix: mat4x4<f32>;
 `;
 
-export const shader = `
+export const shader = /* wgsl */ `
   struct VertexInput {
     @builtin(instance_index) instance: u32,
     @location(0) pos: vec3f,
@@ -48,7 +49,7 @@ export const shader = `
 
   ${common}
 
-  const LIGHT = vec3(0.0, 1.0, -5.0);
+  const LIGHT = vec3(0.0, 10.0, 20.0);
 
   @vertex
   fn vertexMain(input: VertexInput) -> VertexOutput  {
@@ -67,6 +68,9 @@ export const shader = `
     return output;
   }
 
+  ${diffuseLambertian()}
+  ${linearToGamma()}
+
   @fragment
   fn fragmentMain(input: VertexOutput) -> @location(0) vec4f {
     var color = input.color;
@@ -74,14 +78,15 @@ export const shader = `
     let L = normalize(LIGHT - pos);
     let N = normalize(input.normal.xyz);
 
-    let ambient = 0.25;
-    let str = max(dot(L, -N), 0.0) + ambient;
+    let ambient = 0.125;
+    let diffuseFactor = diffuseLambertian(N, L, vec3<f32>(1.0, 1.0, 1.0)) * 0.8; 
+    let str = diffuseFactor + ambient;
     color *= str;
-    return vec4(color, 1.0);
+    return vec4(linearToGamma(color), 1.0);
   }
 `;
 
-export const computeShader = `
+export const computeShader = /* wgsl */ `
   ${math}
   ${cnoise4D}
   ${snoise3Dgrad}
@@ -110,7 +115,7 @@ export const computeShader = `
     let life = state.life - 0.001 * state.speed;
 
     let radius = length(curOffset);
-    let noiseScale = 0.25;
+    let noiseScale = 0.35;
 
 
     let noiseX = snoise3Dgrad(curOffset * noiseScale);

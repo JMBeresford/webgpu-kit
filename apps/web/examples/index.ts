@@ -4,6 +4,7 @@ import { InstancesExample } from "./indexedInstances";
 import { MultisamplingExample } from "./multisampling";
 import { TexturesExample } from "./textures";
 import { VertexDisplacementExample } from "./vertexDisplacement";
+import { DiffuseLightingExample } from "./diffuse";
 
 export type Code = {
   text: string;
@@ -22,6 +23,7 @@ export type Example = {
 export const Examples: Example[] = [
   ConwayExample,
   VertexDisplacementExample,
+  DiffuseLightingExample,
   InstancesExample,
   MultisamplingExample,
   TexturesExample,

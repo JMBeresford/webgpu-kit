@@ -13,6 +13,7 @@
     "@react-three/fiber": "^8.15.12",
     "@types/three": "^0.159.0",
     "@webgpu-kit/core": "workspace:*",
+    "@webgpu-kit/shaders": "workspace:*",
     "geist": "^1.2.0",
     "gl-matrix": "^3.4.3",
     "glsl-noise": "^0.0.0",
