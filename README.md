@@ -34,7 +34,7 @@ Other packages are planned to expose additional APIs:
 ## Packages
 
 - [core]
-- shaders - TODO
+- [shaders]
 - forward - TODO
 - react - TODO
 
@@ -50,3 +50,4 @@ npm i @webgpu-kit/core
 ```
 
 [core]: ./packages/core/
+[shaders]: ./packages/shaders/
