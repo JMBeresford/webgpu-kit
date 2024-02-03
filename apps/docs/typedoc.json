@@ -2,16 +2,10 @@
   "extends": "./typedoc.base.json",
   "name": "webgpu-kit",
   "out": "./dist",
-  "entryPoints": ["../../packages/core/src/*.ts"],
-  "entryPointStrategy": "resolve",
+  "json": "dist/out.json",
+  "entryPoints": ["../../packages/core/"],
+  "entryPointStrategy": "packages",
   "categorizeByGroup": true,
   "excludeInternal": true,
-  "exclude": [
-    "**/node_modules/**/*",
-    "**/*.test.ts",
-    "../../packages/core/src/index.ts"
-  ],
-  "externalModulemap": {
-    "@webgpu/types": "https://gpuweb.github.io/types/"
-  }
+  "exclude": ["**/node_modules/**/*", "**/*.test.ts"]
 }

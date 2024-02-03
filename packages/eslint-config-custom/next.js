@@ -13,19 +13,19 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 module.exports = {
   extends: [
-    "@vercel/style-guide/eslint/node",
-    "@vercel/style-guide/eslint/typescript",
-    "@vercel/style-guide/eslint/browser",
-    "@vercel/style-guide/eslint/react",
-    "@vercel/style-guide/eslint/next",
+    "eslint:recommended",
+    require.resolve("@vercel/style-guide/eslint/next"),
+    "prettier",
     "eslint-config-turbo",
-  ].map(require.resolve),
-  parserOptions: {
-    project,
-  },
+    "plugin:@typescript-eslint/recommended",
+  ],
   globals: {
     React: true,
     JSX: true,
+  },
+  env: {
+    browser: true,
+    node: true,
   },
   settings: {
     "import/resolver": {
@@ -35,11 +35,21 @@ module.exports = {
     },
   },
   plugins: ["prettier"],
-  ignorePatterns: ["node_modules/", "dist/"],
+  ignorePatterns: ["node_modules/", "dist/", ".*.js"],
   // add rules configurations here
   rules: {
     "prettier/prettier": "error",
     "import/no-default-export": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+      },
+    ],
     "@typescript-eslint/consistent-type-definitions": "off",
     "react/no-unknown-property": "off",
   },

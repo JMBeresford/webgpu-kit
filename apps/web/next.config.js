@@ -5,6 +5,9 @@ module.exports = {
   transpilePackages: ["ui"],
 
   reactStrictMode: false,
+  experimental: {
+    serverComponentsExternalPackages: ["typedoc"],
+  },
 
   webpack: (config) => {
     config.module.rules = [

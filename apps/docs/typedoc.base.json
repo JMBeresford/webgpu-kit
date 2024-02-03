@@ -1,5 +1,8 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "plugin": ["typedoc-plugin-resolve-external"],
+  "externalModulemap": {
+    "@webgpu/types": "https://gpuweb.github.io/types/"
+  },
   "logLevel": "Verbose"
 }

@@ -37,8 +37,11 @@
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
+    "docs": "workspace:*",
+    "eslint": "^8.48.0",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
+    "typedoc": "^0.25.2",
     "typescript": "^5.2.2"
   },
   "publishConfig": {

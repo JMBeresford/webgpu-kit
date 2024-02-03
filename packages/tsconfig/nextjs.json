@@ -15,7 +15,5 @@
     "resolveJsonModule": true,
     "strict": false,
     "target": "ES2020"
-  },
-  "include": ["src", "next-env.d.ts"],
-  "exclude": ["node_modules"]
+  }
 }
