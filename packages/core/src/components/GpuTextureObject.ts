@@ -11,7 +11,7 @@ export function WithGpuTexture<TBase extends typeof components>(Base: TBase) {
   return class extends Base {
     /** @internal */
     _mipmaps: MipMap[] = [];
-    declare cpuBuffer?: Uint8ClampedArray;
+    cpuBuffer?: Uint8ClampedArray;
     gpuTexture?: GPUTexture;
     textureFormat: GPUTextureFormat = "rgba8unorm";
     textureWidth = 1;

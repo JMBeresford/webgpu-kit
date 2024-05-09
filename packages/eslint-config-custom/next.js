@@ -16,7 +16,7 @@ module.exports = {
     "eslint:recommended",
     require.resolve("@vercel/style-guide/eslint/next"),
     "prettier",
-    "eslint-config-turbo",
+    "plugin:turbo/recommended",
     "plugin:@typescript-eslint/recommended",
   ],
   globals: {
@@ -34,7 +34,7 @@ module.exports = {
       },
     },
   },
-  plugins: ["prettier"],
+  plugins: ["prettier", "turbo"],
   ignorePatterns: ["node_modules/", "dist/", ".*.js"],
   // add rules configurations here
   rules: {
@@ -51,6 +51,7 @@ module.exports = {
       },
     ],
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/explicit-function-return-type": "error",
     "react/no-unknown-property": "off",
   },
 };

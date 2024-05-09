@@ -1,3 +1,5 @@
+"use client";
+
 import type { ForwardedRef } from "react";
 import { useState, forwardRef } from "react";
 import { Button } from "../button";

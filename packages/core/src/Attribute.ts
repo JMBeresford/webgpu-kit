@@ -17,7 +17,7 @@ export type AttributeOptions = {
    * The value of the location directive of the attribute in the shader
    * e.g.
    * ```wgsl
-   * \@location(0) pos: vec3<f32>
+   * @location(0) pos: vec3<f32>
    * ```
    * would have a shaderLocation of 0.
    */
@@ -27,7 +27,7 @@ export type AttributeOptions = {
    * The number of components in each item of the attribute
    * e.g.
    * ```wgsl
-   * \@location(0) pos: vec3<f32>
+   * @location(0) pos: vec3<f32>
    * ```
    * would have an itemSize of 3.
    */
@@ -61,6 +61,7 @@ export type AttributeOptions = {
  * An attribute object that contains vertex data
  */
 export class Attribute extends components {
+  /** The format that the data is stored in */
   readonly format: GPUVertexFormat;
   readonly shaderLocation: number;
   readonly itemSize: number;

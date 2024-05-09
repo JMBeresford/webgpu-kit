@@ -43,7 +43,7 @@ jobs:
       - name: Build Docs
         run: pnpm run build --filter docs
       - name: Build Web
-        run: pnpm run build --filter web && mv ./apps/docs/dist ./apps/web/out/docs
+        run: pnpm run build --filter web && mv ./apps/docs/dist ./apps/web/out/legacy/docs
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact

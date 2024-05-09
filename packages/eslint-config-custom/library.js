@@ -15,7 +15,7 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "prettier",
-    "eslint-config-turbo",
+    "plugin:turbo/recommended",
     "plugin:@typescript-eslint/recommended",
   ],
   parserOptions: {
@@ -29,11 +29,11 @@ module.exports = {
       },
     },
   },
-  plugins: ["tsdoc", "prettier"],
+  plugins: ["tsdoc", "prettier", "turbo"],
   ignorePatterns: ["node_modules/", "dist/", "vite.config.js", ".*.js"],
   rules: {
     "prettier/prettier": "error",
-    "eslint_d@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-extraneous-class": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-unsafe-argument": "off",

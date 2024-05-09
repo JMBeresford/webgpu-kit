@@ -24,13 +24,14 @@
     "tsconfig": "workspace:*",
     "eslint-config-custom": "workspace:*",
     "turbo": "latest",
-    "typedoc": "^0.25.2"
+    "typedoc": "npm:@jberesford/typedoc@0.25.10"
   },
   "pnpm": {
     "overrides": {
-      "typedoc": "0.25.2",
+      "typedoc": "$typedoc",
       "next": "^13.4.19",
       "@next/eslint-plugin-next": "^13.4.19",
+      "eslint-plugin-turbo": "^1.12.3",
       "@webgpu/types": "$@webgpu/types"
     }
   },

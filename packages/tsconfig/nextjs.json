@@ -13,7 +13,7 @@
     "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
-    "strict": false,
+    "strict": true,
     "target": "ES2020"
   }
 }

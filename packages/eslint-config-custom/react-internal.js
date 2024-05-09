@@ -21,6 +21,10 @@ module.exports = {
   parserOptions: {
     project,
   },
+  env: {
+    browser: true,
+    node: true,
+  },
   globals: {
     JSX: true,
   },

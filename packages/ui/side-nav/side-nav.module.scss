@@ -1,0 +1,18 @@
+.side-nav {
+  display: flex;
+  flex-direction: column;
+
+  .side-nav-group {
+    display: flex;
+    flex-direction: column;
+
+    > .side-nav-group {
+      padding-left: 1rem;
+    }
+
+    .side-nav-item {
+      padding-left: 1rem;
+      list-style: none;
+    }
+  }
+}
