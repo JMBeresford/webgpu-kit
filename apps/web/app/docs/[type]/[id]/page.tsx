@@ -17,10 +17,11 @@ const views: Record<string, View | undefined> = {
   modules: ModuleView,
   types: TypeView,
   functions: FunctionView,
+  methods: FunctionView,
 };
 
 export default function Page(props: { params: ViewParams }): JSX.Element {
-  const { type } = props.params;
+  const type = normalizeTypeName(props.params.type);
   const View = views[type];
 
   if (!View) {
@@ -37,6 +38,12 @@ export default function Page(props: { params: ViewParams }): JSX.Element {
 
 export function generateStaticParams(): ViewParams[] {
   return Array.from(allGroups)
-    .map(([type, ids]) => ids.map((id) => ({ type, id })))
+    .map(([type, ids]) =>
+      ids.map((id) => ({ type: normalizeTypeName(type), id })),
+    )
     .flat();
+}
+
+function normalizeTypeName(type: string): string {
+  return type.toLowerCase().replaceAll(" ", "");
 }
