@@ -1,0 +1,45 @@
+.docs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+
+  .nav {
+    padding: 2rem 1rem 0 0;
+    width: min-content;
+    // border-right: 1px solid #333;
+
+    h3 {
+      color: #ddd;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      margin: 0.25rem 0;
+    }
+
+    li {
+      color: #555;
+      border-left: 1px solid #333;
+      margin: 0.125em 0;
+
+      transition:
+        color 0.15s ease-in,
+        border-color 0.1s ease-in;
+
+      &:hover,
+      &.active {
+        transition-timing-function: ease-out;
+        color: #ddd;
+        border-color: #ddd;
+      }
+    }
+  }
+
+  .content {
+    padding-top: 2rem;
+  }
+}

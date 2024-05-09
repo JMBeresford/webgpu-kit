@@ -1,12 +1,12 @@
-import { Attribute } from "@webgpu-kit/core/src/Attribute";
-import { Executor } from "@webgpu-kit/core/src/Executor";
-import { RenderPipeline } from "@webgpu-kit/core/src/Pipeline";
-import { PipelineGroup } from "@webgpu-kit/core/src/PipelineGroup";
-import { Uniform } from "@webgpu-kit/core/src/Uniform";
-import { VertexAttributeObject } from "@webgpu-kit/core/src/VertexAttributeObject";
-import { Texture } from "@webgpu-kit/core/src/Texture";
-import { Sampler } from "@webgpu-kit/core/src/Sampler";
-import { BindGroup } from "@webgpu-kit/core/src/BindGroup";
+import { Attribute } from "@webgpu-kit/core/Attribute";
+import { Executor } from "@webgpu-kit/core/Executor";
+import { RenderPipeline } from "@webgpu-kit/core/Pipeline";
+import { PipelineGroup } from "@webgpu-kit/core/PipelineGroup";
+import { Uniform } from "@webgpu-kit/core/Uniform";
+import { VertexAttributeObject } from "@webgpu-kit/core/VertexAttributeObject";
+import { Texture } from "@webgpu-kit/core/Texture";
+import { Sampler } from "@webgpu-kit/core/Sampler";
+import { BindGroup } from "@webgpu-kit/core/BindGroup";
 import texture from "./logo.png";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {

@@ -1,0 +1,66 @@
+.readme {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h1 {
+    margin: 0 0 0.25rem;
+  }
+
+  h2,
+  h3 {
+    margin: 0.5rem 0 0.125rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+  }
+
+  h5 {
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 1rem 0;
+  }
+
+  a {
+    color: #888;
+
+    transition: color 0.15s ease-in;
+
+    &:hover {
+      transition-timing-function: ease-out;
+      color: #ddd;
+    }
+  }
+
+  ul,
+  ol {
+    list-style-type: disc;
+    list-style-position: inside;
+
+    ul {
+      padding-left: 1rem;
+    }
+  }
+
+  .code {
+    width: auto;
+  }
+}

@@ -1,0 +1,14 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  border-left: solid 1px #333;
+  padding-left: 1rem;
+}

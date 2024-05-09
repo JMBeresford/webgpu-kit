@@ -84,9 +84,8 @@ $drop-shadow-color: rgba(255, 255, 255, 0.05);
     8px -8px 25px 0px $drop-shadow-color;
 
   .source {
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(40px);
-    overflow-y: auto;
   }
 }
 
@@ -118,6 +117,7 @@ $drop-shadow-color: rgba(255, 255, 255, 0.05);
 
     button {
       opacity: 0.25;
+      font-size: 1em;
       transition: opacity 0.2s ease-in-out;
 
       &:hover,
@@ -132,17 +132,21 @@ $drop-shadow-color: rgba(255, 255, 255, 0.05);
     position: absolute;
     inset: 0;
     transition: opacity 0.2s;
+    overflow-y: hidden;
+    tab-size: 4;
 
-    &:not(.show) {
-      opacity: 0;
-      pointer-events: none;
-      touch-action: none;
+    opacity: 0;
+    pointer-events: none;
+    touch-action: none;
 
-      transition-delay: 0s;
-      transition-timing-function: ease-in;
-    }
+    transition-delay: 0s;
+    transition-timing-function: ease-in;
 
     &.show {
+      opacity: 1;
+      pointer-events: auto;
+      touch-action: auto;
+      overflow-y: auto;
       transition-delay: 0.2s;
       transition-timing-function: ease-out;
     }

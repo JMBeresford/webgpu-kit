@@ -9,7 +9,7 @@ import {
   Storage,
   Uniform,
   VertexAttributeObject,
-} from "@webgpu-kit/core/src";
+} from "@webgpu-kit/core";
 import { mat4 } from "gl-matrix";
 import { generateSphere } from "./sphere";
 import {

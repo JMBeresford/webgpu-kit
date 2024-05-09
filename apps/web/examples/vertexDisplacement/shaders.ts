@@ -1,5 +1,5 @@
 import { cnoise4D, snoise3Dgrad, math } from "wgsl-noise";
-import { diffuseLambertian, linearToGamma } from "@webgpu-kit/shaders/src";
+import { diffuseLambertian, linearToGamma } from "@webgpu-kit/shaders/";
 
 const instanceCount1D = 24;
 export const instanceCount = Math.pow(instanceCount1D, 3);
