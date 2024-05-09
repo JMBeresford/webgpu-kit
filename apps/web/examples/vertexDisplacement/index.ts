@@ -7,7 +7,7 @@ export const VertexDisplacementExample = {
   title: "Vertex Displacement",
   url: "vertexDisplacement",
   code: [
-    { text: code1.default, language: "typescript", filename: "main.ts" },
+    { text: code1.default, language: "ts", filename: "main.ts" },
     { text: code2, language: "ts", filename: "shaders.ts" },
     { text: code3, language: "ts", filename: "sphere.ts" },
   ],

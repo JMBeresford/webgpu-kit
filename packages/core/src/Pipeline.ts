@@ -9,13 +9,13 @@ const components = WithDevice(WithLabel());
 export type Pipeline = RenderPipeline | ComputePipeline;
 export type PipelineCallback = (pipeline: Pipeline) => void | Promise<void>;
 
-type WorkgroupSize = [number, number | undefined, number | undefined];
-type WorkgroupCount = [number, number | undefined, number | undefined];
+export type WorkgroupSize = [number, number | undefined, number | undefined];
+export type WorkgroupCount = [number, number | undefined, number | undefined];
 
 /**
- * {@link BasePipeline} constructor parameters
+ * Constructor parameters shared between {@link RenderPipeline} and {@link ComputePipeline}
  */
-type PipelineOptions = {
+export type PipelineOptions = {
   label?: string;
 
   /**

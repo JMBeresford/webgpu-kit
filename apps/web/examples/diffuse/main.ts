@@ -7,12 +7,12 @@ import {
   RenderPipeline,
   Uniform,
   VertexAttributeObject,
-} from "@webgpu-kit/core/src";
+} from "@webgpu-kit/core";
 import {
   diffuseLambertian,
   diffuseOrenNayar,
   linearToGamma,
-} from "@webgpu-kit/shaders/src/";
+} from "@webgpu-kit/shaders/";
 import { mat4 } from "gl-matrix";
 import { generateSphere } from "./sphere";
 

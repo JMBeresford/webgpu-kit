@@ -13,14 +13,15 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 module.exports = {
   extends: [
-    "@vercel/style-guide/eslint/node",
-    "@vercel/style-guide/eslint/browser",
-    "@vercel/style-guide/eslint/typescript",
-    "eslint-config-turbo",
-  ].map(require.resolve),
+    "eslint:recommended",
+    "prettier",
+    "plugin:turbo/recommended",
+    "plugin:@typescript-eslint/recommended",
+  ],
   parserOptions: {
     project,
   },
+  env: { node: true },
   settings: {
     "import/resolver": {
       typescript: {
@@ -28,10 +29,11 @@ module.exports = {
       },
     },
   },
-  plugins: ["prettier", "tsdoc"],
-  ignorePatterns: ["node_modules/", "dist/", "vite.config.js"],
+  plugins: ["tsdoc", "prettier", "turbo"],
+  ignorePatterns: ["node_modules/", "dist/", "vite.config.js", ".*.js"],
   rules: {
     "prettier/prettier": "error",
+    "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-extraneous-class": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
@@ -39,6 +41,15 @@ module.exports = {
     "unicorn/filename-case": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+      },
+    ],
     "no-bitwise": "off",
     "tsdoc/syntax": "warn",
   },

@@ -1,0 +1,41 @@
+.module {
+  padding-top: 1rem;
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .group {
+    margin: 1.5rem 0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .groupItem {
+      display: flex;
+      align-items: center;
+      margin: 0.5rem 0;
+      gap: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.85rem;
+    }
+
+    h3 {
+      opacity: 0.8;
+      font-weight: 400;
+    }
+
+    h4 {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 10px;
+      padding: 0.25em 0.5em;
+    }
+  }
+}

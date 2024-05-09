@@ -1,83 +1,39 @@
-"use client";
-
-import { PrismAsync as SyntaxHighlighter } from "react-syntax-highlighter";
-import { nord } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Button } from "ui/button";
-import { useCallback, useMemo } from "react";
+import { Code as SyntaxHighlighter } from "bright";
 import type { Code } from "../../../examples";
-import styles from "./styles.module.scss";
+import { Tabs } from "./tabs";
+import { theme } from "@/components/bright-theme";
+import * as prettier from "prettier";
 
 type Props = {
   code: Code;
-  active: boolean;
 };
 
-function CodeBlock(props: Props): JSX.Element {
+async function CodeBlock(props: Props): Promise<JSX.Element> {
+  const parser = props.code.language.startsWith("ts")
+    ? "typescript"
+    : undefined;
+
+  const code = parser
+    ? await prettier.format(props.code.text, { parser, useTabs: true })
+    : props.code.text;
+
   return (
-    <div
-      className={`${styles["source-text"]} ${props.active ? styles.show : ""}`}
-    >
-      <SyntaxHighlighter
-        customStyle={{ background: "rgba(255,255,255,0)", margin: 0 }}
-        language={props.code.language}
-        showLineNumbers
-        style={nord as unknown}
-      >
-        {props.code.text}
-      </SyntaxHighlighter>
-    </div>
+    <SyntaxHighlighter lang={props.code.language} lineNumbers theme={theme}>
+      {code}
+    </SyntaxHighlighter>
   );
 }
 
 export function CodeOverlay(props: { sources: Code[] }): JSX.Element {
-  const params = useSearchParams();
-  const file = params.get("showFile") ?? props.sources[0].filename;
-  const show = params.get("showCode") === "true";
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const changeFile = useCallback(
-    (filename: string) => {
-      const newParams = new URLSearchParams(params);
-      newParams.set("showFile", filename);
-
-      router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
-    },
-    [router, pathname, params],
-  );
-
-  const codeBlocks = useMemo(
-    () =>
-      props.sources.map((code) => (
-        <CodeBlock
-          active={show ? code.filename === file : false}
-          code={code}
-          key={code.text}
-        />
-      )),
-    [file, props.sources, show],
-  );
-
   return (
-    <div className={`${styles["code-overlay"]} ${show ? styles.show : ""}`}>
-      <div className={styles.tabs}>
+    <div>
+      <Tabs sources={props.sources}>
         {props.sources.map((code) => (
-          <Button
-            bare
-            className={file === code.filename ? styles.active : ""}
-            key={code.filename}
-            onClick={() => {
-              changeFile(code.filename);
-            }}
-            small
-          >
-            {code.filename}
-          </Button>
+          <div key={code.filename}>
+            <CodeBlock code={code} />
+          </div>
         ))}
-      </div>
-
-      <div className={`${styles.source} `}>{codeBlocks}</div>
+      </Tabs>
     </div>
   );
 }

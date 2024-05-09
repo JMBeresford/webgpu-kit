@@ -3,13 +3,19 @@
   "version": "0.0.4",
   "description": "Documentation for the webgpu-kit packages",
   "private": true,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/out.json",
   "scripts": {
     "build": "typedoc"
   },
   "devDependencies": {
     "typedoc-plugin-resolve-external": "^0.2.1",
     "@webgpu/types": "0.1.34",
-    "tsconfig": "*",
+    "@webgpu-kit/core": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typedoc": "npm:@jberesford/typedoc@0.25.10",
     "typescript": "^5.2.2"
   }
 }

@@ -1,10 +1,8 @@
 # @webgpu-kit/core
 
-### A light wrapper around the webGPU API that aims to reduce boilerplate for render and compute operations.
+##### A light wrapper around the webGPU API that aims to reduce boilerplate for render and compute operations.
 
 ## Table of Contents
-
-<!--toc:start-->
 
 - [Installation](#installation)
 - [Overview](#overview)
@@ -15,8 +13,6 @@
   - [Storage Buffers](#storage-buffers)
   - [Samplers and Textures](#samplers-and-textures)
   - [Vertex Attribute Objects](#vertex-attribute-objects)
-
-<!--toc:end-->
 
 ## Installation
 
@@ -32,7 +28,7 @@ yarn add @webgpu-kit/core
 pnpm i @webgpu-kit/core
 ```
 
-### Overview
+## Overview
 
 The package exposes an API that allows for easy construction and execution of webGPU
 pipelines. An understanding of the webGPU spec/API is recommended but not stricly needed.
@@ -124,7 +120,9 @@ object. It is _mandatory_ that these values match. This will also be the case
 for any other gpu-bound objects such as [Uniforms][uniform_source], [Textures][texture_source],
 [Samplers][sampler_source] and [Storage][storage_source] objects which will be covered later.
 
-#### Pipelines
+---
+
+### Pipelines
 
 A [pipeline][pipeline_source] is essentially a context in which either a render or a compute
 operation is defined. These pipelines are executed in batches (or singularly, if desired) via
@@ -164,7 +162,9 @@ const pipeline = new ComputePipeline({
 
 > reference the [source][pipeline_source] for the full list of constructor options available
 
-#### Pipeline Groups
+---
+
+### Pipeline Groups
 
 A [pipeline group][pipeline_group_source] is a collection of [pipelines][pipeline_source] that
 share [bind groups][bind_group_source]. This allows for an ergonmic way to execute multiple
@@ -195,7 +195,9 @@ const pipelineGroup = new PipelineGroup({
 
 > reference the [source][pipeline_group_source] for the full list of constructor options available
 
-#### Bind Groups
+---
+
+### Bind Groups
 
 [Bind groups][bind_group_source] are collections of objects that are bound to the GPU. You can think of
 them as a way to collect all of the resources that a shader needs to execute (except for those defined in the
@@ -282,7 +284,9 @@ await myPipelineGroup.setBindGroups(bindGroup);
 
 > reference the [source][bind_group_source] for the full list of constructor options available
 
-#### Uniform Buffers
+---
+
+### Uniform Buffers
 
 [Uniforms][uniform_source] are created and used like so:
 
@@ -312,7 +316,9 @@ await myBindGroup.addUniforms(myColorUniform);
 
 > reference the [source][uniform_source] for the full list of constructor options available
 
-#### Storage Buffers
+---
+
+### Storage Buffers
 
 [Storages][storage_source] are created and used in the exact same fashion as [Uniforms][uniform_source]:
 
@@ -341,7 +347,9 @@ await myBindGroup.addStorages(myColorStorage);
 
 > reference the [source][storage_source] for the full list of constructor options available
 
-#### Samplers and Textures
+---
+
+### Samplers and Textures
 
 Create and use [samplers][sampler_source] and [textures][texture_source] like so:
 
@@ -392,7 +400,9 @@ await myBindGroup.addTextures(texture);
 > [Texture source][texture_source] for the full list of constructor
 > options available
 
-#### Vertex Attribute Objects
+---
+
+### Vertex Attribute Objects
 
 [Vertex attribute objects][vao_source], or VAO's, contain per-vertex (or per-instance) data commonly referred to as
 [attributes][attribute_source]. The most common attribute is the position of each vertex. Each
@@ -441,13 +451,13 @@ pipelineGroup.addVertesAttributeObjects(vao);
 > [VertexAttributeObject source][vao_source] for the full list of constructor
 > options available
 
-[attribute_source]: ./src/Attribute.ts
-[pipeline_source]: ./src/Pipeline.ts
-[pipeline_group_source]: ./src/PipelineGroup.ts
-[executor_source]: ./src/Executor.ts
-[uniform_source]: ./src/Uniform.ts
-[storage_source]: ./src/Storage.ts
-[sampler_source]: ./src/Sampler.ts
-[texture_source]: ./src/Texture.ts
-[vao_source]: ./src/VertexAttributeObject.ts
-[bind_group_source]: ./src/BindGroup.ts
+[attribute_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Attribute.ts
+[pipeline_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Pipeline.ts
+[pipeline_group_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/PipelineGroup.ts
+[executor_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Executor.ts
+[uniform_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Uniform.ts
+[storage_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Storage.ts
+[sampler_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Sampler.ts
+[texture_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/Texture.ts
+[vao_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/VertexAttributeObject.ts
+[bind_group_source]: https://github.com/JMBeresford/webgpu-kit/tree/main/packages/core/src/BindGroup.ts

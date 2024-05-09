@@ -3,9 +3,9 @@ import type { MaterialNode } from "@react-three/fiber";
 import { extend } from "@react-three/fiber";
 import type { ShaderMaterial } from "three";
 import { AdditiveBlending, Color } from "three";
-import { generateUUID } from "three/src/math/MathUtils";
 import fragmentShader from "./frag.glsl";
 import vertexShader from "./vert.glsl";
+import { generateUUID } from "three/src/math/MathUtils.js";
 
 type Uniforms = {
   uTime?: number;

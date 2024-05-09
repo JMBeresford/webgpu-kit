@@ -1,12 +1,12 @@
 import { mat4 } from "gl-matrix";
-import { Attribute } from "@webgpu-kit/core/src/Attribute";
-import { Executor } from "@webgpu-kit/core/src/Executor";
-import { RenderPipeline } from "@webgpu-kit/core/src/Pipeline";
-import { PipelineGroup } from "@webgpu-kit/core/src/PipelineGroup";
-import { Uniform } from "@webgpu-kit/core/src/Uniform";
-import { VertexAttributeObject } from "@webgpu-kit/core/src/VertexAttributeObject";
-import { IndexBuffer } from "@webgpu-kit/core/src/IndexBuffer";
-import { BindGroup } from "@webgpu-kit/core/src/BindGroup";
+import { Attribute } from "@webgpu-kit/core/Attribute";
+import { Executor } from "@webgpu-kit/core/Executor";
+import { RenderPipeline } from "@webgpu-kit/core/Pipeline";
+import { PipelineGroup } from "@webgpu-kit/core/PipelineGroup";
+import { Uniform } from "@webgpu-kit/core/Uniform";
+import { VertexAttributeObject } from "@webgpu-kit/core/VertexAttributeObject";
+import { IndexBuffer } from "@webgpu-kit/core/IndexBuffer";
+import { BindGroup } from "@webgpu-kit/core/BindGroup";
 
 export async function runExample(canvas: HTMLCanvasElement): Promise<void> {
   const vertices = [

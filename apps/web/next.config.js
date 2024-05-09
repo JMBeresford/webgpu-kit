@@ -1,10 +1,13 @@
 module.exports = {
   output: "export",
   basePath: process.env.NODE_ENV === "production" ? "/webgpu-kit" : "",
-  reactStrictMode: true,
-  transpilePackages: ["ui"],
+  transpilePackages: ["ui", "@webgpu-kit/core"],
 
   reactStrictMode: false,
+  experimental: {
+    // serverActions: true,
+    // serverComponentsExternalPackages: ["typedoc"],
+  },
 
   webpack: (config) => {
     config.module.rules = [

@@ -1,0 +1,10 @@
+.link {
+  color: #888;
+
+  transition: color 0.15s ease-in;
+
+  &:hover {
+    transition-timing-function: ease-out;
+    color: #ddd;
+  }
+}
