@@ -97,7 +97,9 @@ allReflections.forEach((reflection) => {
         allGroups.set(group.title, []);
       }
 
-      allGroups.get(group.title)?.push(reflection.id.toString());
+      const ids = group.children?.map((child) => child.toString()) || [];
+
+      allGroups.get(group.title)?.push(...ids);
     });
   }
 });
