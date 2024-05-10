@@ -1,5 +1,11 @@
 # docs
 
+## 0.0.5
+
+### Patch Changes
+
+- [#42](https://github.com/JMBeresford/webgpu-kit/pull/42) [`febb649`](https://github.com/JMBeresford/webgpu-kit/commit/febb649be47ac0bd16cc7d7c18e8fc79aff1a796) Thanks [@JMBeresford](https://github.com/JMBeresford)! - init new docs, major lint/tsconfig refactor
+
 ## 0.0.4
 
 ### Patch Changes
