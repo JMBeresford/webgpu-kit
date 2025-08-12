@@ -1,8 +1,10 @@
 # WebGPU-Kit
 
-### A minimal webGPU toolkit for rendering and compute operations
+## See more
 
-> UNDER HEAVY DEVELOPMENT
+[Documentation](https://jmberesford.github.io/webgpu-kit/)
+
+[Examples](https://jmberesford.github.io/webgpu-kit/examples)
 
 ## Table of Contents
 
